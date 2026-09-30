@@ -8,6 +8,8 @@ nonisolated enum UndoStep: Sendable {
   case putBack([TrashedItem])
   /// Ridà ai file il nome che avevano.
   case renameBack([RenamedItem])
+  /// Riporta i file nella cartella da cui erano partiti.
+  case moveBack([MovedItem])
 }
 
 /// Cosa mostrare dopo un'azione.
@@ -68,9 +70,33 @@ enum ActionRunner {
       // Servono le opzioni: se ne occupa il pannello di `RenameController`, che poi chiama `rename`.
       return .failure("Rinomina passa dal suo pannello")
 
-    case .convert, .move, .resize:
+    case .move:
+      // Serve la cartella di destinazione, scelta nel secondo anello: vedi `move(_:to:)`.
+      return .failure("Sposta ha bisogno di una cartella")
+
+    case .convert, .resize:
       return ActionOutcome(symbol: action.symbol, message: "\(action.title): in arrivo")
     }
+  }
+
+  static func move(_ urls: [URL], to folder: URL, store: DestinationStore = DestinationStore()) async -> ActionOutcome {
+    let result = await FileOperations.move(urls, to: folder)
+    let name = FileManager.default.displayName(atPath: folder.path(percentEncoded: false))
+
+    guard !result.done.isEmpty else {
+      if result.failed == 0, result.skipped > 0 {
+        return ActionOutcome(symbol: "info.circle.fill", message: "Già in «\(name)»")
+      }
+      return .failure("Impossibile spostare")
+    }
+
+    store.recordRecent(folder)
+    let count = result.done.count
+    var message = "\(count) \(count == 1 ? "elemento spostato" : "elementi spostati") in «\(name)»"
+    if result.failed > 0 {
+      message += ", \(result.failed) non \(result.failed == 1 ? "riuscito" : "riusciti")"
+    }
+    return ActionOutcome(message: message, undo: .moveBack(result.done))
   }
 
   static func rename(_ entries: [RenameEntry]) async -> ActionOutcome {
@@ -94,6 +120,8 @@ enum ActionRunner {
     case .renameBack(let items):
       let entries = items.map { RenameEntry(source: $0.renamed, newName: $0.original.lastPathComponent) }
       failed = await FileOperations.rename(entries).failed
+    case .moveBack(let items):
+      failed = await FileOperations.moveBack(items).failed
     }
     guard failed == 0 else { return .failure("Impossibile annullare") }
     return ActionOutcome(symbol: "arrow.uturn.backward.circle.fill", message: "Annullato")

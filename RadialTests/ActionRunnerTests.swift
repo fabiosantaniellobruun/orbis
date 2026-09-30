@@ -115,6 +115,82 @@ final class ActionRunnerTests {
     #expect(lines.last?.hasSuffix("/Cartella") == true)
   }
 
+  // MARK: Sposta
+
+  /// Un archivio a sé per le cartelle recenti, così i test non toccano quello dell'app.
+  private func makeStore() -> DestinationStore {
+    let suite = "RadialTests-\(UUID().uuidString)"
+    let defaults = UserDefaults(suiteName: suite)!
+    defaults.removePersistentDomain(forName: suite)
+    return DestinationStore(defaults: defaults)
+  }
+
+  private func makeDestination(_ name: String) throws -> URL {
+    let url = directory.appendingPathComponent(name, isDirectory: true)
+    try FileManager.default.createDirectory(at: url, withIntermediateDirectories: true)
+    return url
+  }
+
+  @Test("Sposta dice quanti elementi ha spostato e dove, e ricorda la cartella")
+  func moveOutcome() async throws {
+    let files = try makeFiles("uno.txt", "due.txt")
+    let destination = try makeDestination("Archivio")
+    let store = makeStore()
+
+    let outcome = await ActionRunner.move(files, to: destination, store: store)
+
+    #expect(outcome.message == "2 elementi spostati in «Archivio»")
+    #expect(outcome.undo != nil)
+    #expect(store.recents.map(\.lastPathComponent) == ["Archivio"])
+  }
+
+  @Test("Con un elemento solo il messaggio è al singolare")
+  func moveSingularMessage() async throws {
+    let files = try makeFiles("uno.txt")
+    let destination = try makeDestination("Archivio")
+
+    let outcome = await ActionRunner.move(files, to: destination, store: makeStore())
+
+    #expect(outcome.message == "1 elemento spostato in «Archivio»")
+  }
+
+  @Test("Se i file sono già lì lo dice, senza offrire di annullare e senza ricordare la cartella")
+  func moveAlreadyThere() async throws {
+    let destination = try makeDestination("Archivio")
+    let inside = destination.appendingPathComponent("gia.txt")
+    try "x".write(to: inside, atomically: true, encoding: .utf8)
+    let store = makeStore()
+
+    let outcome = await ActionRunner.move([inside], to: destination, store: store)
+
+    #expect(outcome.message == "Già in «Archivio»")
+    #expect(outcome.undo == nil)
+    #expect(store.recents.isEmpty)
+  }
+
+  @Test("Se qualcosa non riesce, il messaggio lo dice")
+  func movePartialFailure() async throws {
+    let files = try makeFiles("uno.txt") + [directory.appendingPathComponent("sparito.txt")]
+    let destination = try makeDestination("Archivio")
+
+    let outcome = await ActionRunner.move(files, to: destination, store: makeStore())
+
+    #expect(outcome.message == "1 elemento spostato in «Archivio», 1 non riuscito")
+  }
+
+  @Test("Se non riesce nulla non c'è niente da annullare e la cartella non si ricorda")
+  func moveTotalFailure() async throws {
+    let missing = directory.appendingPathComponent("sparito.txt")
+    let destination = try makeDestination("Archivio")
+    let store = makeStore()
+
+    let outcome = await ActionRunner.move([missing], to: destination, store: store)
+
+    #expect(outcome.message == "Impossibile spostare")
+    #expect(outcome.undo == nil)
+    #expect(store.recents.isEmpty)
+  }
+
   @Test("Le azioni non ancora pronte lo dicono e non toccano i file")
   func unimplementedAction() async throws {
     let files = try makeFiles("uno.txt")

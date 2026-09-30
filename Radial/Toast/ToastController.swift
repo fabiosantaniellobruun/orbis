@@ -4,7 +4,7 @@ import SwiftUI
 /// Mostra l'avviso in un pannello suo, piccolo quanto basta: resta visibile e cliccabile anche
 /// dopo che il menu è sparito, senza coprire altro.
 final class ToastController {
-  private static let size = NSSize(width: 520, height: 80)
+  private static let size = NSSize(width: 640, height: 80)
 
   private let model = ToastModel()
   private let panel: OverlayPanel

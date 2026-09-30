@@ -24,6 +24,12 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
        let id = arguments.dropFirst(flag + 1).first.flatMap(RadialAction.ID.init(rawValue:)) {
       controller.run(id, on: arguments.dropFirst(flag + 2).map { URL(filePath: $0) })
     }
+
+    // `--settings` apre subito la finestra delle impostazioni.
+    if arguments.contains("--settings") {
+      NSApp.activate()
+      NSApp.sendAction(Selector(("showSettingsWindow:")), to: nil, from: nil)
+    }
     #endif
   }
 }

@@ -37,6 +37,10 @@ struct ToastView: View {
 
           Text(content.text)
             .contentTransition(.opacity)
+            // Il nome di una cartella può essere lungo: si taglia nel mezzo, dov'è meno importante.
+            .lineLimit(1)
+            .truncationMode(.middle)
+            .frame(maxWidth: 440)
 
           if content.canUndo {
             Divider()

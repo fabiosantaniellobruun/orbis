@@ -9,6 +9,13 @@ nonisolated struct TrashedItem: Sendable, Equatable {
 nonisolated struct BatchResult<Item: Sendable>: Sendable {
   var done: [Item] = []
   var failed = 0
+  /// Elementi che non c'era nulla da fare (già nella cartella di destinazione).
+  var skipped = 0
+}
+
+nonisolated struct MovedItem: Sendable, Equatable {
+  let original: URL
+  let moved: URL
 }
 
 /// Un elemento da rinominare: il file com'è adesso e il nome che deve avere.
@@ -132,6 +139,67 @@ nonisolated enum FileOperations {
       }
     }
     return result
+  }
+
+  // MARK: Sposta
+
+  /// Sposta gli elementi in una cartella. Non sovrascrive mai: se il nome è già occupato l'elemento
+  /// arriva come "nome 2", come fa il Finder con "Mantieni entrambi". Chi è già in quella cartella
+  /// resta dov'è, e una cartella non si può spostare dentro sé stessa.
+  @concurrent
+  static func move(_ urls: [URL], to folder: URL) async -> BatchResult<MovedItem> {
+    let fileManager = FileManager.default
+    var result = BatchResult<MovedItem>()
+    let target = comparablePath(folder.resolvingSymlinksInPath())
+
+    for url in urls {
+      // Si risolvono i collegamenti della cartella che contiene l'elemento, non dell'elemento:
+      // se è un alias lo si sposta lui, non ciò a cui punta.
+      let parent = comparablePath(url.deletingLastPathComponent().resolvingSymlinksInPath())
+      if parent == target {
+        result.skipped += 1
+        continue
+      }
+      let itemPath = (parent == "/" ? "" : parent) + "/" + url.lastPathComponent
+      if target == itemPath || target.hasPrefix(itemPath + "/") {
+        log.error("Sposta non riuscito: \(url.lastPathComponent, privacy: .public) verrebbe spostato dentro sé stesso")
+        result.failed += 1
+        continue
+      }
+
+      let (stem, ext) = nameParts(of: url)
+      let destination = availableURL(in: folder, stem: stem, extension: ext)
+      do {
+        try fileManager.moveItem(at: url, to: destination)
+        result.done.append(MovedItem(original: url, moved: destination))
+      } catch {
+        log.error("Sposta non riuscito: \(error.localizedDescription, privacy: .public)")
+        result.failed += 1
+      }
+    }
+    return result
+  }
+
+  /// Rimette gli elementi dov'erano. Non sovrascrive: se nel frattempo il loro posto è stato
+  /// preso, quell'elemento resta dov'è arrivato.
+  @concurrent
+  static func moveBack(_ items: [MovedItem]) async -> BatchResult<URL> {
+    var result = BatchResult<URL>()
+    for item in items {
+      do {
+        try FileManager.default.moveItem(at: item.moved, to: item.original)
+        result.done.append(item.original)
+      } catch {
+        log.error("Ripristino non riuscito: \(error.localizedDescription, privacy: .public)")
+        result.failed += 1
+      }
+    }
+    return result
+  }
+
+  private static func comparablePath(_ url: URL) -> String {
+    let path = url.standardizedFileURL.path(percentEncoded: false)
+    return path.count > 1 && path.hasSuffix("/") ? String(path.dropLast()) : path
   }
 
   // MARK: Rinomina

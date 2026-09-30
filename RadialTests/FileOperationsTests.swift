@@ -277,6 +277,142 @@ final class FileOperationsTests {
     #expect(try contents("b.txt") == "B")
   }
 
+  // MARK: Sposta
+
+  /// Una sottocartella di destinazione, con un file dentro se serve a distinguerla.
+  private func makeDestination(_ name: String) throws -> URL {
+    try makeFolder(name)
+  }
+
+  private func names(in folder: URL) throws -> [String] {
+    try FileManager.default.contentsOfDirectory(atPath: folder.path(percentEncoded: false)).sorted()
+  }
+
+  @Test("Sposta porta i file nella cartella e li toglie dall'origine")
+  func moveBasic() async throws {
+    let file = try makeFile("uno.txt", contents: "dentro")
+    let destination = try makeDestination("Archivio")
+
+    let result = await FileOperations.move([file], to: destination)
+
+    #expect(result.failed == 0)
+    #expect(result.skipped == 0)
+    #expect(try names() == ["Archivio"])
+    #expect(try names(in: destination) == ["uno.txt"])
+    #expect(try String(contentsOf: destination.appendingPathComponent("uno.txt"), encoding: .utf8) == "dentro")
+  }
+
+  @Test("Con un nome già occupato il file arriva come 'nome 2', senza toccare l'altro")
+  func moveKeepsBoth() async throws {
+    let file = try makeFile("foto.jpg", contents: "nuova")
+    let destination = try makeDestination("Archivio")
+    try "vecchia".write(to: destination.appendingPathComponent("foto.jpg"), atomically: true, encoding: .utf8)
+
+    let result = await FileOperations.move([file], to: destination)
+
+    #expect(result.failed == 0)
+    #expect(try names(in: destination) == ["foto 2.jpg", "foto.jpg"])
+    #expect(try String(contentsOf: destination.appendingPathComponent("foto.jpg"), encoding: .utf8) == "vecchia")
+    #expect(try String(contentsOf: destination.appendingPathComponent("foto 2.jpg"), encoding: .utf8) == "nuova")
+  }
+
+  @Test("Chi è già nella cartella di destinazione resta dov'è e si conta a parte")
+  func moveSkipsItemsAlreadyThere() async throws {
+    let destination = try makeDestination("Archivio")
+    let inside = destination.appendingPathComponent("gia.txt")
+    try "x".write(to: inside, atomically: true, encoding: .utf8)
+    let outside = try makeFile("fuori.txt")
+
+    let result = await FileOperations.move([inside, outside], to: destination)
+
+    #expect(result.skipped == 1)
+    #expect(result.failed == 0)
+    #expect(result.done.map { $0.moved.lastPathComponent } == ["fuori.txt"])
+    #expect(try names(in: destination) == ["fuori.txt", "gia.txt"])
+  }
+
+  @Test("Una cartella non si può spostare dentro sé stessa né dentro una sua sottocartella")
+  func moveFolderIntoItself() async throws {
+    let folder = try makeFolder("Progetto")
+    let child = folder.appendingPathComponent("Sotto", isDirectory: true)
+    try FileManager.default.createDirectory(at: child, withIntermediateDirectories: true)
+
+    let intoItself = await FileOperations.move([folder], to: folder)
+    let intoChild = await FileOperations.move([folder], to: child)
+
+    #expect(intoItself.done.isEmpty)
+    #expect(intoChild.done.isEmpty)
+    #expect(intoChild.failed == 1)
+    #expect(try names() == ["Progetto"])
+    #expect(try names(in: folder) == ["Sotto"])
+  }
+
+  @Test("Un file che non esiste conta come non riuscito, gli altri vanno avanti")
+  func moveReportsFailures() async throws {
+    let file = try makeFile("uno.txt")
+    let missing = directory.appendingPathComponent("sparito.txt")
+    let destination = try makeDestination("Archivio")
+
+    let result = await FileOperations.move([missing, file], to: destination)
+
+    #expect(result.failed == 1)
+    #expect(result.done.count == 1)
+    #expect(try names(in: destination) == ["uno.txt"])
+  }
+
+  @Test("Si sposta anche una cartella, con tutto quello che contiene")
+  func moveFolderWithContents() async throws {
+    let folder = try makeFolder("Progetto v1.2")
+    try "dentro".write(to: folder.appendingPathComponent("nota.txt"), atomically: true, encoding: .utf8)
+    let destination = try makeDestination("Archivio")
+
+    let result = await FileOperations.move([folder], to: destination)
+
+    #expect(result.failed == 0)
+    #expect(try names(in: destination) == ["Progetto v1.2"])
+    #expect(try names(in: destination.appendingPathComponent("Progetto v1.2")) == ["nota.txt"])
+  }
+
+  @Test("Un elemento con lo stesso nome di una cartella già lì prende il numero prima dell'estensione")
+  func moveNumbersBeforeExtension() async throws {
+    let destination = try makeDestination("Archivio")
+    try "vecchio".write(to: destination.appendingPathComponent("relazione.v2.pdf"), atomically: true, encoding: .utf8)
+    let file = try makeFile("relazione.v2.pdf")
+
+    _ = await FileOperations.move([file], to: destination)
+
+    #expect(try names(in: destination) == ["relazione.v2 2.pdf", "relazione.v2.pdf"])
+  }
+
+  @Test("Annullare uno spostamento riporta i file da dove erano partiti")
+  func moveUndo() async throws {
+    let one = try makeFile("uno.txt", contents: "1")
+    let two = try makeFile("due.txt", contents: "2")
+    let destination = try makeDestination("Archivio")
+
+    let result = await FileOperations.move([one, two], to: destination)
+    let outcome = await ActionRunner.undo(.moveBack(result.done))
+
+    #expect(outcome.message == "Annullato")
+    #expect(try names() == ["Archivio", "due.txt", "uno.txt"])
+    #expect(try names(in: destination).isEmpty)
+    #expect(try contents("uno.txt") == "1")
+  }
+
+  @Test("Annullare non sovrascrive ciò che nel frattempo ha preso il posto")
+  func moveUndoDoesNotOverwrite() async throws {
+    let file = try makeFile("uno.txt", contents: "originale")
+    let destination = try makeDestination("Archivio")
+
+    let result = await FileOperations.move([file], to: destination)
+    _ = try makeFile("uno.txt", contents: "nuovo arrivato")
+    let outcome = await ActionRunner.undo(.moveBack(result.done))
+
+    #expect(outcome.message == "Impossibile annullare")
+    #expect(try contents("uno.txt") == "nuovo arrivato")
+    #expect(try names(in: destination) == ["uno.txt"])
+  }
+
   // MARK: Nomi
 
   @Test("Il primo nome libero salta quelli già presi")

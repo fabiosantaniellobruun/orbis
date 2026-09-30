@@ -23,6 +23,22 @@ eseguire l'azione.
 - **I pannelli con cui si interagisce si spostano** (`movableWindow()` in `RadialGlass.swift`),
   trascinandoli da un punto libero. L'anello e l'avviso seguono il puntatore e non si spostano.
   `isMovableByWindowBackground` non basta: il contenuto SwiftUI se ne prende gli eventi.
+- **Secondo anello** per le azioni con opzioni: passando su un bottone che ne ha, si apre un arco di
+  voci oltre l'anello, e si rilascia su una di quelle. Il bottone da solo non è un bersaglio. Le
+  voci stanno sul lato del loro bottone, con l'etichetta sul lato esterno. Di base Sposta sta a
+  sinistra, Converti in a destra, Cestina in basso, lontana da tutte e due.
+  Vicino a un bordo dello schermo non c'è posto per le etichette (servono circa 455 punti di lato):
+  invece di capovolgere l'arco, che diventerebbe irraggiungibile perché bisognerebbe attraversare
+  il centro (e lì il sottomenu si chiude), sono le due voci ad andare dalla parte che ha posto
+  (`RadialAction.layout`). Rinomina sta sempre in alto. In verticale il pannello si sposta di
+  quanto serve perché stia l'arco. Il prezzo è che la posizione di Sposta cambia con il punto
+  in cui si trascina: se dà fastidio, si può passare a un solo lato.
+- **Sposta**: prima le due cartelle usate più di recente, poi le quattro preferite scelte
+  dall'utente (Impostazioni…), poi "Scegli cartella…". Ogni voce mostra il nome e, in piccolo, il
+  percorso completo con la casa abbreviata (`~/Sites/Clienti/Rossi`), perché spesso più cartelle
+  hanno lo stesso nome. Una cartella già preferita non occupa anche un posto tra le recenti; quelle
+  che non esistono più saltano. Se il nome esiste già nella destinazione il file arriva come
+  "nome 2", come "Mantieni entrambi" del Finder; non si sovrascrive mai.
 - **Onda al rilascio**: dal bottone scelto parte una lente di vetro con il bordo iridescente
   (`HoloRipple`). Con "Riduci movimento" attivo non compare.
 - Preferenza `stickyMenu` (UserDefaults): il menu resta aperto dopo aver rilasciato Shift.
@@ -30,8 +46,8 @@ eseguire l'azione.
 ## Fasi
 
 1. **Prototipo di verifica** — fatto. Vedi sotto.
-2. **Menu radiale**: secondo anello per le azioni con opzioni, comportamento ai bordi dello schermo,
-   azioni filtrate per tipo di file, test sulla geometria.
+2. **Menu radiale** — fatto il secondo anello (usato da Sposta; Converti in lo userà per i formati)
+   e il comportamento ai bordi dello schermo. Manca: azioni filtrate per tipo di file.
 3. **Azioni immediate** — fatto: Clona, Comprimi, Copia percorso, Cestina. Dopo l'azione un avviso
    dice com'è andata e, dove ha senso, offre Annulla per cinque secondi. Resta Sposta, che ha
    bisogno del secondo anello. Le azioni non ancora pronte rispondono "in arrivo" e non toccano nulla.
@@ -95,7 +111,11 @@ I test lavorano in cartelle temporanee. Quelli sul Cestino cestinano e ripristin
 
 - `--preview` all'avvio mostra il menu al centro dello schermo, pilotato dal mouse.
 - `--run <azione> <percorsi…>` (solo Debug, da mettere per ultimo) esegue un'azione senza passare
-  dal menu: `clone`, `compress`, `copyPath`, `trash`, `rename` (apre il pannello).
+  dal menu: `clone`, `compress`, `copyPath`, `trash`, `rename` (apre il pannello). Per `move` il
+  primo percorso è la cartella di destinazione, gli altri sono i file.
+- `--settings` (solo Debug) prova ad aprire le impostazioni; da dentro l'app si aprono con ⌘,.
+- Le preferenze (`favoriteFolders`, `recentFolders`, `stickyMenu`) stanno in
+  `defaults read it.fabiosbruun.Radial`.
 - `-stickyMenu YES` attiva la preferenza per una sola esecuzione.
 - I messaggi si leggono con
   `log stream --info --predicate 'subsystem == "it.fabiosbruun.Radial"'`.

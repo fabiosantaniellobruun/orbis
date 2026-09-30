@@ -3,7 +3,8 @@ import SwiftUI
 
 /// Tiene insieme il rilevamento del trascinamento, il pannello e lo stato del menu.
 final class RadialController {
-  private static let panelSide: CGFloat = 600
+  /// Largo per le etichette del secondo anello, alto per il suo arco e per l'onda.
+  private static let panelSize = NSSize(width: 920, height: 640)
 
   private let model = RadialModel()
   private let monitor = DragMonitor()
@@ -20,7 +21,7 @@ final class RadialController {
   private var clickAwayMonitor: Any?
 
   init() {
-    let frame = NSRect(x: 0, y: 0, width: Self.panelSide, height: Self.panelSide)
+    let frame = NSRect(origin: .zero, size: Self.panelSize)
     dropView = RadialDropView(frame: frame)
 
     let hostingView = NSHostingView(rootView: RadialMenuView(model: model).ignoresSafeArea())
@@ -37,6 +38,7 @@ final class RadialController {
     }
     dropView.pointerLeft = { [weak self] in
       self?.highlight(nil)
+      self?.highlightOption(nil)
     }
     dropView.filesDropped = { [weak self] urls in
       self?.filesDropped(urls) ?? false
@@ -65,10 +67,17 @@ final class RadialController {
 
   #if DEBUG
   /// Esegue un'azione senza passare dal menu; l'avviso compare al centro dello schermo.
+  /// Per `move` il primo percorso è la cartella di destinazione, gli altri sono i file.
   func run(_ id: RadialAction.ID, on urls: [URL]) {
     guard let action = model.actions.first(where: { $0.id == id }), let screen = NSScreen.main else { return }
+    let center = NSPoint(x: screen.frame.midX, y: screen.frame.midY)
     Task {
-      await perform(action, on: urls, toastAt: NSPoint(x: screen.frame.midX, y: screen.frame.midY))
+      if id == .move, let destination = urls.first {
+        let option = RadialOption(destination: Destination(url: destination, kind: .favorite))
+        await perform(action, option: option, on: Array(urls.dropFirst()), toastAt: center)
+      } else {
+        await perform(action, option: nil, on: urls, toastAt: center)
+      }
     }
   }
   #endif
@@ -97,22 +106,46 @@ final class RadialController {
     }
   }
 
+  /// Aggiorna ciò che sta sotto il puntatore. Restituisce `true` se lì si può rilasciare: un
+  /// bottone senza secondo anello, o una voce di un secondo anello.
   private func pointerMoved(to offset: CGSize, isDragging: Bool) -> Bool {
     guard model.phase == .ring else { return false }
+    let distance = hypot(offset.width, offset.height)
+
+    // Con un secondo anello aperto, oltre l'anello principale valgono le sue voci.
+    if let sub = model.subGeometry, distance >= sub.innerRadius {
+      if let option = sub.hit(offset) {
+        highlightOption(option)
+        return true
+      }
+      highlightOption(nil)
+      if distance > sub.dismissRadius {
+        leaveMenu(isDragging: isDragging)
+        return false
+      }
+      // Fuori dall'arco ma vicino all'anello principale: vale ancora quello.
+      if distance >= model.geometry.dismissRadius { return false }
+    }
+
     switch model.geometry.hit(offset) {
     case .center:
       highlight(nil)
+      collapse()
       return false
+
     case .sector(let index):
       highlight(index)
-      return true
+      if model.expanded != index {
+        highlightOption(nil)
+        model.expanded = model.hasOptions(at: index) ? index : nil
+      }
+      // Un bottone con un secondo anello non è un bersaglio: bisogna scegliere una voce.
+      return !model.hasOptions(at: index)
+
     case .outside:
       highlight(nil)
-      // Trascinando fuori dal menu lo si chiude, così il rilascio torna a ciò che sta sotto.
-      if isDragging {
-        log.info("Trascinamento uscito dall'anello")
-        dismiss()
-      }
+      highlightOption(nil)
+      leaveMenu(isDragging: isDragging)
       return false
     }
   }
@@ -122,17 +155,22 @@ final class RadialController {
       log.info("Rilascio ignorato: nessuna azione sotto il puntatore")
       return false
     }
-    confirm(model.actions[index], urls: urls)
+    if model.hasOptions(at: index), model.highlightedOption == nil {
+      log.info("Rilascio ignorato: nessuna voce del secondo anello sotto il puntatore")
+      return false
+    }
+    confirm(model.actions[index], option: model.highlightedOption, urls: urls)
     return true
   }
 
   private func clicked() {
     guard model.phase == .ring else { return }
-    if let index = model.highlighted {
-      confirm(model.actions[index], urls: [])
-    } else {
+    guard let index = model.highlighted else {
       dismiss()
+      return
     }
+    if model.hasOptions(at: index), model.highlightedOption == nil { return }
+    confirm(model.actions[index], option: model.highlightedOption, urls: [])
   }
 
   // MARK: Stato del menu
@@ -145,24 +183,52 @@ final class RadialController {
     }
   }
 
+  private func highlightOption(_ index: Int?) {
+    guard model.highlightedOption != index else { return }
+    model.highlightedOption = index
+    if index != nil {
+      NSHapticFeedbackManager.defaultPerformer.perform(.alignment, performanceTime: .now)
+    }
+  }
+
+  private func collapse() {
+    highlightOption(nil)
+    model.expanded = nil
+  }
+
+  /// Trascinando fuori dal menu lo si chiude, così il rilascio torna a ciò che sta sotto.
+  private func leaveMenu(isDragging: Bool) {
+    guard isDragging else { return }
+    log.info("Trascinamento uscito dall'anello")
+    dismiss()
+  }
+
   private func show(centeredAt point: NSPoint) {
     hideTask?.cancel()
     hideTask = nil
     model.highlighted = nil
+    model.highlightedOption = nil
+    model.expanded = nil
     model.phase = .hidden
+    model.options = [.move: RadialOption.moveOptions(for: DestinationStore().destinations())]
 
-    let side = Self.panelSide
-    var origin = NSPoint(x: point.x - side / 2, y: point.y - side / 2)
-    // Vicino ai bordi il pannello si sposta quanto basta perché l'anello resti sullo schermo.
-    if let screen = NSScreen.screens.first(where: { $0.frame.contains(point) }) ?? NSScreen.main {
+    let size = Self.panelSize
+    var origin = NSPoint(x: point.x - size.width / 2, y: point.y - size.height / 2)
+    let screen = NSScreen.screens.first(where: { $0.frame.contains(point) }) ?? NSScreen.main
+    // Vicino ai bordi il pannello si sposta quanto basta perché l'anello resti sullo schermo, e in
+    // verticale anche l'arco del secondo anello, che è più alto dell'anello.
+    if let screen {
       let geometry = model.geometry
       let ringExtent = geometry.radius + geometry.buttonSize / 2 + 12
-      let overhang = side / 2 - ringExtent
-      let bounds = screen.visibleFrame.insetBy(dx: -overhang, dy: -overhang)
-      origin.x = min(max(origin.x, bounds.minX), bounds.maxX - side)
-      origin.y = min(max(origin.y, bounds.minY), bounds.maxY - side)
+      let bounds = screen.visibleFrame.insetBy(
+        dx: -(size.width / 2 - ringExtent),
+        dy: -(size.height / 2 - max(ringExtent, SubRingGeometry.verticalReach))
+      )
+      origin.x = min(max(origin.x, bounds.minX), bounds.maxX - size.width)
+      origin.y = min(max(origin.y, bounds.minY), bounds.maxY - size.height)
     }
     panel.setFrameOrigin(origin)
+    arrangeActions(on: screen)
     panel.orderFrontRegardless()
 
     // Un giro di run loop dopo, così lo stato chiuso viene disegnato e l'apertura si anima.
@@ -171,26 +237,50 @@ final class RadialController {
     }
   }
 
-  private func confirm(_ action: RadialAction, urls: [URL]) {
+  /// Le etichette del secondo anello vogliono posto di lato. Se da una parte non ce n'è, le voci
+  /// che ne hanno uno passano dall'altra parte dell'anello: capovolgere l'arco non basterebbe,
+  /// perché per raggiungerlo bisognerebbe attraversare il centro, e lì il sottomenu si chiude.
+  private func arrangeActions(on screen: NSScreen?) {
+    guard let screen else {
+      model.arrange(RadialAction.all)
+      return
+    }
+    let bounds = screen.visibleFrame
+    model.arrange(RadialAction.layout(
+      roomLeft: panel.frame.midX - bounds.minX,
+      roomRight: bounds.maxX - panel.frame.midX
+    ))
+  }
+
+  private func confirm(_ action: RadialAction, option optionIndex: Int?, urls: [URL]) {
+    var option: RadialOption?
+    if let optionIndex, let expanded = model.expanded {
+      let options = model.options(at: expanded)
+      if options.indices.contains(optionIndex) {
+        option = options[optionIndex]
+      }
+    }
     log.notice("Azione scelta: \(action.id.rawValue, privacy: .public), file ricevuti: \(urls.count)")
     model.highlighted = nil
-    model.phase = .confirmation(action)
+    model.highlightedOption = nil
+    model.phase = .confirmation(action, option: optionIndex)
     NSHapticFeedbackManager.defaultPerformer.perform(.generic, performanceTime: .now)
     scheduleHide(after: .milliseconds(900))
 
     // L'avviso compare al centro dell'anello e gli sopravvive.
     let center = NSPoint(x: panel.frame.midX, y: panel.frame.midY)
     Task {
-      await perform(action, on: urls, toastAt: center)
+      await perform(action, option: option, on: urls, toastAt: center)
     }
   }
 
   // MARK: Azioni
 
-  private func perform(_ action: RadialAction, on urls: [URL], toastAt point: NSPoint) async {
+  private func perform(_ action: RadialAction, option: RadialOption?, on urls: [URL], toastAt point: NSPoint) async {
     // Il menu di prova non ha file: mostra solo quale azione è stata scelta.
     guard !urls.isEmpty else {
-      toast.show(ToastContent(symbol: action.symbol, text: action.title), centeredAt: point, for: .milliseconds(1400))
+      let text = option.map { "\(action.title) · \($0.title)" } ?? action.title
+      toast.show(ToastContent(symbol: action.symbol, text: text), centeredAt: point, for: .milliseconds(1400))
       return
     }
 
@@ -207,6 +297,22 @@ final class RadialController {
       return
     }
 
+    // Sposta ha bisogno della cartella: quella della voce scelta, o una da cercare.
+    var destination: URL?
+    if action.id == .move {
+      switch option?.kind {
+      case .folder(let url):
+        destination = url
+      case .chooseFolder:
+        try? await Task.sleep(for: .milliseconds(450))
+        destination = await chooseFolder()
+        // Niente scelta, niente da fare.
+        guard destination != nil else { return }
+      case nil:
+        return
+      }
+    }
+
     // L'avviso "in corso" compare solo se l'azione non è immediata.
     let working = Task {
       try? await Task.sleep(for: .milliseconds(250))
@@ -217,9 +323,31 @@ final class RadialController {
         for: nil
       )
     }
-    let outcome = await ActionRunner.run(action, on: urls)
+    let outcome: ActionOutcome
+    if let destination {
+      outcome = await ActionRunner.move(urls, to: destination)
+    } else {
+      outcome = await ActionRunner.run(action, on: urls)
+    }
     working.cancel()
     present(outcome, at: point)
+  }
+
+  /// Chiede una cartella di destinazione. Radial si attiva per mostrare il pannello, e alla fine
+  /// restituisce il focus all'app di prima.
+  private func chooseFolder() async -> URL? {
+    NSApp.activate()
+    let open = NSOpenPanel()
+    open.canChooseDirectories = true
+    open.canChooseFiles = false
+    open.canCreateDirectories = true
+    open.allowsMultipleSelection = false
+    open.prompt = "Sposta qui"
+    open.message = "Scegli la cartella di destinazione"
+    open.directoryURL = DestinationStore().destinations().first?.url
+    let response = await open.begin()
+    NSApp.hide(nil)
+    return response == .OK ? open.url : nil
   }
 
   private func present(_ outcome: ActionOutcome, at point: NSPoint) {
@@ -254,10 +382,12 @@ final class RadialController {
       try? await Task.sleep(for: delay)
       guard !Task.isCancelled else { return }
       model.highlighted = nil
+      model.highlightedOption = nil
       model.phase = .hidden
       // Il tempo dell'animazione di chiusura, poi la finestra esce davvero.
       try? await Task.sleep(for: .milliseconds(140))
       guard !Task.isCancelled else { return }
+      model.expanded = nil
       panel.orderOut(nil)
       isPreview = false
       if let clickAwayMonitor {
