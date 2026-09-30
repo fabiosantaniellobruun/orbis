@@ -18,9 +18,6 @@ final class RadialPanel: NSPanel {
     hidesOnDeactivate = false
     isReleasedWhenClosed = false
     animationBehavior = .none
-    // Sempre scuro: il menu compare sopra qualsiasi cosa, e con il vetro chiaro le icone scure
-    // si perdono sugli sfondi scuri.
-    appearance = NSAppearance(named: .darkAqua)
     // Impostato esplicitamente: altrimenti le zone trasparenti lasciano passare clic e rilasci.
     ignoresMouseEvents = false
     self.contentView = contentView

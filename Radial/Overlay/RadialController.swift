@@ -155,6 +155,7 @@ final class RadialController {
     log.notice("Azione scelta: \(action.id, privacy: .public), file ricevuti: \(urls.count)")
     model.highlighted = nil
     model.phase = .confirmation(action, fileCount: urls.count)
+    NSHapticFeedbackManager.defaultPerformer.perform(.generic, performanceTime: .now)
     scheduleHide(after: .milliseconds(1200))
   }
 

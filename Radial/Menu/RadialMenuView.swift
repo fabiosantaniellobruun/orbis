@@ -3,10 +3,24 @@ import SwiftUI
 struct RadialMenuView: View {
   let model: RadialModel
 
+  @Environment(\.accessibilityReduceMotion) private var reduceMotion
+
   private var isOpen: Bool { model.phase == .ring }
+
+  /// Il bottone su cui sono stati rilasciati i file: resta al suo posto durante la conferma.
+  private var confirmedIndex: Int? {
+    guard case .confirmation(let action, _) = model.phase else { return nil }
+    return model.actions.firstIndex(of: action)
+  }
 
   var body: some View {
     ZStack {
+      if let index = confirmedIndex, !reduceMotion {
+        HoloRipple(startDiameter: model.geometry.buttonSize, spread: 110)
+          .offset(model.geometry.offset(at: index))
+          .transition(.identity)
+      }
+
       ring
 
       if isOpen, let index = model.highlighted {
@@ -28,19 +42,22 @@ struct RadialMenuView: View {
     return GlassEffectContainer(spacing: 14) {
       ZStack {
         ForEach(Array(model.actions.enumerated()), id: \.element.id) { index, action in
+          let isConfirmed = confirmedIndex == index
+          let isShown = isOpen || isConfirmed
           RadialButton(
             action: action,
             size: geometry.buttonSize,
-            isOpen: isOpen,
-            isHighlighted: model.highlighted == index
+            isShown: isShown,
+            isHighlighted: model.highlighted == index,
+            isConfirmed: isConfirmed
           )
-            .opacity(isOpen ? 1 : 0)
-            .offset(isOpen ? geometry.offset(at: index) : .zero)
+            .opacity(isShown ? 1 : 0)
+            .offset(isShown ? geometry.offset(at: index) : .zero)
             .animation(
-              isOpen
+              isShown
                 ? .spring(duration: 0.36, bounce: 0.28).delay(Double(index) * 0.012)
                 : .easeOut(duration: 0.12),
-              value: isOpen
+              value: isShown
             )
         }
       }
@@ -54,7 +71,7 @@ struct RadialMenuView: View {
       .font(.system(size: 13, weight: .semibold))
       .padding(.horizontal, 12)
       .padding(.vertical, 6)
-      .glassEffect(.regular, in: .capsule)
+      .modifier(RadialGlass(shape: .capsule))
       .fixedSize()
       .id(index)
       .transition(.opacity)
@@ -64,31 +81,50 @@ struct RadialMenuView: View {
 private struct RadialButton: View {
   let action: RadialAction
   let size: CGFloat
-  let isOpen: Bool
+  let isShown: Bool
   let isHighlighted: Bool
+  let isConfirmed: Bool
 
   // Il bottone cambia dimensione con il frame e non con `scaleEffect`: applicato al vetro,
   // `scaleEffect` lo scala da un angolo e lo stacca dal contenuto.
   private var diameter: CGFloat {
-    guard isOpen else { return size * 0.3 }
+    guard isShown else { return size * 0.3 }
     return isHighlighted ? size * 1.18 : size
   }
+
+  private var isAccented: Bool { isHighlighted || isConfirmed }
 
   var body: some View {
     Image(systemName: action.symbol)
       .font(.system(size: 20, weight: .medium))
-      .foregroundStyle(isHighlighted ? AnyShapeStyle(.white) : AnyShapeStyle(.primary))
-      .scaleEffect(isOpen ? 1 : 0.3)
+      .foregroundStyle(isAccented ? AnyShapeStyle(.white) : AnyShapeStyle(.primary))
+      .scaleEffect(isShown ? 1 : 0.3)
       .frame(width: diameter, height: diameter)
-      // Il colore è un riempimento e non una tinta del vetro: il pannello non è mai la finestra
-      // attiva, e il sistema toglie la tinta al vetro delle finestre non attive.
-      .background {
-        Circle()
-          .fill(Color.fixedAccent)
-          .opacity(isHighlighted ? 0.85 : 0)
-      }
-      .glassEffect(.regular, in: .circle)
+      .modifier(RadialGlass(shape: .circle, isAccented: isAccented))
       .animation(.spring(duration: 0.22, bounce: 0.35), value: isHighlighted)
+  }
+}
+
+/// Il vetro del menu, con un velo di colore tra il vetro e il contenuto.
+private struct RadialGlass<S: Shape>: ViewModifier {
+  @Environment(\.colorScheme) private var colorScheme
+
+  let shape: S
+  var isAccented = false
+
+  func body(content: Content) -> some View {
+    content
+      .background { shape.fill(isAccented ? Color.fixedAccent.opacity(0.85) : veil) }
+      .glassEffect(.regular, in: shape)
+  }
+
+  // Il colore di accento è un riempimento e non una tinta del vetro: il pannello non è mai la
+  // finestra attiva, e il sistema toglie la tinta al vetro delle finestre non attive.
+  //
+  // Nel tema chiaro il vetro prende il tono di ciò che ha dietro: su uno sfondo scuro diventa
+  // scuro e le icone scure non si leggono più. Un velo bianco lo tiene chiaro.
+  private var veil: Color {
+    colorScheme == .light ? .white.opacity(0.5) : .clear
   }
 }
 
@@ -118,6 +154,6 @@ private struct ConfirmationLabel: View {
       .font(.system(size: 14, weight: .semibold))
       .padding(.horizontal, 16)
       .padding(.vertical, 10)
-      .glassEffect(.regular, in: .capsule)
+      .modifier(RadialGlass(shape: .capsule))
   }
 }

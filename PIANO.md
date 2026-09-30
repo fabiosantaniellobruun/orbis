@@ -10,7 +10,10 @@ eseguire l'azione.
   Al centro c'è una zona morta; uscendo dall'anello il menu si chiude e il trascinamento prosegue.
 - **Combinazione di soli modificatori** (⌃⇧ di default): non richiede permessi di sistema.
 - **Niente sandbox, fuori dal Mac App Store**: rinomina e spostamento in sandbox sono molto limitati.
-- **Pannello sempre scuro**: compare sopra qualsiasi sfondo e con il vetro chiaro le icone si perdono.
+- **Tema chiaro o scuro secondo il sistema**. Nel tema chiaro un velo bianco sotto le icone tiene
+  il vetro chiaro anche sugli sfondi scuri, dove altrimenti le icone scure si perderebbero.
+- **Onda al rilascio**: dal bottone scelto parte una lente di vetro con il bordo iridescente
+  (`HoloRipple`). Con "Riduci movimento" attivo non compare.
 - Preferenza `stickyMenu` (UserDefaults): il menu resta aperto dopo aver rilasciato i tasti.
 
 ## Fasi
@@ -48,4 +51,4 @@ open build/Build/Products/Debug/Radial.app
 - `--preview` all'avvio mostra il menu al centro dello schermo, pilotato dal mouse.
 - `-stickyMenu YES` attiva la preferenza per una sola esecuzione.
 - I messaggi si leggono con
-  `log stream --info --predicate 'subsystem == "it.geckosoft.Radial"'`.
+  `log stream --info --predicate 'subsystem == "it.fabiosbruun.Radial"'`.

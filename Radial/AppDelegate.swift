@@ -1,7 +1,7 @@
 import AppKit
 import os
 
-let log = Logger(subsystem: "it.geckosoft.Radial", category: "radial")
+let log = Logger(subsystem: "it.fabiosbruun.Radial", category: "radial")
 
 final class AppDelegate: NSObject, NSApplicationDelegate {
   private(set) var controller: RadialController?
