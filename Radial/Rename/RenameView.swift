@@ -68,8 +68,7 @@ struct RenameView: View {
           .onSubmit { model.apply(model.plan) }
       }
 
-      Toggle("Numero progressivo", isOn: $model.options.addsNumber)
-        .toggleStyle(.switch)
+      SwitchRow("Numero progressivo", isOn: $model.options.addsNumber)
 
       if model.options.addsNumber {
         HStack(spacing: 14) {
@@ -124,8 +123,7 @@ struct RenameView: View {
         TextField("Testo nuovo (vuoto per togliere)", text: $model.options.replacement)
           .modifier(RadialField())
       }
-      Toggle("Distingui maiuscole e minuscole", isOn: $model.options.matchCase)
-        .toggleStyle(.switch)
+      SwitchRow("Distingui maiuscole e minuscole", isOn: $model.options.matchCase)
     }
   }
 
@@ -238,37 +236,6 @@ struct RenameView: View {
     case 1: Text("1 elemento da rinominare")
     default: Text("\(count) elementi da rinominare")
     }
-  }
-}
-
-private struct FieldRow<Content: View>: View {
-  let title: String
-  @ViewBuilder let content: Content
-
-  init(_ title: String, @ViewBuilder content: () -> Content) {
-    self.title = title
-    self.content = content()
-  }
-
-  var body: some View {
-    VStack(alignment: .leading, spacing: 4) {
-      Text(title)
-        .font(.system(size: 11, weight: .medium))
-        .foregroundStyle(.secondary)
-      content
-    }
-  }
-}
-
-private struct RadialField: ViewModifier {
-  func body(content: Content) -> some View {
-    let shape = RoundedRectangle(cornerRadius: 10, style: .continuous)
-    content
-      .textFieldStyle(.plain)
-      .padding(.horizontal, 10)
-      .padding(.vertical, 7)
-      .background(.primary.opacity(0.09), in: shape)
-      .overlay { shape.strokeBorder(.primary.opacity(0.14), lineWidth: 1) }
   }
 }
 

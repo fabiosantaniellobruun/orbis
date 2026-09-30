@@ -79,8 +79,34 @@ enum ActionRunner {
       return .failure("Converti in ha bisogno di un formato")
 
     case .resize:
-      return ActionOutcome(symbol: action.symbol, message: "\(action.title): in arrivo")
+      // Servono le misure: se ne occupa il pannello di `ResizeController`, che poi chiama `resize`.
+      return .failure("Ridimensiona passa dal suo pannello")
     }
+  }
+
+  static func resize(_ request: ResizeRequest) async -> ActionOutcome {
+    let result = await FileOperations.resize(request)
+
+    guard !result.done.isEmpty else {
+      if result.failed == 0, result.skipped > 0 {
+        return ActionOutcome(symbol: "info.circle.fill", message: "Nessuna immagine da ridimensionare")
+      }
+      return .failure("Impossibile ridimensionare")
+    }
+
+    let count = result.done.count
+    var message = "\(count) \(count == 1 ? "immagine ridimensionata" : "immagini ridimensionate")"
+    let overweight = result.done.count { !$0.reachedTarget }
+    if overweight > 0 {
+      message += ", \(overweight) \(overweight == 1 ? "resta sopra" : "restano sopra") il peso richiesto"
+    }
+    if result.failed > 0 {
+      message += ", \(result.failed) non \(result.failed == 1 ? "riuscita" : "riuscite")"
+    }
+    if result.skipped > 0 {
+      message += ", \(result.skipped) \(result.skipped == 1 ? "saltato" : "saltati")"
+    }
+    return ActionOutcome(message: message, undo: .discard(result.done.map(\.url)))
   }
 
   static func convert(_ urls: [URL], to format: ImageFormat) async -> ActionOutcome {

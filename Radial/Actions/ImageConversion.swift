@@ -8,6 +8,11 @@ import UniformTypeIdentifiers
 nonisolated enum ImageFormat: String, CaseIterable, Sendable {
   case png, jpeg, heic, avif, tiff
 
+  init?(typeIdentifier: String) {
+    guard let format = Self.allCases.first(where: { $0.typeIdentifier == typeIdentifier }) else { return nil }
+    self = format
+  }
+
   var title: String {
     switch self {
     case .png: "PNG"
@@ -62,10 +67,10 @@ nonisolated enum ImageFormat: String, CaseIterable, Sendable {
   }
 
   /// I formati che questo Mac sa davvero scrivere: non si propone ciò che poi non riesce.
-  static var available: [ImageFormat] {
+  static let available: [ImageFormat] = {
     let writable = Set((CGImageDestinationCopyTypeIdentifiers() as? [String]) ?? [])
     return allCases.filter { writable.contains($0.typeIdentifier) }
-  }
+  }()
 }
 
 nonisolated enum ImageConversionError: Error {
@@ -116,7 +121,7 @@ nonisolated enum ImageConverter {
   }
 
   /// Le proprietà che descrivono l'immagine com'era e che il nuovo file ricalcola da sé.
-  private static var derivedKeys: Set<CFString> {
+  static var derivedKeys: Set<CFString> {
     [
       kCGImagePropertyHasAlpha, kCGImagePropertyPixelWidth, kCGImagePropertyPixelHeight,
       kCGImagePropertyDepth, kCGImagePropertyColorModel, kCGImagePropertyIsIndexed,
@@ -124,7 +129,8 @@ nonisolated enum ImageConverter {
     ]
   }
 
-  private static func flattenedOnWhite(_ image: CGImage) -> CGImage {
+  /// L'immagine appoggiata su un fondo bianco, senza trasparenza.
+  static func flattenedOnWhite(_ image: CGImage) -> CGImage {
     let width = image.width
     let height = image.height
     let colorSpace = image.colorSpace ?? CGColorSpaceCreateDeviceRGB()

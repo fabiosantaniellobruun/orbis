@@ -19,7 +19,7 @@ codice. Per usare l'app, vedi il [README](../README.it.md).
 | 6 | Converti in, per le immagini (PNG, JPEG, HEIC, AVIF, TIFF) | fatto |
 | 7 | Impostazioni: tasto, menu aperto, avvio al login, cartelle preferite | fatto (manca: ordine delle azioni) |
 | 8 | Distribuzione: versione, DMG, script di rilascio, benvenuto al primo avvio | fatto, **manca la firma Developer ID e la notarizzazione** (servono le credenziali Apple) |
-| 9 | Ridimensiona: compressione, dimensioni, proporzioni | da fare |
+| 9 | Ridimensiona: dimensioni, percentuale, proporzioni, qualità e peso massimo | fatto |
 | 10 | Video in GIF, con tutti i controlli | da fare (vedi sotto) |
 | 11 | Interfaccia in inglese | da fare, prima di promuovere l'app fuori dall'Italia |
 
@@ -115,14 +115,36 @@ codice. Per usare l'app, vedi il [README](../README.it.md).
 - Il pannello (`FormPanel`) può ricevere la tastiera. Radial si attiva mentre è aperto e restituisce
   il focus all'app di prima quando si chiude.
 
-## Da fare: Ridimensiona
+## Ridimensiona
 
-Un pannello come quello di Rinomina, con tre modi, anteprima di dimensioni e peso stimato, e il
-file nuovo accanto all'originale:
+Un pannello come quello di Rinomina (`FormPanelHost` è in comune), con tre modi e, sotto, la
+compressione. Il file nuovo arriva accanto all'originale come "foto ridimensionata.jpg"; Annulla lo
+mette nel Cestino.
 
-- **Compressione**: qualità per i formati con perdita, oppure un peso da non superare.
-- **Dimensioni**: larghezza e altezza in pixel o in percentuale, con o senza proporzioni bloccate.
-- **Proporzioni**: mantenerle, oppure ritagliare a un rapporto (16:9, 1:1, 4:3, 3:2…).
+- **Dimensioni**: larghezza e altezza sono una scatola in cui l'immagine deve stare, e un lato
+  vuoto non pone limiti. Così una misura vale per un gruppo di foto orizzontali e verticali
+  insieme, cosa che un lucchetto alla Photoshop (che ricalcola l'altro lato su un'immagine sola)
+  non sa fare. Senza proporzioni l'immagine si stira alla misura esatta. "Non ingrandire" è attivo
+  di base: le immagini già piccole restano come sono.
+- **Percentuale**: da 1 a 500; qui ingrandire è voluto.
+- **Proporzioni**: ritaglio al centro con 1:1, 4:3, 3:2, 16:9, 5:4 o un rapporto a scelta, più un
+  lato lungo massimo. "Segui l'orientamento" (attivo) dà 3:4 a una foto verticale quando si sceglie
+  4:3, così non servono le versioni verticali dei rapporti; il quadrato conta come orizzontale.
+- **Compressione**: formato (come l'originale, o uno di quelli di Converti in), qualità per JPEG,
+  HEIC e AVIF, e un peso massimo facoltativo. Col peso massimo si cerca per bisezione la qualità
+  più alta che lo rispetta, partendo da quella scelta e senza scendere sotto il 10%; se non basta,
+  il file si scrive lo stesso e l'avviso lo dice ("resta sopra il peso richiesto").
+- **Anteprima**: per ogni file, misure prima e dopo; per i primi quattro anche il peso stimato,
+  calcolato scrivendo davvero l'immagine in memoria, un attimo dopo che si è smesso di scrivere.
+- **Cosa si salta**: file che non sono immagini, immagini a più fotogrammi (GIF animate, sequenze
+  HEIC), formati che il Mac non sa scrivere se non se ne sceglie un altro, e le immagini senza
+  perdita che resterebbero identiche (stesse misure, stesso formato): riscriverle darebbe lo stesso
+  file, spesso più pesante.
+- **Pixel**: l'orientamento EXIF si applica ai pixel e si toglie dai metadati (altrimenti la foto
+  si girerebbe due volte); il resto dei metadati resta. Le riduzioni proporzionali passano da
+  `CGImageSourceCreateThumbnailAtIndex`, che riduce bene senza caricare l'immagine intera; ritagli,
+  ingrandimenti e stiramenti da un `CGContext` ad alta interpolazione. L'uscita è a 8 bit per
+  canale, nello spazio colore dell'originale.
 
 ## Da fare: video in GIF
 
@@ -164,9 +186,15 @@ I test lavorano in cartelle temporanee. Quelli sul Cestino cestinano e ripristin
 - `--preview` all'avvio mostra il menu al centro dello schermo, pilotato dal mouse.
 - `--welcome` mostra la finestra di benvenuto anche se è già stata vista.
 - `--run <azione> <percorsi…>` (solo Debug, da mettere per ultimo) esegue un'azione senza passare
-  dal menu: `clone`, `compress`, `copyPath`, `trash`, `rename` (apre il pannello). Per `move` il
-  primo percorso è la cartella di destinazione, per `convert` il formato (`png`, `jpeg`, `heic`,
-  `avif`, `tiff`); gli altri sono i file.
+  dal menu: `clone`, `compress`, `copyPath`, `trash`, `rename` e `resize` (aprono il pannello).
+  Per `move` il primo percorso è la cartella di destinazione, per `convert` il formato (`png`,
+  `jpeg`, `heic`, `avif`, `tiff`), per `resize` può essere una larghezza massima in pixel (e allora
+  il pannello non si apre); gli altri sono i file.
+- `--snapshot <percorso.png>` (solo Debug, prima di `--run`) dopo due secondi fotografa dall'interno
+  le finestre visibili (`percorso.1.png`, `.2.png`…): serve a controllare l'impaginazione dei
+  pannelli senza permessi di registrazione dello schermo. Il vetro, gli slider e i selettori
+  segmentati non escono: li compone il sistema. `RADIAL_RESIZE_MODE=dimensions|percent|ratio`
+  (con `open --env`) apre Ridimensiona in quel modo, con il peso massimo attivo.
 - `--settings` (solo Debug) prova ad aprire le impostazioni; da dentro l'app si aprono con ⌘,.
 - Le preferenze (`favoriteFolders`, `recentFolders`, `stickyMenu`, `triggerShortcut`,
   `didShowWelcome`) stanno in `defaults read it.fabiosbruun.Radial`.

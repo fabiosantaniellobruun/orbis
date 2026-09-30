@@ -5,7 +5,7 @@
 Radial è una piccola app per la barra dei menu di macOS. Inizia a trascinare dei file nel Finder,
 tieni premuto **⇧** (o il tasto che preferisci) e attorno al puntatore compare un anello di
 bottoni in vetro. Rilascia i file su un bottone: rinominali in serie, clonali, spostali in una
-cartella recente, converti le immagini, comprimili, copia i loro percorsi o mandali nel Cestino.
+cartella recente, converti o ridimensiona le immagini, comprimili, copia i loro percorsi o mandali nel Cestino.
 Ogni azione si può annullare.
 
 <p align="center">
@@ -24,14 +24,17 @@ Ogni azione si può annullare.
   voce mostra il nome della cartella e, in piccolo, il **percorso completo**: cartelle con lo stesso
   nome non si confondono.
 - **Converti le immagini** in PNG, JPEG, HEIC, AVIF o TIFF, conservando metadati e orientamento.
+- **Ridimensiona le immagini**: falle stare in una larghezza e un'altezza (anche un gruppo di foto
+  orizzontali e verticali insieme), scalale in percentuale o ritagliale a 1:1, 4:3, 16:9 o a un
+  rapporto a scelta. Scegli formato e qualità, oppure un peso massimo, con l'anteprima delle misure
+  e del peso stimato.
 - **Clona**, **comprimi** (zip), **copia il percorso** e **cestina** ("Ripristina" del Finder funziona).
 - **Annulla** per qualche secondo dopo ogni azione che modifica dei file. Radial non sovrascrive
   mai un file: se il nome è occupato, quello nuovo arriva come `nome 2`.
 - **Il tuo tasto**: ⇧ di base; nelle impostazioni scegli qualsiasi combinazione di modificatori o tasto.
 - Pensata per il **Liquid Glass** di macOS 26, segue il tema chiaro e scuro e rispetta "Riduci movimento".
 
-In arrivo: **Ridimensiona** (compressione, dimensioni, proporzioni) e **video in GIF** con tutti i
-controlli su durata, dimensioni, fotogrammi e colori.
+In arrivo: **video in GIF** con tutti i controlli su durata, dimensioni, fotogrammi e colori.
 
 <p align="center">
   <img src="docs/images/rename.jpg" alt="Il pannello di rinomina in serie con l'anteprima in tempo reale" width="330">
@@ -65,8 +68,8 @@ tolgono con `defaults delete it.fabiosbruun.Radial`.
    sotto il puntatore si illumina.
 
 Alcuni bottoni aprono un **secondo anello**: su **Sposta** trovi le cartelle recenti e preferite, su
-**Converti in** i formati. **Rinomina** apre un pannello con l'anteprima, che puoi spostare
-trascinandolo da un punto libero.
+**Converti in** i formati. **Rinomina** e **Ridimensiona** aprono un pannello con l'anteprima, che
+puoi spostare trascinandolo da un punto libero.
 
 Per **annullare**, rilascia il tasto o allontanati dall'anello: il trascinamento prosegue come al solito.
 
@@ -115,7 +118,7 @@ Per creare un DMG da distribuire, vedi [docs/RELEASING.md](docs/RELEASING.md).
 | `Radial/Input` | Il riconoscimento del trascinamento e il tasto configurabile |
 | `Radial/Menu` | La geometria dell'anello, i bottoni, le voci del secondo anello |
 | `Radial/Overlay` | I pannelli trasparenti e il controller |
-| `Radial/Rename` | Il pannello di rinomina in serie e la sua logica |
+| `Radial/Rename`, `Resize` | I pannelli di rinomina in serie e di ridimensionamento, con la loro logica |
 | `Radial/Settings`, `Toast`, `Welcome` | Le impostazioni, l'avviso con Annulla, la finestra del primo avvio |
 | `RadialTests` | Le suite di [Swift Testing](https://developer.apple.com/xcode/swift-testing/) |
 | `docs` | Le [note di progetto](docs/PROGETTO.md) e la [guida al rilascio](docs/RELEASING.md) |

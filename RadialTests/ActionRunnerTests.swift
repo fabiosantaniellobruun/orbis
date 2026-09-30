@@ -191,13 +191,12 @@ final class ActionRunnerTests {
     #expect(store.recents.isEmpty)
   }
 
-  @Test("Le azioni non ancora pronte lo dicono e non toccano i file")
-  func unimplementedAction() async throws {
+  @Test("Ridimensiona senza pannello non tocca i file")
+  func resizeNeedsItsPanel() async throws {
     let files = try makeFiles("uno.txt")
 
     let outcome = try await ActionRunner.run(action(.resize), on: files)
 
-    #expect(outcome.message == "Ridimensiona: in arrivo")
     #expect(outcome.undo == nil)
     #expect(try names() == ["uno.txt"])
   }

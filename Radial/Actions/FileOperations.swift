@@ -31,6 +31,12 @@ nonisolated struct RenamedItem: Sendable, Equatable {
   let renamed: URL
 }
 
+nonisolated struct ResizedItem: Sendable, Equatable {
+  let url: URL
+  /// `false` se era stato chiesto un peso massimo e non è stato raggiunto.
+  let reachedTarget: Bool
+}
+
 nonisolated enum FileOperationError: Error {
   case noFiles
   case processFailed(status: Int32, message: String)
@@ -86,6 +92,35 @@ nonisolated enum FileOperations {
         result.done.append(destination)
       } catch {
         log.error("Converti non riuscito: \(String(describing: error), privacy: .private)")
+        result.failed += 1
+      }
+    }
+    return result
+  }
+
+  // MARK: Ridimensiona
+
+  /// Scrive la versione ridimensionata di ogni immagine accanto all'originale ("foto ridimensionata.jpg"),
+  /// che resta dov'è.
+  @concurrent
+  static func resize(_ request: ResizeRequest) async -> BatchResult<ResizedItem> {
+    var result = BatchResult<ResizedItem>()
+    result.skipped = request.skipped
+    for job in request.jobs {
+      let (stem, _) = nameParts(of: job.url)
+      let destination = availableURL(
+        in: job.url.deletingLastPathComponent(),
+        stem: "\(stem) ridimensionata",
+        extension: job.fileExtension
+      )
+      do {
+        let rendered = try ImageResizer.render(
+          job.url, geometry: job.geometry, format: job.format, quality: request.quality, maxBytes: request.maxBytes
+        )
+        try rendered.data.write(to: destination, options: .withoutOverwriting)
+        result.done.append(ResizedItem(url: destination, reachedTarget: rendered.reachedTarget))
+      } catch {
+        log.error("Ridimensiona non riuscito: \(String(describing: error), privacy: .private)")
         result.failed += 1
       }
     }

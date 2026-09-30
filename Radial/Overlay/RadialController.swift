@@ -10,6 +10,7 @@ final class RadialController {
   private let monitor = DragMonitor()
   private let toast = ToastController()
   private let rename = RenameController()
+  private let resize = ResizeController()
   private let dropView: RadialDropView
   private let panel: OverlayPanel
 
@@ -68,7 +69,8 @@ final class RadialController {
   #if DEBUG
   /// Esegue un'azione senza passare dal menu; l'avviso compare al centro dello schermo.
   /// Per `move` il primo percorso è la cartella di destinazione, per `convert` il formato
-  /// (png, jpeg, heic, avif, tiff); gli altri sono i file.
+  /// (png, jpeg, heic, avif, tiff), per `resize` la larghezza massima in pixel (senza, si apre il
+  /// pannello); gli altri sono i file.
   func run(_ id: RadialAction.ID, on urls: [URL]) {
     guard let action = model.actions.first(where: { $0.id == id }), let screen = NSScreen.main else { return }
     let center = NSPoint(x: screen.frame.midX, y: screen.frame.midY)
@@ -78,6 +80,11 @@ final class RadialController {
         await perform(action, option: option, on: Array(urls.dropFirst()), toastAt: center)
       } else if id == .convert, let name = urls.first?.lastPathComponent, let format = ImageFormat(rawValue: name) {
         await perform(action, option: RadialOption(format: format), on: Array(urls.dropFirst()), toastAt: center)
+      } else if id == .resize, let width = urls.first.flatMap({ Int($0.lastPathComponent) }) {
+        var options = ResizeOptions()
+        options.width = width
+        let sources = urls.dropFirst().map { ResizeSource(url: $0) }
+        present(await ActionRunner.resize(ResizePlan.make(sources: sources, options: options).request), at: center)
       } else {
         await perform(action, option: nil, on: urls, toastAt: center)
       }
@@ -290,6 +297,24 @@ final class RadialController {
       return
     }
 
+    // Ridimensiona ha bisogno delle misure: si apre il suo pannello, e l'esito arriva dopo.
+    if action.id == .resize {
+      try? await Task.sleep(for: .milliseconds(450))
+      let opened = resize.present(urls, near: point) { [weak self] request in
+        Task {
+          let working = self?.showWorking(action, at: point)
+          let outcome = await ActionRunner.resize(request)
+          working?.cancel()
+          self?.present(outcome, at: point)
+        }
+      }
+      if !opened {
+        let message = urls.count == 1 ? "Il file non è un'immagine da ridimensionare" : "I file non sono immagini da ridimensionare"
+        present(ActionOutcome(symbol: "info.circle.fill", message: message), at: point)
+      }
+      return
+    }
+
     // Rinomina ha bisogno di opzioni: si apre il suo pannello, e l'esito arriva dopo.
     if action.id == .rename {
       // Il tempo di vedere l'onda partire dal bottone.
@@ -319,16 +344,7 @@ final class RadialController {
       }
     }
 
-    // L'avviso "in corso" compare solo se l'azione non è immediata.
-    let working = Task {
-      try? await Task.sleep(for: .milliseconds(250))
-      guard !Task.isCancelled else { return }
-      toast.show(
-        ToastContent(symbol: action.symbol, text: action.title, isWorking: true),
-        centeredAt: point,
-        for: nil
-      )
-    }
+    let working = showWorking(action, at: point)
     let outcome: ActionOutcome
     if let destination {
       outcome = await ActionRunner.move(urls, to: destination)
@@ -344,6 +360,20 @@ final class RadialController {
     }
     working.cancel()
     present(outcome, at: point)
+  }
+
+  /// L'avviso "in corso", che compare solo se l'azione non è immediata. Va annullato quando
+  /// l'azione finisce.
+  private func showWorking(_ action: RadialAction, at point: NSPoint) -> Task<Void, Never> {
+    Task {
+      try? await Task.sleep(for: .milliseconds(250))
+      guard !Task.isCancelled else { return }
+      toast.show(
+        ToastContent(symbol: action.symbol, text: action.title, isWorking: true),
+        centeredAt: point,
+        for: nil
+      )
+    }
   }
 
   /// Chiede una cartella di destinazione. Radial si attiva per mostrare il pannello, e alla fine

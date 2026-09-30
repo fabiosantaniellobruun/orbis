@@ -25,6 +25,15 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     #if DEBUG
+    // `--snapshot <percorso.png>` fotografa le finestre visibili dopo un attimo: va prima di `--run`.
+    if let flag = arguments.firstIndex(of: "--snapshot"), arguments.indices.contains(flag + 1) {
+      let base = URL(filePath: arguments[flag + 1])
+      Task {
+        try? await Task.sleep(for: .seconds(2))
+        Snapshot.writeVisibleWindows(to: base)
+      }
+    }
+
     // `--run <azione> <percorsi…>` esegue un'azione senza passare dal menu, per provarla
     // da riga di comando. Va messo per ultimo: tutto ciò che segue l'azione è un percorso.
     if let flag = arguments.firstIndex(of: "--run"),

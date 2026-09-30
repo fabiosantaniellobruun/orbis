@@ -4,7 +4,7 @@
 
 Radial is a small macOS menu bar app. Start dragging files in the Finder, hold **⇧** (or any key
 you choose), and a ring of glass buttons appears around your pointer. Drop the files on a button:
-rename them in bulk, clone them, move them to a recent folder, convert images, compress, copy their
+rename them in bulk, clone them, move them to a recent folder, convert or resize images, compress, copy their
 paths or send them to the Trash. Every action can be undone.
 
 <p align="center">
@@ -21,14 +21,16 @@ paths or send them to the Trash. Every action can be undone.
 - **Move** to the last two folders you used, your four favorites or any folder. Every entry shows the
   folder name and, in small type, its **full path**, so folders with the same name are never confused.
 - **Convert images** to PNG, JPEG, HEIC, AVIF or TIFF, keeping metadata and orientation.
+- **Resize images**: fit them in a width and height (a whole batch of landscape and portrait photos
+  at once), scale by a percentage, or crop to 1:1, 4:3, 16:9 or any ratio. Choose the format and
+  quality, or a maximum file size, with a live preview of dimensions and estimated weight.
 - **Clone**, **compress** (zip), **copy path** and **move to Trash** (Finder's *Put Back* keeps working).
 - **Undo** for a few seconds after each action that changes files. Radial never overwrites a file:
   if a name is taken, the new file arrives as `name 2`.
 - **Your key**: ⇧ by default; choose any modifier combination or key in Settings.
 - Designed for macOS 26 **Liquid Glass**, follows light/dark mode and respects *Reduce Motion*.
 
-Coming next: **Resize** (compression, dimensions, aspect ratio) and **video → GIF** with full control
-over duration, size, frame rate and colors.
+Coming next: **video → GIF** with full control over duration, size, frame rate and colors.
 
 <p align="center">
   <img src="docs/images/rename.jpg" alt="The bulk rename panel with a live preview" width="330">
@@ -62,8 +64,8 @@ with `defaults delete it.fabiosbruun.Radial`.
    button under the pointer lights up.
 
 Some buttons open a **second ring**: hover **Move** and you get your recent and favorite folders;
-hover **Convert to** and you get the formats. **Rename** opens a panel with a preview, which you can
-drag around by any empty spot.
+hover **Convert to** and you get the formats. **Rename** and **Resize** open a panel with a preview,
+which you can drag around by any empty spot.
 
 To **cancel**, release the key or drag away from the ring: the drag carries on as usual.
 
@@ -112,7 +114,7 @@ To build a distributable DMG, see [docs/RELEASING.md](docs/RELEASING.md).
 | `Radial/Input` | Drag detection and the configurable trigger key |
 | `Radial/Menu` | Ring geometry, buttons, second-ring options |
 | `Radial/Overlay` | The transparent panels and the controller |
-| `Radial/Rename` | The bulk-rename panel and its logic |
+| `Radial/Rename`, `Resize` | The bulk-rename and resize panels and their logic |
 | `Radial/Settings`, `Toast`, `Welcome` | Settings window, result notice with Undo, first-run window |
 | `RadialTests` | [Swift Testing](https://developer.apple.com/xcode/swift-testing/) suites |
 | `docs` | [Design notes](docs/PROGETTO.md) (in Italian) and the [release guide](docs/RELEASING.md) |
