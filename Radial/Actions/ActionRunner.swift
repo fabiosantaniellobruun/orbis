@@ -46,7 +46,7 @@ enum ActionRunner {
         let archive = try await FileOperations.compress(urls)
         return ActionOutcome(message: "\(archive.lastPathComponent) creato", undo: .discard([archive]))
       } catch {
-        log.error("Comprimi non riuscito: \(String(describing: error), privacy: .public)")
+        log.error("Comprimi non riuscito: \(String(describing: error), privacy: .private)")
         return .failure("Impossibile comprimere")
       }
 
@@ -74,9 +74,35 @@ enum ActionRunner {
       // Serve la cartella di destinazione, scelta nel secondo anello: vedi `move(_:to:)`.
       return .failure("Sposta ha bisogno di una cartella")
 
-    case .convert, .resize:
+    case .convert:
+      // Serve il formato, scelto nel secondo anello: vedi `convert(_:to:)`.
+      return .failure("Converti in ha bisogno di un formato")
+
+    case .resize:
       return ActionOutcome(symbol: action.symbol, message: "\(action.title): in arrivo")
     }
+  }
+
+  static func convert(_ urls: [URL], to format: ImageFormat) async -> ActionOutcome {
+    let result = await FileOperations.convert(urls, to: format)
+
+    guard !result.done.isEmpty else {
+      if result.failed == 0, result.skipped > 0 {
+        let reason = result.skipped == 1 ? "non è un'immagine da convertire" : "non sono immagini da convertire"
+        return ActionOutcome(symbol: "info.circle.fill", message: "\(result.skipped == 1 ? "Il file" : "I file") \(reason) in \(format.title)")
+      }
+      return .failure("Impossibile convertire")
+    }
+
+    let count = result.done.count
+    var message = "\(count) \(count == 1 ? "immagine convertita" : "immagini convertite") in \(format.title)"
+    if result.failed > 0 {
+      message += ", \(result.failed) non \(result.failed == 1 ? "riuscita" : "riuscite")"
+    }
+    if result.skipped > 0 {
+      message += ", \(result.skipped) \(result.skipped == 1 ? "saltato" : "saltati")"
+    }
+    return ActionOutcome(message: message, undo: .discard(result.done))
   }
 
   static func move(_ urls: [URL], to folder: URL, store: DestinationStore = DestinationStore()) async -> ActionOutcome {

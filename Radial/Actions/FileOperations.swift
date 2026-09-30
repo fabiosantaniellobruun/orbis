@@ -56,7 +56,36 @@ nonisolated enum FileOperations {
         try FileManager.default.copyItem(at: url, to: destination)
         result.done.append(destination)
       } catch {
-        log.error("Clona non riuscito: \(error.localizedDescription, privacy: .public)")
+        log.error("Clona non riuscito: \(error.localizedDescription, privacy: .private)")
+        result.failed += 1
+      }
+    }
+    return result
+  }
+
+  // MARK: Converti
+
+  /// Converte le immagini nel formato scelto, accanto agli originali, che restano dove sono.
+  /// Chi non è un'immagine, o lo è già in quel formato, si salta e si conta a parte.
+  @concurrent
+  static func convert(_ urls: [URL], to format: ImageFormat) async -> BatchResult<URL> {
+    var result = BatchResult<URL>()
+    for url in urls {
+      guard let type = ImageConverter.imageType(of: url), type != format.typeIdentifier else {
+        result.skipped += 1
+        continue
+      }
+      let (stem, _) = nameParts(of: url)
+      let destination = availableURL(
+        in: url.deletingLastPathComponent(),
+        stem: stem,
+        extension: format.fileExtension
+      )
+      do {
+        try ImageConverter.convert(url, to: format, destination: destination)
+        result.done.append(destination)
+      } catch {
+        log.error("Converti non riuscito: \(String(describing: error), privacy: .private)")
         result.failed += 1
       }
     }
@@ -106,7 +135,7 @@ nonisolated enum FileOperations {
       if let trashed = moved {
         result.done.append(TrashedItem(original: url, trashed: trashed))
       } else {
-        log.error("Cestina non riuscito: \(url.lastPathComponent, privacy: .public)")
+        log.error("Cestina non riuscito: \(url.lastPathComponent, privacy: .private)")
         result.failed += 1
       }
     }
@@ -117,7 +146,7 @@ nonisolated enum FileOperations {
     await withCheckedContinuation { continuation in
       NSWorkspace.shared.recycle([url]) { newURLs, error in
         if let error {
-          log.error("recycle: \(error.localizedDescription, privacy: .public)")
+          log.error("recycle: \(error.localizedDescription, privacy: .private)")
         }
         continuation.resume(returning: newURLs[url])
       }
@@ -134,7 +163,7 @@ nonisolated enum FileOperations {
         try FileManager.default.moveItem(at: item.trashed, to: item.original)
         result.done.append(item.original)
       } catch {
-        log.error("Ripristino non riuscito: \(error.localizedDescription, privacy: .public)")
+        log.error("Ripristino non riuscito: \(error.localizedDescription, privacy: .private)")
         result.failed += 1
       }
     }
@@ -162,7 +191,7 @@ nonisolated enum FileOperations {
       }
       let itemPath = (parent == "/" ? "" : parent) + "/" + url.lastPathComponent
       if target == itemPath || target.hasPrefix(itemPath + "/") {
-        log.error("Sposta non riuscito: \(url.lastPathComponent, privacy: .public) verrebbe spostato dentro sé stesso")
+        log.error("Sposta non riuscito: \(url.lastPathComponent, privacy: .private) verrebbe spostato dentro sé stesso")
         result.failed += 1
         continue
       }
@@ -173,7 +202,7 @@ nonisolated enum FileOperations {
         try fileManager.moveItem(at: url, to: destination)
         result.done.append(MovedItem(original: url, moved: destination))
       } catch {
-        log.error("Sposta non riuscito: \(error.localizedDescription, privacy: .public)")
+        log.error("Sposta non riuscito: \(error.localizedDescription, privacy: .private)")
         result.failed += 1
       }
     }
@@ -190,7 +219,7 @@ nonisolated enum FileOperations {
         try FileManager.default.moveItem(at: item.moved, to: item.original)
         result.done.append(item.original)
       } catch {
-        log.error("Ripristino non riuscito: \(error.localizedDescription, privacy: .public)")
+        log.error("Ripristino non riuscito: \(error.localizedDescription, privacy: .private)")
         result.failed += 1
       }
     }
@@ -225,7 +254,7 @@ nonisolated enum FileOperations {
         try fileManager.moveItem(at: entry.source, to: entry.destination)
         result.done.append(RenamedItem(original: entry.source, renamed: entry.destination))
       } catch {
-        log.error("Rinomina non riuscita: \(error.localizedDescription, privacy: .public)")
+        log.error("Rinomina non riuscita: \(error.localizedDescription, privacy: .private)")
         result.failed += 1
       }
     }
@@ -238,7 +267,7 @@ nonisolated enum FileOperations {
         try fileManager.moveItem(at: entry.source, to: temporary)
         parked.append((entry, temporary))
       } catch {
-        log.error("Rinomina non riuscita: \(error.localizedDescription, privacy: .public)")
+        log.error("Rinomina non riuscita: \(error.localizedDescription, privacy: .private)")
         result.failed += 1
       }
     }
@@ -247,7 +276,7 @@ nonisolated enum FileOperations {
         try fileManager.moveItem(at: temporary, to: entry.destination)
         result.done.append(RenamedItem(original: entry.source, renamed: entry.destination))
       } catch {
-        log.error("Rinomina non riuscita: \(error.localizedDescription, privacy: .public)")
+        log.error("Rinomina non riuscita: \(error.localizedDescription, privacy: .private)")
         // Il nome finale è occupato: l'elemento torna dov'era.
         try? fileManager.moveItem(at: temporary, to: entry.source)
         result.failed += 1

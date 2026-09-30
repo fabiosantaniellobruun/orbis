@@ -11,11 +11,12 @@ final class DragMonitor {
   }
 
   var onEvent: ((Event) -> Void)?
-  /// Il tasto che apre il menu: Shift, da solo. Con ⌘, ⌥ o ⌃ accanto il Finder cambia il
-  /// significato del trascinamento (sposta, copia, alias): lì il menu non deve comparire.
-  var trigger: NSEvent.ModifierFlags = [.shift]
 
-  private static let modifierKeys: NSEvent.ModifierFlags = [.shift, .control, .option, .command]
+  /// Il tasto che apre il menu, come impostato dall'utente. Lo si rilegge a ogni trascinamento,
+  /// così una modifica nelle impostazioni vale subito. I modificatori devono essere esattamente
+  /// quelli scelti: con un altro in più si è in un'altra combinazione.
+  private var trigger = TriggerShortcut.standard
+
   private static let legacyFilenames = NSPasteboard.PasteboardType("NSFilenamesPboardType")
 
   private let dragPasteboard = NSPasteboard(name: .drag)
@@ -61,6 +62,7 @@ final class DragMonitor {
   }
 
   private func beginTracking() {
+    trigger = .load()
     log.info("Trascinamento rilevato")
     pollTask = Task { [weak self] in
       while !Task.isCancelled, self?.poll() == true {
@@ -75,12 +77,16 @@ final class DragMonitor {
       endTracking()
       return false
     }
-    let held = NSEvent.modifierFlags.intersection(Self.modifierKeys) == trigger
+    // Lo stato di un tasto normale si legge, non si intercetta: non servono permessi, ma il tasto
+    // arriva anche all'app da cui si trascina.
+    let held = trigger.isHeld(modifiers: NSEvent.modifierFlags) { keyCode in
+      CGEventSource.keyState(.combinedSessionState, key: CGKeyCode(keyCode))
+    }
     guard held != isTriggerHeld else { return true }
     isTriggerHeld = held
     if held {
       guard dragContainsFiles else {
-        log.info("Shift premuto, ma il trascinamento non contiene file")
+        log.info("Tasto premuto, ma il trascinamento non contiene file")
         return true
       }
       isMenuRequested = true

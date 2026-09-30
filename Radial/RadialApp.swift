@@ -19,9 +19,14 @@ private struct MenuContent: View {
   let appDelegate: AppDelegate
 
   @Environment(\.openSettings) private var openSettings
+  @AppStorage(TriggerShortcut.storageKey) private var storedShortcut = Data()
+
+  private var shortcut: TriggerShortcut {
+    (try? JSONDecoder().decode(TriggerShortcut.self, from: storedShortcut)) ?? .standard
+  }
 
   var body: some View {
-    Text("Trascina dei file e tieni premuto ⇧")
+    Text("Trascina dei file e tieni premuto \(shortcut.displayString)")
     Divider()
     Button("Mostra menu di prova") {
       appDelegate.controller?.showPreview()
@@ -33,6 +38,9 @@ private struct MenuContent: View {
       openSettings()
     }
     .keyboardShortcut(",")
+    Button("Come si usa…") {
+      appDelegate.showWelcome()
+    }
     Divider()
     Button("Esci da Radial") {
       NSApp.terminate(nil)

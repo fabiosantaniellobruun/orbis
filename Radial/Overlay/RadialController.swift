@@ -14,7 +14,7 @@ final class RadialController {
   private let panel: OverlayPanel
 
   private var isPreview = false
-  /// Preferenza `stickyMenu`: il menu resta aperto anche dopo aver rilasciato Shift,
+  /// Preferenza `stickyMenu`: il menu resta aperto anche dopo aver rilasciato il tasto,
   /// e si chiude con il rilascio dei file o uscendo dall'anello.
   private var staysOpenAfterRelease: Bool { UserDefaults.standard.bool(forKey: "stickyMenu") }
   private var hideTask: Task<Void, Never>?
@@ -67,7 +67,8 @@ final class RadialController {
 
   #if DEBUG
   /// Esegue un'azione senza passare dal menu; l'avviso compare al centro dello schermo.
-  /// Per `move` il primo percorso è la cartella di destinazione, gli altri sono i file.
+  /// Per `move` il primo percorso è la cartella di destinazione, per `convert` il formato
+  /// (png, jpeg, heic, avif, tiff); gli altri sono i file.
   func run(_ id: RadialAction.ID, on urls: [URL]) {
     guard let action = model.actions.first(where: { $0.id == id }), let screen = NSScreen.main else { return }
     let center = NSPoint(x: screen.frame.midX, y: screen.frame.midY)
@@ -75,6 +76,8 @@ final class RadialController {
       if id == .move, let destination = urls.first {
         let option = RadialOption(destination: Destination(url: destination, kind: .favorite))
         await perform(action, option: option, on: Array(urls.dropFirst()), toastAt: center)
+      } else if id == .convert, let name = urls.first?.lastPathComponent, let format = ImageFormat(rawValue: name) {
+        await perform(action, option: RadialOption(format: format), on: Array(urls.dropFirst()), toastAt: center)
       } else {
         await perform(action, option: nil, on: urls, toastAt: center)
       }
@@ -87,7 +90,7 @@ final class RadialController {
   private func handle(_ event: DragMonitor.Event) {
     switch event {
     case .triggerPressed:
-      log.info("Shift premuto durante un trascinamento di file")
+      log.info("Tasto premuto durante un trascinamento di file")
       isPreview = false
       show(centeredAt: NSEvent.mouseLocation)
     case .triggerReleased:
@@ -210,7 +213,10 @@ final class RadialController {
     model.highlightedOption = nil
     model.expanded = nil
     model.phase = .hidden
-    model.options = [.move: RadialOption.moveOptions(for: DestinationStore().destinations())]
+    model.options = [
+      .move: RadialOption.moveOptions(for: DestinationStore().destinations()),
+      .convert: RadialOption.convertOptions(),
+    ]
 
     let size = Self.panelSize
     var origin = NSPoint(x: point.x - size.width / 2, y: point.y - size.height / 2)
@@ -308,7 +314,7 @@ final class RadialController {
         destination = await chooseFolder()
         // Niente scelta, niente da fare.
         guard destination != nil else { return }
-      case nil:
+      case .format, nil:
         return
       }
     }
@@ -326,6 +332,13 @@ final class RadialController {
     let outcome: ActionOutcome
     if let destination {
       outcome = await ActionRunner.move(urls, to: destination)
+    } else if action.id == .convert {
+      // Converti in ha bisogno del formato, scelto nel secondo anello.
+      guard let format = option?.format else {
+        working.cancel()
+        return
+      }
+      outcome = await ActionRunner.convert(urls, to: format)
     } else {
       outcome = await ActionRunner.run(action, on: urls)
     }
@@ -364,7 +377,7 @@ final class RadialController {
   private func undo(_ step: UndoStep, at point: NSPoint) {
     Task {
       let outcome = await ActionRunner.undo(step)
-      log.notice("Annullamento: \(outcome.message, privacy: .public)")
+      log.notice("Annullamento: \(outcome.message, privacy: .private)")
       present(outcome, at: point)
     }
   }

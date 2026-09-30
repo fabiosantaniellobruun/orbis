@@ -195,9 +195,9 @@ final class ActionRunnerTests {
   func unimplementedAction() async throws {
     let files = try makeFiles("uno.txt")
 
-    let outcome = try await ActionRunner.run(action(.convert), on: files)
+    let outcome = try await ActionRunner.run(action(.resize), on: files)
 
-    #expect(outcome.message == "Converti in: in arrivo")
+    #expect(outcome.message == "Ridimensiona: in arrivo")
     #expect(outcome.undo == nil)
     #expect(try names() == ["uno.txt"])
   }

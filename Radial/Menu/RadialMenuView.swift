@@ -208,6 +208,13 @@ private struct SubItem: View {
       Image(nsImage: NSWorkspace.shared.icon(forFile: folder.path(percentEncoded: false)))
         .resizable()
         .frame(width: 28, height: 28)
+    } else if let text = option.glyphText {
+      // Un formato si riconosce dalla sigla.
+      Text(text)
+        .font(.system(size: 11, weight: .bold, design: .rounded))
+        .foregroundStyle(isAccented ? AnyShapeStyle(.white) : AnyShapeStyle(.primary))
+        .minimumScaleFactor(0.7)
+        .lineLimit(1)
     } else {
       Image(systemName: option.symbol)
         .font(.system(size: 18, weight: .medium))

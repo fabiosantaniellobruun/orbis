@@ -5,14 +5,21 @@ nonisolated let log = Logger(subsystem: "it.fabiosbruun.Radial", category: "radi
 
 final class AppDelegate: NSObject, NSApplicationDelegate {
   private(set) var controller: RadialController?
+  private let welcome = WelcomeWindowController()
 
   func applicationDidFinishLaunching(_ notification: Notification) {
     let controller = RadialController()
     controller.start()
     self.controller = controller
 
-    // Avvio con `--preview` per vedere il menu senza trascinare nulla.
     let arguments = CommandLine.arguments
+
+    // Al primo avvio si spiega come si usa: l'app non ha icona nel Dock.
+    if welcome.isFirstLaunch || arguments.contains("--welcome") {
+      welcome.show()
+    }
+
+    // Avvio con `--preview` per vedere il menu senza trascinare nulla.
     if arguments.contains("--preview") {
       controller.showPreview()
     }
@@ -31,5 +38,9 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
       NSApp.sendAction(Selector(("showSettingsWindow:")), to: nil, from: nil)
     }
     #endif
+  }
+
+  func showWelcome() {
+    welcome.show()
   }
 }

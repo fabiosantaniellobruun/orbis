@@ -1,7 +1,95 @@
 import AppKit
+import ServiceManagement
 import SwiftUI
 
 struct SettingsView: View {
+  var body: some View {
+    TabView {
+      GeneralSettings()
+        .tabItem { Label("Generale", systemImage: "gearshape") }
+      MoveSettings()
+        .tabItem { Label("Sposta", systemImage: "folder") }
+    }
+    .frame(width: 560, height: 500)
+  }
+}
+
+// MARK: Generale
+
+private struct GeneralSettings: View {
+  @AppStorage(TriggerShortcut.storageKey) private var storedShortcut = Data()
+  @AppStorage("stickyMenu") private var staysOpen = false
+
+  @State private var opensAtLogin = SMAppService.mainApp.status == .enabled
+  @State private var loginItemNeedsApproval = SMAppService.mainApp.status == .requiresApproval
+
+  private var shortcut: Binding<TriggerShortcut> {
+    Binding(
+      get: { (try? JSONDecoder().decode(TriggerShortcut.self, from: storedShortcut)) ?? .standard },
+      set: { newValue in
+        // Tornare alla combinazione di base cancella la scelta invece di salvarla.
+        storedShortcut = newValue == .standard ? Data() : ((try? JSONEncoder().encode(newValue)) ?? Data())
+      }
+    )
+  }
+
+  var body: some View {
+    Form {
+      Section {
+        LabeledContent("Tasto per aprire il menu") {
+          ShortcutRecorder(shortcut: shortcut)
+        }
+
+        Toggle("Tieni il menu aperto dopo aver rilasciato il tasto", isOn: $staysOpen)
+      } header: {
+        Text("Menu")
+      } footer: {
+        VStack(alignment: .leading, spacing: 6) {
+          Text("Tienilo premuto mentre trascini dei file. Clicca il campo e premi la combinazione: solo modificatori (⇧, ⌥⇧…) o un tasto con dei modificatori. Esc annulla, ⌫ ripristina ⇧.")
+          if shortcut.wrappedValue.usesRegularKey {
+            Text("Un tasto normale arriva anche all'app da cui stai trascinando: Spazio, per esempio, apre l'anteprima nel Finder. Di solito conviene usare solo modificatori.")
+              .foregroundStyle(.orange)
+          }
+          if shortcut.wrappedValue.modifiers.contains(.command) {
+            Text("Con ⌘ il Finder considera il trascinamento uno spostamento: ⌥, ⌃ o ⇧ sono più sicuri.")
+              .foregroundStyle(.orange)
+          }
+        }
+      }
+
+      Section {
+        Toggle("Apri Radial all'avvio del Mac", isOn: Binding(get: { opensAtLogin }, set: setLoginItem))
+      } header: {
+        Text("Avvio")
+      } footer: {
+        if loginItemNeedsApproval {
+          Text("macOS chiede una conferma: Impostazioni di Sistema → Generali → Elementi login.")
+            .foregroundStyle(.orange)
+        }
+      }
+    }
+    .formStyle(.grouped)
+  }
+
+  private func setLoginItem(_ enabled: Bool) {
+    do {
+      if enabled {
+        try SMAppService.mainApp.register()
+      } else {
+        try SMAppService.mainApp.unregister()
+      }
+    } catch {
+      log.error("Elemento login: \(error.localizedDescription, privacy: .private)")
+    }
+    let status = SMAppService.mainApp.status
+    opensAtLogin = status == .enabled || status == .requiresApproval
+    loginItemNeedsApproval = status == .requiresApproval
+  }
+}
+
+// MARK: Sposta
+
+private struct MoveSettings: View {
   @State private var favorites: [URL?] = DestinationStore().favoriteSlots
   @State private var recents: [URL] = DestinationStore().recents
 
@@ -43,7 +131,6 @@ struct SettingsView: View {
       }
     }
     .formStyle(.grouped)
-    .frame(width: 540, height: 520)
     // Le recenti cambiano mentre l'app lavora: si rileggono ogni volta che la finestra torna in primo piano.
     .onReceive(NotificationCenter.default.publisher(for: NSWindow.didBecomeKeyNotification)) { _ in
       recents = DestinationStore().recents
