@@ -4,7 +4,8 @@
 
 Radial is a small macOS menu bar app. Start dragging files in the Finder, hold **⇧** (or any key
 you choose), and a ring of glass buttons appears around your pointer. Drop the files on a button:
-rename them in bulk, clone them, move them to a recent folder, convert or resize images, compress, copy their
+rename them in bulk, clone them, move them to a recent folder, convert or resize images, turn videos
+into GIFs, compress, copy their
 paths or send them to the Trash. Every action can be undone.
 
 <p align="center">
@@ -24,13 +25,15 @@ paths or send them to the Trash. Every action can be undone.
 - **Resize images**: fit them in a width and height (a whole batch of landscape and portrait photos
   at once), scale by a percentage, or crop to 1:1, 4:3, 16:9 or any ratio. Choose the format and
   quality, or a maximum file size, with a live preview of dimensions and estimated weight.
+- **Video → GIF** with a live, animated preview: pick the range on a filmstrip, speed, size and
+  aspect ratio, frame rate, number of colors, dithering, looping and a maximum file size. Radial has
+  its own GIF encoder (no ffmpeg): one palette for the whole clip, smooth dithering, and only the
+  pixels that change are stored from frame to frame.
 - **Clone**, **compress** (zip), **copy path** and **move to Trash** (Finder's *Put Back* keeps working).
 - **Undo** for a few seconds after each action that changes files. Radial never overwrites a file:
   if a name is taken, the new file arrives as `name 2`.
 - **Your key**: ⇧ by default; choose any modifier combination or key in Settings.
 - Designed for macOS 26 **Liquid Glass**, follows light/dark mode and respects *Reduce Motion*.
-
-Coming next: **video → GIF** with full control over duration, size, frame rate and colors.
 
 <p align="center">
   <img src="docs/images/rename.jpg" alt="The bulk rename panel with a live preview" width="330">
@@ -64,7 +67,7 @@ with `defaults delete it.fabiosbruun.Radial`.
    button under the pointer lights up.
 
 Some buttons open a **second ring**: hover **Move** and you get your recent and favorite folders;
-hover **Convert to** and you get the formats. **Rename** and **Resize** open a panel with a preview,
+hover **Convert to** and you get the formats (and **GIF**, when you are dragging a video). **Rename**, **Resize** and **GIF** open a panel with a preview,
 which you can drag around by any empty spot.
 
 To **cancel**, release the key or drag away from the ring: the drag carries on as usual.
@@ -83,9 +86,9 @@ Open them from the menu bar icon (**⌘,**).
 ## Privacy
 
 Radial asks for **no permissions**, uses **no network** and sends **no data anywhere**. It notices that
-a drag is in progress by watching mouse events and the drag pasteboard, and reads the paths of the
-dragged files only when you drop them on an action. System log messages that could contain file names
-are marked private.
+a drag is in progress by watching mouse events and the drag pasteboard. It looks at the dragged files
+when the ring opens (only their type, to offer GIF for videos) and when you drop them on an action.
+System log messages that could contain file names are marked private.
 
 ## Build from source
 
@@ -114,7 +117,7 @@ To build a distributable DMG, see [docs/RELEASING.md](docs/RELEASING.md).
 | `Radial/Input` | Drag detection and the configurable trigger key |
 | `Radial/Menu` | Ring geometry, buttons, second-ring options |
 | `Radial/Overlay` | The transparent panels and the controller |
-| `Radial/Rename`, `Resize` | The bulk-rename and resize panels and their logic |
+| `Radial/Rename`, `Resize`, `GIF` | The bulk-rename, resize and video-to-GIF panels, their logic and the GIF encoder |
 | `Radial/Settings`, `Toast`, `Welcome` | Settings window, result notice with Undo, first-run window |
 | `RadialTests` | [Swift Testing](https://developer.apple.com/xcode/swift-testing/) suites |
 | `docs` | [Design notes](docs/PROGETTO.md) (in Italian) and the [release guide](docs/RELEASING.md) |

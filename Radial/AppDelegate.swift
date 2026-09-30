@@ -28,8 +28,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     // `--snapshot <percorso.png>` fotografa le finestre visibili dopo un attimo: va prima di `--run`.
     if let flag = arguments.firstIndex(of: "--snapshot"), arguments.indices.contains(flag + 1) {
       let base = URL(filePath: arguments[flag + 1])
+      // `RADIAL_SNAPSHOT_DELAY` per aspettare di più, per esempio che un video sia letto.
+      let delay = ProcessInfo.processInfo.environment["RADIAL_SNAPSHOT_DELAY"].flatMap(Double.init) ?? 2
       Task {
-        try? await Task.sleep(for: .seconds(2))
+        try? await Task.sleep(for: .seconds(delay))
         Snapshot.writeVisibleWindows(to: base)
       }
     }

@@ -11,6 +11,7 @@ final class RadialController {
   private let toast = ToastController()
   private let rename = RenameController()
   private let resize = ResizeController()
+  private let gif = GIFController()
   private let dropView: RadialDropView
   private let panel: OverlayPanel
 
@@ -20,6 +21,8 @@ final class RadialController {
   private var staysOpenAfterRelease: Bool { UserDefaults.standard.bool(forKey: "stickyMenu") }
   private var hideTask: Task<Void, Never>?
   private var clickAwayMonitor: Any?
+  /// L'ultima percentuale mostrata mentre si crea un GIF.
+  private var gifPercent = -1
 
   init() {
     let frame = NSRect(origin: .zero, size: Self.panelSize)
@@ -69,7 +72,7 @@ final class RadialController {
   #if DEBUG
   /// Esegue un'azione senza passare dal menu; l'avviso compare al centro dello schermo.
   /// Per `move` il primo percorso è la cartella di destinazione, per `convert` il formato
-  /// (png, jpeg, heic, avif, tiff), per `resize` la larghezza massima in pixel (senza, si apre il
+  /// (png, jpeg, heic, avif, tiff, o gif per i video), per `resize` la larghezza massima in pixel (senza, si apre il
   /// pannello); gli altri sono i file.
   func run(_ id: RadialAction.ID, on urls: [URL]) {
     guard let action = model.actions.first(where: { $0.id == id }), let screen = NSScreen.main else { return }
@@ -78,6 +81,8 @@ final class RadialController {
       if id == .move, let destination = urls.first {
         let option = RadialOption(destination: Destination(url: destination, kind: .favorite))
         await perform(action, option: option, on: Array(urls.dropFirst()), toastAt: center)
+      } else if id == .convert, urls.first?.lastPathComponent == "gif" {
+        await perform(action, option: .gif, on: Array(urls.dropFirst()), toastAt: center)
       } else if id == .convert, let name = urls.first?.lastPathComponent, let format = ImageFormat(rawValue: name) {
         await perform(action, option: RadialOption(format: format), on: Array(urls.dropFirst()), toastAt: center)
       } else if id == .resize, let width = urls.first.flatMap({ Int($0.lastPathComponent) }) {
@@ -222,7 +227,8 @@ final class RadialController {
     model.phase = .hidden
     model.options = [
       .move: RadialOption.moveOptions(for: DestinationStore().destinations()),
-      .convert: RadialOption.convertOptions(),
+      // Il menu di prova non trascina nulla: la pasteboard avrebbe i file del trascinamento di prima.
+      .convert: RadialOption.convertOptions(for: isPreview ? [] : DragMonitor.draggedFileURLs()),
     ]
 
     let size = Self.panelSize
@@ -297,6 +303,13 @@ final class RadialController {
       return
     }
 
+    // Il GIF ha bisogno di tante scelte: si apre il suo pannello, e l'esito arriva dopo.
+    if action.id == .convert, case .gif = option?.kind {
+      try? await Task.sleep(for: .milliseconds(450))
+      presentGIF(urls, for: action, at: point)
+      return
+    }
+
     // Ridimensiona ha bisogno delle misure: si apre il suo pannello, e l'esito arriva dopo.
     if action.id == .resize {
       try? await Task.sleep(for: .milliseconds(450))
@@ -339,7 +352,7 @@ final class RadialController {
         destination = await chooseFolder()
         // Niente scelta, niente da fare.
         guard destination != nil else { return }
-      case .format, nil:
+      case .format, .gif, nil:
         return
       }
     }
@@ -362,14 +375,45 @@ final class RadialController {
     present(outcome, at: point)
   }
 
+  private func presentGIF(_ urls: [URL], for action: RadialAction, at point: NSPoint) {
+    let opened = gif.present(urls, near: point) { [weak self] request in
+      Task { await self?.makeGIFs(request, for: action, at: point) }
+    }
+    if !opened {
+      let message = urls.count == 1 ? "Il file non è un video da trasformare in GIF" : "I file non sono video da trasformare in GIF"
+      present(ActionOutcome(symbol: "info.circle.fill", message: message), at: point)
+    }
+  }
+
+  /// Crea i GIF, con l'avviso "in corso" che dice a che punto si è: può volerci un po'.
+  private func makeGIFs(_ request: GIFRequest, for action: RadialAction, at point: NSPoint) async {
+    let working = showWorking(action, at: point, text: "Creo il GIF")
+    gifPercent = -1
+    let outcome = await ActionRunner.makeGIFs(request) { [weak self] fraction in
+      Task { @MainActor in
+        // Gli aggiornamenti possono arrivare in disordine: la percentuale non torna indietro.
+        let percent = Int(fraction * 100)
+        guard let self, percent > self.gifPercent, self.toast.isShowingWork else { return }
+        self.gifPercent = percent
+        self.toast.show(
+          ToastContent(symbol: "film", text: "Creo il GIF · \(percent)%", isWorking: true),
+          centeredAt: point,
+          for: nil
+        )
+      }
+    }
+    working.cancel()
+    present(outcome, at: point)
+  }
+
   /// L'avviso "in corso", che compare solo se l'azione non è immediata. Va annullato quando
   /// l'azione finisce.
-  private func showWorking(_ action: RadialAction, at point: NSPoint) -> Task<Void, Never> {
+  private func showWorking(_ action: RadialAction, at point: NSPoint, text: String? = nil) -> Task<Void, Never> {
     Task {
       try? await Task.sleep(for: .milliseconds(250))
       guard !Task.isCancelled else { return }
       toast.show(
-        ToastContent(symbol: action.symbol, text: action.title, isWorking: true),
+        ToastContent(symbol: action.symbol, text: text ?? action.title, isWorking: true),
         centeredAt: point,
         for: nil
       )

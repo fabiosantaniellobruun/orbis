@@ -12,7 +12,7 @@ codice. Per usare l'app, vedi il [README](../README.it.md).
 | # | Fase | Stato |
 |---|------|-------|
 | 1 | Prototipo di verifica | fatto |
-| 2 | Menu radiale: secondo anello, bordi dello schermo | fatto (manca: azioni filtrate per tipo di file) |
+| 2 | Menu radiale: secondo anello, bordi dello schermo | fatto (le voci di Converti in dipendono dai file; manca: azioni filtrate per tipo di file) |
 | 3 | Azioni immediate: Clona, Comprimi, Copia percorso, Cestina, con Annulla | fatto |
 | 4 | Rinomina in serie | fatto |
 | 5 | Sposta, con cartelle recenti e preferite | fatto |
@@ -20,7 +20,7 @@ codice. Per usare l'app, vedi il [README](../README.it.md).
 | 7 | Impostazioni: tasto, menu aperto, avvio al login, cartelle preferite | fatto (manca: ordine delle azioni) |
 | 8 | Distribuzione: versione, DMG, script di rilascio, benvenuto al primo avvio | fatto, **manca la firma Developer ID e la notarizzazione** (servono le credenziali Apple) |
 | 9 | Ridimensiona: dimensioni, percentuale, proporzioni, qualità e peso massimo | fatto |
-| 10 | Video in GIF, con tutti i controlli | da fare (vedi sotto) |
+| 10 | Video in GIF, con tutti i controlli | fatto |
 | 11 | Interfaccia in inglese | da fare, prima di promuovere l'app fuori dall'Italia |
 
 ## Decisioni
@@ -146,27 +146,51 @@ mette nel Cestino.
   ingrandimenti e stiramenti da un `CGContext` ad alta interpolazione. L'uscita è a 8 bit per
   canale, nello spazio colore dell'originale.
 
-## Da fare: video in GIF
+## Video in GIF
 
-Lo strumento che si usa più spesso, con tutti i controlli. Un pannello come Rinomina, con
-anteprima del risultato e del peso stimato:
+Dal secondo anello di **Converti in**: la voce GIF compare quando tra i file trascinati c'è un
+video (per saperlo, all'apertura dell'anello si leggono i file della pasteboard di trascinamento;
+nel menu di prova compaiono tutte le voci). Il pannello ha:
 
-- **Durata**: da dove a dove (inizio e fine), e la velocità (per esempio 0,5×–4×).
-- **Dimensioni**: larghezza e altezza in pixel o in percentuale; proporzioni bloccate o libere;
-  ritaglio a un rapporto (16:9, 1:1, 4:3…).
-- **Fotogrammi**: quanti al secondo (5–30).
-- **Compressione**: numero di colori (16–256), retino (*dithering*) sì/no, ottimizzazione tra
-  fotogrammi (salvare solo ciò che cambia), e un peso massimo come obiettivo.
-- **Ciclo**: infinito, N volte, una sola.
+- **Anteprima vera**: due secondi dal centro dell'intervallo, codificati con le stesse opzioni del
+  file finale e animati nel pannello; dal loro peso si stima quello del GIF intero. Si rifà un
+  attimo dopo che le opzioni smettono di cambiare (ripetizioni e peso massimo non la toccano).
+- **Intervallo** su una striscia di miniature: si trascinano i bordi, o l'intervallo intero. Si
+  parte dai primi dieci secondi. Con più video non c'è intervallo: ognuno va per intero, fino a
+  1500 fotogrammi.
+- **Velocità** (0,5×–4×), **misura** (larghezza e altezza come scatola, senza ingrandire; 480 px di
+  base) e **proporzioni** (originale, 1:1, 4:3, 16:9, 9:16, 4:5, ritaglio al centro),
+  **fotogrammi al secondo** (5–30, 15 di base), **colori** (16–256), **retino**, **ripetizioni**
+  (sempre, una volta, N volte), **peso massimo**, e "salva solo ciò che cambia".
 
-**Motore.** Nativo: AVFoundation per leggere i fotogrammi, ImageIO per scrivere il GIF. Niente
-ffmpeg incluso: peso, licenze (LGPL/GPL) e distribuzione pesano più del vantaggio, e un'app
-che dipende da Homebrew non si può dare a chiunque. Il limite da tenere d'occhio è la qualità
-del GIF di ImageIO (palette e retino non controllabili): se non basta, si scrive un encoder GIF
-proprio (quantizzazione dei colori, LZW, sottrazione tra fotogrammi), che è anche ciò che dà i
-file più leggeri. Si decide guardando dei risultati veri, non in anticipo.
+**Motore: tutto nostro, niente ffmpeg.** Peso, licenze (LGPL/GPL) e distribuzione pesano più del
+vantaggio, e il GIF di ImageIO non lascia scegliere palette, retino e ottimizzazione. Quindi:
 
-**Dove compare.** Nell'anello, sui file video (azioni filtrate per tipo di file, fase 2).
+- `VideoReader` decodifica il video in ordine con `AVAssetReader` (molto più veloce che chiedere i
+  fotogrammi uno per uno) e consegna, per ogni istante, il fotogramma che in quel momento è a
+  schermo. Core Image lo ruota come va visto (i video girati in verticale sono salvati in
+  orizzontale), lo ritaglia e lo riduce, in sRGB.
+- Due passaggi sul video: il primo, su una cinquantina di fotogrammi, raccoglie l'istogramma dei
+  colori; il secondo scrive. Nessun fotogramma resta in memoria, e la durata non pesa sulla RAM.
+- **Palette** unica per tutto il GIF: taglio mediano sull'istogramma a 5 bit per canale, poi tre giri
+  di k-means. Se i colori usati sono pochi, la palette è esattamente quelli. La distanza tra i
+  colori pesa di più il verde e di meno il blu.
+- **Retino**: nessuno (gradini nel cielo), ordinato (matrice di Bayer 8×8, uguale in ogni
+  fotogramma: le zone ferme restano ferme) o diffuso (Floyd–Steinberg a serpentina, all'87,5%, il
+  più morbido e il predefinito). Provati sul video del Golden Gate di sistema: il diffuso è il
+  migliore sulle sfumature; l'ordinato a metà ampiezza è discreto a 256 colori.
+- **Ottimizzazione**: un pixel si lascia trasparente (resta quello del fotogramma prima) se il
+  colore già a schermo è buono quasi quanto il nuovo; si scrive solo il rettangolo che contiene i
+  cambiamenti; un fotogramma senza cambiamenti si fonde con il precedente, che resta a schermo più
+  a lungo.
+- **LZW** con codici da 3 a 12 bit e azzeramento a tabella piena; il test lo verifica con un
+  decodificatore scritto a parte. Tempi in centesimi di secondo, con gli arrotondamenti compensati.
+  Ripetizioni con l'estensione NETSCAPE (ImageIO riporta il numero di riproduzioni, cioè una in più).
+- **Peso massimo**: se il GIF pesa troppo si riduce la misura (il peso va circa con i pixel) e si
+  riprova, fino a quattro volte; se non basta, il file si scrive lo stesso e l'avviso lo dice.
+
+Il file arriva accanto al video ("clip.gif"), con Annulla. Durante la scrittura l'avviso mostra la
+percentuale.
 
 ## Sviluppo
 
@@ -188,12 +212,13 @@ I test lavorano in cartelle temporanee. Quelli sul Cestino cestinano e ripristin
 - `--run <azione> <percorsi…>` (solo Debug, da mettere per ultimo) esegue un'azione senza passare
   dal menu: `clone`, `compress`, `copyPath`, `trash`, `rename` e `resize` (aprono il pannello).
   Per `move` il primo percorso è la cartella di destinazione, per `convert` il formato (`png`,
-  `jpeg`, `heic`, `avif`, `tiff`), per `resize` può essere una larghezza massima in pixel (e allora
+  `jpeg`, `heic`, `avif`, `tiff`, oppure `gif` per aprire il pannello del GIF su un video), per `resize` può essere una larghezza massima in pixel (e allora
   il pannello non si apre); gli altri sono i file.
 - `--snapshot <percorso.png>` (solo Debug, prima di `--run`) dopo due secondi fotografa dall'interno
   le finestre visibili (`percorso.1.png`, `.2.png`…): serve a controllare l'impaginazione dei
   pannelli senza permessi di registrazione dello schermo. Il vetro, gli slider e i selettori
-  segmentati non escono: li compone il sistema. `RADIAL_RESIZE_MODE=dimensions|percent|ratio`
+  segmentati non escono: li compone il sistema. `RADIAL_SNAPSHOT_DELAY=<secondi>` aspetta di più
+  (per esempio che il pannello del GIF abbia letto il video e fatto l'anteprima). `RADIAL_RESIZE_MODE=dimensions|percent|ratio`
   (con `open --env`) apre Ridimensiona in quel modo, con il peso massimo attivo.
 - `--settings` (solo Debug) prova ad aprire le impostazioni; da dentro l'app si aprono con ⌘,.
 - Le preferenze (`favoriteFolders`, `recentFolders`, `stickyMenu`, `triggerShortcut`,

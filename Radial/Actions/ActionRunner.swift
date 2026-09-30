@@ -131,6 +131,37 @@ enum ActionRunner {
     return ActionOutcome(message: message, undo: .discard(result.done))
   }
 
+  static func makeGIFs(_ request: GIFRequest, progress: @escaping @Sendable (Double) -> Void = { _ in }) async -> ActionOutcome {
+    let result = await FileOperations.makeGIFs(request, progress: progress)
+
+    guard !result.done.isEmpty else {
+      if result.failed == 0, result.skipped > 0 {
+        return ActionOutcome(symbol: "info.circle.fill", message: "Nessun video da trasformare in GIF")
+      }
+      return .failure("Impossibile creare il GIF")
+    }
+
+    var message: String
+    if result.done.count == 1, let item = result.done.first {
+      let weight = ByteCountFormatter.string(fromByteCount: Int64(item.byteCount), countStyle: .file)
+      message = "\(item.url.lastPathComponent) creato, \(weight)"
+      if !item.reachedTarget { message += ", sopra il peso richiesto" }
+    } else {
+      message = "\(result.done.count) GIF creati"
+      let overweight = result.done.count { !$0.reachedTarget }
+      if overweight > 0 {
+        message += ", \(overweight) sopra il peso richiesto"
+      }
+    }
+    if result.failed > 0 {
+      message += ", \(result.failed) non \(result.failed == 1 ? "riuscito" : "riusciti")"
+    }
+    if result.skipped > 0 {
+      message += ", \(result.skipped) \(result.skipped == 1 ? "saltato" : "saltati")"
+    }
+    return ActionOutcome(message: message, undo: .discard(result.done.map(\.url)))
+  }
+
   static func move(_ urls: [URL], to folder: URL, store: DestinationStore = DestinationStore()) async -> ActionOutcome {
     let result = await FileOperations.move(urls, to: folder)
     let name = FileManager.default.displayName(atPath: folder.path(percentEncoded: false))

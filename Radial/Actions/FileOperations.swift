@@ -37,6 +37,13 @@ nonisolated struct ResizedItem: Sendable, Equatable {
   let reachedTarget: Bool
 }
 
+nonisolated struct GIFItem: Sendable, Equatable {
+  let url: URL
+  let byteCount: Int
+  /// `false` se era stato chiesto un peso massimo e non è stato raggiunto.
+  let reachedTarget: Bool
+}
+
 nonisolated enum FileOperationError: Error {
   case noFiles
   case processFailed(status: Int32, message: String)
@@ -121,6 +128,32 @@ nonisolated enum FileOperations {
         result.done.append(ResizedItem(url: destination, reachedTarget: rendered.reachedTarget))
       } catch {
         log.error("Ridimensiona non riuscito: \(String(describing: error), privacy: .private)")
+        result.failed += 1
+      }
+    }
+    return result
+  }
+
+  // MARK: GIF
+
+  /// Scrive il GIF di ogni video accanto al video ("clip.gif"), che resta dov'è.
+  /// - Parameter progress: da 0 a 1, per tutti i video insieme.
+  @concurrent
+  static func makeGIFs(_ request: GIFRequest, progress: @escaping @Sendable (Double) -> Void = { _ in }) async -> BatchResult<GIFItem> {
+    var result = BatchResult<GIFItem>()
+    result.skipped = request.skipped
+    let count = Double(request.jobs.count)
+    for (index, job) in request.jobs.enumerated() {
+      do {
+        let output = try await GIFMaker.make(job.url, info: job.info, options: job.options) { fraction in
+          progress((Double(index) + fraction) / count)
+        }
+        let (stem, _) = nameParts(of: job.url)
+        let destination = availableURL(in: job.url.deletingLastPathComponent(), stem: stem, extension: "gif")
+        try output.data.write(to: destination, options: .withoutOverwriting)
+        result.done.append(GIFItem(url: destination, byteCount: output.data.count, reachedTarget: output.reachedTarget))
+      } catch {
+        log.error("GIF non riuscito: \(String(describing: error), privacy: .private)")
         result.failed += 1
       }
     }

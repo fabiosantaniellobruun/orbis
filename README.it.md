@@ -5,7 +5,7 @@
 Radial è una piccola app per la barra dei menu di macOS. Inizia a trascinare dei file nel Finder,
 tieni premuto **⇧** (o il tasto che preferisci) e attorno al puntatore compare un anello di
 bottoni in vetro. Rilascia i file su un bottone: rinominali in serie, clonali, spostali in una
-cartella recente, converti o ridimensiona le immagini, comprimili, copia i loro percorsi o mandali nel Cestino.
+cartella recente, converti o ridimensiona le immagini, trasforma i video in GIF, comprimili, copia i loro percorsi o mandali nel Cestino.
 Ogni azione si può annullare.
 
 <p align="center">
@@ -28,13 +28,15 @@ Ogni azione si può annullare.
   orizzontali e verticali insieme), scalale in percentuale o ritagliale a 1:1, 4:3, 16:9 o a un
   rapporto a scelta. Scegli formato e qualità, oppure un peso massimo, con l'anteprima delle misure
   e del peso stimato.
+- **Video in GIF** con l'anteprima animata: scegli l'intervallo su una striscia di fotogrammi, la
+  velocità, la misura e le proporzioni, i fotogrammi al secondo, i colori, il retino, le ripetizioni
+  e un peso massimo. Radial ha un suo encoder GIF (niente ffmpeg): una palette per tutta la clip,
+  un retino morbido, e da un fotogramma all'altro si salvano solo i pixel che cambiano.
 - **Clona**, **comprimi** (zip), **copia il percorso** e **cestina** ("Ripristina" del Finder funziona).
 - **Annulla** per qualche secondo dopo ogni azione che modifica dei file. Radial non sovrascrive
   mai un file: se il nome è occupato, quello nuovo arriva come `nome 2`.
 - **Il tuo tasto**: ⇧ di base; nelle impostazioni scegli qualsiasi combinazione di modificatori o tasto.
 - Pensata per il **Liquid Glass** di macOS 26, segue il tema chiaro e scuro e rispetta "Riduci movimento".
-
-In arrivo: **video in GIF** con tutti i controlli su durata, dimensioni, fotogrammi e colori.
 
 <p align="center">
   <img src="docs/images/rename.jpg" alt="Il pannello di rinomina in serie con l'anteprima in tempo reale" width="330">
@@ -68,7 +70,7 @@ tolgono con `defaults delete it.fabiosbruun.Radial`.
    sotto il puntatore si illumina.
 
 Alcuni bottoni aprono un **secondo anello**: su **Sposta** trovi le cartelle recenti e preferite, su
-**Converti in** i formati. **Rinomina** e **Ridimensiona** aprono un pannello con l'anteprima, che
+**Converti in** i formati (e **GIF**, se trascini un video). **Rinomina**, **Ridimensiona** e **GIF** aprono un pannello con l'anteprima, che
 puoi spostare trascinandolo da un punto libero.
 
 Per **annullare**, rilascia il tasto o allontanati dall'anello: il trascinamento prosegue come al solito.
@@ -87,8 +89,9 @@ Si aprono dall'icona nella barra dei menu (**⌘,**).
 ## Privacy
 
 Radial non chiede **nessun permesso**, non usa la **rete** e non invia **nessun dato**. Si accorge che
-è in corso un trascinamento osservando gli eventi del mouse e la pasteboard di trascinamento, e legge i
-percorsi dei file trascinati solo quando li rilasci su un'azione. I messaggi nel registro di sistema
+è in corso un trascinamento osservando gli eventi del mouse e la pasteboard di trascinamento. Guarda i
+file trascinati quando si apre l'anello (solo il tipo, per proporre il GIF per i video) e quando li
+rilasci su un'azione. I messaggi nel registro di sistema
 che potrebbero contenere nomi di file sono privati.
 
 ## Compilare dal codice
@@ -118,7 +121,7 @@ Per creare un DMG da distribuire, vedi [docs/RELEASING.md](docs/RELEASING.md).
 | `Radial/Input` | Il riconoscimento del trascinamento e il tasto configurabile |
 | `Radial/Menu` | La geometria dell'anello, i bottoni, le voci del secondo anello |
 | `Radial/Overlay` | I pannelli trasparenti e il controller |
-| `Radial/Rename`, `Resize` | I pannelli di rinomina in serie e di ridimensionamento, con la loro logica |
+| `Radial/Rename`, `Resize`, `GIF` | I pannelli di rinomina in serie, ridimensionamento e video in GIF, con la loro logica e l'encoder GIF |
 | `Radial/Settings`, `Toast`, `Welcome` | Le impostazioni, l'avviso con Annulla, la finestra del primo avvio |
 | `RadialTests` | Le suite di [Swift Testing](https://developer.apple.com/xcode/swift-testing/) |
 | `docs` | Le [note di progetto](docs/PROGETTO.md) e la [guida al rilascio](docs/RELEASING.md) |

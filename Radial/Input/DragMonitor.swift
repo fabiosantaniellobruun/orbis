@@ -27,6 +27,13 @@ final class DragMonitor {
   private var isTriggerHeld = false
   private var isMenuRequested = false
 
+  /// I file trascinati in questo momento, per proporre le azioni adatte (per esempio GIF per i
+  /// video). Si leggono solo per questo, e non escono dal Mac.
+  static func draggedFileURLs() -> [URL] {
+    let options: [NSPasteboard.ReadingOptionKey: Any] = [.urlReadingFileURLsOnly: true]
+    return NSPasteboard(name: .drag).readObjects(forClasses: [NSURL.self], options: options) as? [URL] ?? []
+  }
+
   func start() {
     changeCountAtMouseDown = dragPasteboard.changeCount
     eventMonitor = NSEvent.addGlobalMonitorForEvents(matching: [.leftMouseDown, .leftMouseDragged]) { [weak self] event in

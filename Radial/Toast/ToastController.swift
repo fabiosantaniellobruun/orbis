@@ -17,6 +17,9 @@ final class ToastController {
     panel = OverlayPanel(contentView: hostingView, size: Self.size, catchesTransparentAreas: false)
   }
 
+  /// Se l'avviso in vista è quello di un lavoro in corso (e non già il suo esito).
+  var isShowingWork: Bool { model.content?.isWorking == true }
+
   /// - Parameter duration: dopo quanto l'avviso sparisce; `nil` lo lascia finché non ne arriva un altro.
   func show(
     _ content: ToastContent,

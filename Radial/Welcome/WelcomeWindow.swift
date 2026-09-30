@@ -79,7 +79,7 @@ private struct WelcomeView: View {
           title: "Tieni premuto \(shortcut.displayString)",
           detail: "Attorno al puntatore compare un anello di bottoni. Lo cambi nelle impostazioni."
         )
-        Step(number: 3, title: "Rilascia su un'azione", detail: "Rinomina, Clona, Sposta, Converti, Comprimi… Su Sposta e Converti in si apre un secondo anello.")
+        Step(number: 3, title: "Rilascia su un'azione", detail: "Rinomina, Clona, Sposta, Converti, Comprimi… Su Sposta e Converti in si apre un secondo anello; per i video, Converti in propone il GIF.")
       }
 
       Label {

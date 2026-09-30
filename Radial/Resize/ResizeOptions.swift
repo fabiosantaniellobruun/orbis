@@ -13,6 +13,36 @@ nonisolated struct PixelSize: Sendable, Equatable {
   }
 }
 
+nonisolated extension PixelSize {
+  /// Le stesse proporzioni, dentro una scatola; un lato `nil` non pone limiti.
+  func fitted(width: Int?, height: Int?, neverEnlarges: Bool) -> PixelSize {
+    var factor = Double.infinity
+    if let width { factor = min(factor, Double(width) / Double(self.width)) }
+    if let height { factor = min(factor, Double(height) / Double(self.height)) }
+    if factor == .infinity { factor = 1 }
+    if neverEnlarges { factor = min(factor, 1) }
+
+    // L'arrotondamento non deve far uscire l'immagine dalla scatola.
+    var output = scaled(by: factor)
+    if let width { output.width = max(1, min(output.width, width)) }
+    if let height { output.height = max(1, min(output.height, height)) }
+    return output
+  }
+
+  /// Il ritaglio più grande possibile con quel rapporto, al centro.
+  func centeredCrop(ratio: AspectRatio) -> PixelRect {
+    var crop = PixelRect(x: 0, y: 0, width: width, height: height)
+    if width * ratio.height > height * ratio.width {
+      crop.width = min(width, max(1, Int((Double(height) * Double(ratio.width) / Double(ratio.height)).rounded())))
+      crop.x = (width - crop.width) / 2
+    } else {
+      crop.height = min(height, max(1, Int((Double(width) * Double(ratio.height) / Double(ratio.width)).rounded())))
+      crop.y = (height - crop.height) / 2
+    }
+    return crop
+  }
+}
+
 nonisolated struct PixelRect: Sendable, Equatable {
   var x: Int
   var y: Int
@@ -160,17 +190,7 @@ nonisolated struct ResizeOptions: Sendable, Equatable {
       return ResizeGeometry(output: PixelSize(width: max(1, output.width), height: max(1, output.height)))
     }
 
-    var factor = Double.infinity
-    if let width { factor = min(factor, Double(width) / Double(source.width)) }
-    if let height { factor = min(factor, Double(height) / Double(source.height)) }
-    if factor == .infinity { factor = 1 }
-    if neverEnlarges { factor = min(factor, 1) }
-
-    // L'arrotondamento non deve far uscire l'immagine dalla scatola.
-    var output = source.scaled(by: factor)
-    if let width { output.width = max(1, min(output.width, width)) }
-    if let height { output.height = max(1, min(output.height, height)) }
-    return ResizeGeometry(output: output)
+    return ResizeGeometry(output: source.fitted(width: width, height: height, neverEnlarges: neverEnlarges))
   }
 
   private func ratioGeometry(for source: PixelSize) -> ResizeGeometry {
@@ -179,16 +199,7 @@ nonisolated struct ResizeOptions: Sendable, Equatable {
       target = target.oriented(landscape: source.width >= source.height)
     }
 
-    // Il ritaglio più grande possibile, al centro.
-    var crop = PixelRect(x: 0, y: 0, width: source.width, height: source.height)
-    if source.width * target.height > source.height * target.width {
-      crop.width = min(source.width, max(1, Int((Double(source.height) * Double(target.width) / Double(target.height)).rounded())))
-      crop.x = (source.width - crop.width) / 2
-    } else {
-      crop.height = min(source.height, max(1, Int((Double(source.width) * Double(target.height) / Double(target.width)).rounded())))
-      crop.y = (source.height - crop.height) / 2
-    }
-
+    let crop = source.centeredCrop(ratio: target)
     var output = PixelSize(width: crop.width, height: crop.height)
     if let longSide, max(output.width, output.height) > longSide {
       output = output.scaled(by: Double(longSide) / Double(max(output.width, output.height)))

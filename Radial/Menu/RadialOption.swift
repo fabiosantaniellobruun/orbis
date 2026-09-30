@@ -1,11 +1,13 @@
 import Foundation
 
-/// Una voce del secondo anello: per Sposta una cartella di destinazione, per Converti in un formato.
+/// Una voce del secondo anello: per Sposta una cartella di destinazione, per Converti in un formato
+/// (o il GIF, per i video).
 struct RadialOption: Identifiable {
   enum Kind {
     case folder(URL)
     case chooseFolder
     case format(ImageFormat)
+    case gif
   }
 
   let id: String
@@ -65,21 +67,34 @@ struct RadialOption: Identifiable {
     glyphText = format.title
   }
 
+  static let gif = RadialOption(
+    id: "gif", kind: .gif, title: "GIF", subtitle: "Animazione dal video", symbol: "film", glyphText: "GIF"
+  )
+
   /// I formati che questo Mac sa scrivere, nell'ordine di ImageFormat.
   static func convertOptions(formats: [ImageFormat] = ImageFormat.available) -> [RadialOption] {
     formats.map(RadialOption.init(format:))
   }
 
+  /// Le voci adatte ai file trascinati: il GIF se ci sono video, i formati se c'è altro. Senza
+  /// sapere cosa si trascina (il menu di prova), tutte.
+  static func convertOptions(for urls: [URL], formats: [ImageFormat] = ImageFormat.available) -> [RadialOption] {
+    let videos = urls.filter(VideoReader.isVideo).count
+    let hasVideos = urls.isEmpty || videos > 0
+    let hasOthers = urls.isEmpty || videos < urls.count
+    return (hasVideos ? [.gif] : []) + (hasOthers ? convertOptions(formats: formats) : [])
+  }
+
   // MARK: Comune
 
-  private init(id: String, kind: Kind, title: String, subtitle: String?, symbol: String) {
+  private init(id: String, kind: Kind, title: String, subtitle: String?, symbol: String, glyphText: String? = nil) {
     self.id = id
     self.kind = kind
     self.title = title
     self.subtitle = subtitle
     self.badge = nil
     self.symbol = symbol
-    self.glyphText = nil
+    self.glyphText = glyphText
   }
 
   /// Il percorso completo con la casa abbreviata: "~/Sites/Clienti/Rossi".
