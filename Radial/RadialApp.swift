@@ -6,7 +6,7 @@ struct RadialApp: App {
 
   var body: some Scene {
     MenuBarExtra("Radial", systemImage: "circle.hexagongrid.circle") {
-      Text("Trascina dei file e tieni premuto ⌃⇧")
+      Text("Trascina dei file e tieni premuto ⇧")
       Divider()
       Button("Mostra menu di prova") {
         appDelegate.controller?.showPreview()

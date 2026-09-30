@@ -62,6 +62,7 @@ final class RadialDropView: NSView {
   // MARK: Trascinamento
 
   override func draggingEntered(_ sender: NSDraggingInfo) -> NSDragOperation {
+    log.info("Trascinamento entrato nel pannello")
     isDragInside = true
     return operation(for: sender)
   }

@@ -5,7 +5,7 @@ final class RadialModel {
   enum Phase: Equatable {
     case hidden
     case ring
-    case confirmation(RadialAction, fileCount: Int)
+    case confirmation(RadialAction)
   }
 
   var phase: Phase = .hidden

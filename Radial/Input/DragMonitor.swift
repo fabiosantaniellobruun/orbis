@@ -1,19 +1,21 @@
 import AppKit
 
 /// Si accorge di quando è in corso un trascinamento di file e di quando, durante il trascinamento,
-/// viene premuta la combinazione di tasti. Non richiede permessi di sistema: gli eventi del mouse
+/// viene premuto il tasto che apre il menu. Non richiede permessi di sistema: gli eventi del mouse
 /// si possono osservare liberamente e lo stato dei modificatori viene letto, non intercettato.
 final class DragMonitor {
   enum Event {
-    case comboPressed
-    case comboReleased
+    case triggerPressed
+    case triggerReleased
     case dragEnded
   }
 
   var onEvent: ((Event) -> Void)?
-  var combo: NSEvent.ModifierFlags = [.control, .shift]
+  /// Il tasto che apre il menu: Shift, da solo. Con ⌘, ⌥ o ⌃ accanto il Finder cambia il
+  /// significato del trascinamento (sposta, copia, alias): lì il menu non deve comparire.
+  var trigger: NSEvent.ModifierFlags = [.shift]
 
-  private static let comboKeys: NSEvent.ModifierFlags = [.control, .shift, .option, .command]
+  private static let modifierKeys: NSEvent.ModifierFlags = [.shift, .control, .option, .command]
   private static let legacyFilenames = NSPasteboard.PasteboardType("NSFilenamesPboardType")
 
   private let dragPasteboard = NSPasteboard(name: .drag)
@@ -21,7 +23,7 @@ final class DragMonitor {
   private var lastCheck = Date.distantPast
   private var eventMonitor: Any?
   private var pollTask: Task<Void, Never>?
-  private var isComboHeld = false
+  private var isTriggerHeld = false
   private var isMenuRequested = false
 
   func start() {
@@ -73,26 +75,26 @@ final class DragMonitor {
       endTracking()
       return false
     }
-    let held = NSEvent.modifierFlags.intersection(Self.comboKeys) == combo
-    guard held != isComboHeld else { return true }
-    isComboHeld = held
+    let held = NSEvent.modifierFlags.intersection(Self.modifierKeys) == trigger
+    guard held != isTriggerHeld else { return true }
+    isTriggerHeld = held
     if held {
       guard dragContainsFiles else {
-        log.info("Combinazione premuta, ma il trascinamento non contiene file")
+        log.info("Shift premuto, ma il trascinamento non contiene file")
         return true
       }
       isMenuRequested = true
-      onEvent?(.comboPressed)
+      onEvent?(.triggerPressed)
     } else if isMenuRequested {
       isMenuRequested = false
-      onEvent?(.comboReleased)
+      onEvent?(.triggerReleased)
     }
     return true
   }
 
   private func endTracking() {
     pollTask = nil
-    isComboHeld = false
+    isTriggerHeld = false
     isMenuRequested = false
     changeCountAtMouseDown = dragPasteboard.changeCount
     onEvent?(.dragEnded)
