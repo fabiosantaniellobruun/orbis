@@ -11,6 +11,19 @@ nonisolated struct BatchResult<Item: Sendable>: Sendable {
   var failed = 0
 }
 
+/// Un elemento da rinominare: il file com'è adesso e il nome che deve avere.
+nonisolated struct RenameEntry: Sendable, Equatable {
+  let source: URL
+  let newName: String
+
+  var destination: URL { source.deletingLastPathComponent().appendingPathComponent(newName) }
+}
+
+nonisolated struct RenamedItem: Sendable, Equatable {
+  let original: URL
+  let renamed: URL
+}
+
 nonisolated enum FileOperationError: Error {
   case noFiles
   case processFailed(status: Int32, message: String)
@@ -119,6 +132,66 @@ nonisolated enum FileOperations {
       }
     }
     return result
+  }
+
+  // MARK: Rinomina
+
+  /// Rinomina gli elementi. Non sovrascrive mai: se un nome è occupato da un elemento che non
+  /// fa parte del gruppo, quell'elemento resta com'era.
+  ///
+  /// Quando un nuovo nome coincide con il vecchio nome di un altro elemento del gruppo (uno
+  /// scambio, uno scorrimento di numeri, un cambio di sole maiuscole), i due passaggi non si
+  /// possono fare uno dopo l'altro: gli elementi coinvolti vengono prima messi da parte con un
+  /// nome provvisorio, poi portati al nome finale.
+  @concurrent
+  static func rename(_ entries: [RenameEntry]) async -> BatchResult<RenamedItem> {
+    let fileManager = FileManager.default
+    var result = BatchResult<RenamedItem>()
+
+    let sourceKeys = Set(entries.map { pathKey($0.source) })
+    let entangled = entries.filter { sourceKeys.contains(pathKey($0.destination)) }
+    let direct = entries.filter { !sourceKeys.contains(pathKey($0.destination)) }
+
+    for entry in direct {
+      do {
+        try fileManager.moveItem(at: entry.source, to: entry.destination)
+        result.done.append(RenamedItem(original: entry.source, renamed: entry.destination))
+      } catch {
+        log.error("Rinomina non riuscita: \(error.localizedDescription, privacy: .public)")
+        result.failed += 1
+      }
+    }
+
+    var parked: [(entry: RenameEntry, temporary: URL)] = []
+    for entry in entangled {
+      let temporary = entry.source.deletingLastPathComponent()
+        .appendingPathComponent(".radial-\(UUID().uuidString)")
+      do {
+        try fileManager.moveItem(at: entry.source, to: temporary)
+        parked.append((entry, temporary))
+      } catch {
+        log.error("Rinomina non riuscita: \(error.localizedDescription, privacy: .public)")
+        result.failed += 1
+      }
+    }
+    for (entry, temporary) in parked {
+      do {
+        try fileManager.moveItem(at: temporary, to: entry.destination)
+        result.done.append(RenamedItem(original: entry.source, renamed: entry.destination))
+      } catch {
+        log.error("Rinomina non riuscita: \(error.localizedDescription, privacy: .public)")
+        // Il nome finale è occupato: l'elemento torna dov'era.
+        try? fileManager.moveItem(at: temporary, to: entry.source)
+        result.failed += 1
+      }
+    }
+    return result
+  }
+
+  /// Cartella e nome come li confronta il disco, per riconoscere lo stesso elemento.
+  private static func pathKey(_ url: URL) -> String {
+    let directory = url.deletingLastPathComponent().standardizedFileURL.path(percentEncoded: false)
+    return directory + "\u{0}" + RenamePlan.nameKey(url.lastPathComponent)
   }
 
   // MARK: Nomi

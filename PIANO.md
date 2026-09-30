@@ -16,6 +16,13 @@ eseguire l'azione.
 - **Niente sandbox, fuori dal Mac App Store**: rinomina e spostamento in sandbox sono molto limitati.
 - **Tema chiaro o scuro secondo il sistema**. Nel tema chiaro un velo bianco sotto le icone tiene
   il vetro chiaro anche sugli sfondi scuri, dove altrimenti le icone scure si perderebbero.
+- **Icona** in formato Icon Composer (`Radial/AppIcon.icon`), ricavata da `Radial icon.png` (2048 px,
+  a pieno campo): macOS la ritaglia nel quadrato arrotondato e le dà i riflessi di vetro. Il livello
+  è opaco: con la traslucenza attiva i colori si slavano sul fondo. Per cambiarla basta sostituire
+  `Assets/RadialIcon.png` (1024 px), oppure aprire la cartella con Icon Composer.
+- **I pannelli con cui si interagisce si spostano** (`movableWindow()` in `RadialGlass.swift`),
+  trascinandoli da un punto libero. L'anello e l'avviso seguono il puntatore e non si spostano.
+  `isMovableByWindowBackground` non basta: il contenuto SwiftUI se ne prende gli eventi.
 - **Onda al rilascio**: dal bottone scelto parte una lente di vetro con il bordo iridescente
   (`HoloRipple`). Con "Riduci movimento" attivo non compare.
 - Preferenza `stickyMenu` (UserDefaults): il menu resta aperto dopo aver rilasciato Shift.
@@ -28,7 +35,8 @@ eseguire l'azione.
 3. **Azioni immediate** — fatto: Clona, Comprimi, Copia percorso, Cestina. Dopo l'azione un avviso
    dice com'è andata e, dove ha senso, offre Annulla per cinque secondi. Resta Sposta, che ha
    bisogno del secondo anello. Le azioni non ancora pronte rispondono "in arrivo" e non toccano nulla.
-4. **Rinomina in serie**: schema (testo + contatore, trova/sostituisci, data) con anteprima live.
+4. **Rinomina in serie** — fatto. Pannello in vetro con quattro modi (Nome e numero, Sostituisci,
+   Aggiungi, Data) e anteprima in tempo reale. Vedi "Rinomina" sotto.
 5. **Converti in** e **Ridimensiona**: immagini (PNG, JPEG, HEIC, WebP, AVIF), poi video e audio.
    Ridimensiona copre compressione, dimensioni e proporzioni.
 6. **Impostazioni**: combinazione di tasti, ordine delle azioni, cartelle preferite, avvio al login.
@@ -57,6 +65,21 @@ eseguire l'azione.
   rimette i file dov'erano, senza sovrascrivere ciò che nel frattempo ha preso quel nome.
 - L'avviso vive in un pannello suo (`ToastController`), piccolo, che sopravvive al menu.
 
+## Rinomina
+
+- La logica dei nomi (`RenamePlan`) non tocca il disco e si ricalcola a ogni tasto. Segnala nome
+  vuoto, caratteri non validi (`/` e `:`), nome troppo lungo, due elementi con lo stesso nome e
+  nome già occupato da un elemento estraneo. Basta un problema per spegnere il pulsante.
+- L'estensione non viene mai toccata. Nelle cartelle il punto fa parte del nome.
+- L'ordine di numerazione è "Come nel Finder", per nome (naturale: 2 prima di 10), per data di
+  creazione o di modifica.
+- `FileOperations.rename` non sovrascrive mai. Quando un nome nuovo è il vecchio nome di un altro
+  elemento del gruppo (scambi, scorrimento di numeri, sole maiuscole) mette prima da parte gli
+  elementi coinvolti con un nome provvisorio (`.radial-…`) e poi li porta al nome finale.
+- Annulla rimette i nomi di prima, con la stessa procedura.
+- Il pannello (`FormPanel`) può ricevere la tastiera. Radial si attiva mentre è aperto e restituisce
+  il focus all'app di prima quando si chiude.
+
 ## Sviluppo
 
 ```bash
@@ -72,7 +95,7 @@ I test lavorano in cartelle temporanee. Quelli sul Cestino cestinano e ripristin
 
 - `--preview` all'avvio mostra il menu al centro dello schermo, pilotato dal mouse.
 - `--run <azione> <percorsi…>` (solo Debug, da mettere per ultimo) esegue un'azione senza passare
-  dal menu: `clone`, `compress`, `copyPath`, `trash`.
+  dal menu: `clone`, `compress`, `copyPath`, `trash`, `rename` (apre il pannello).
 - `-stickyMenu YES` attiva la preferenza per una sola esecuzione.
 - I messaggi si leggono con
   `log stream --info --predicate 'subsystem == "it.fabiosbruun.Radial"'`.

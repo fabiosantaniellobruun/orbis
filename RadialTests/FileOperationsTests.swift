@@ -165,6 +165,118 @@ final class FileOperationsTests {
     }
   }
 
+  // MARK: Rinomina
+
+  private func entry(_ name: String, to newName: String) -> RenameEntry {
+    RenameEntry(source: directory.appendingPathComponent(name), newName: newName)
+  }
+
+  private func contents(_ name: String) throws -> String {
+    try String(contentsOf: directory.appendingPathComponent(name), encoding: .utf8)
+  }
+
+  @Test("Rinomina cambia il nome e tiene il contenuto")
+  func renameSimple() async throws {
+    _ = try makeFile("vecchio.txt", contents: "dentro")
+
+    let result = await FileOperations.rename([entry("vecchio.txt", to: "nuovo.txt")])
+
+    #expect(result.failed == 0)
+    #expect(try names() == ["nuovo.txt"])
+    #expect(try contents("nuovo.txt") == "dentro")
+  }
+
+  @Test("Uno scambio di nomi riesce senza perdere nulla")
+  func renameSwap() async throws {
+    _ = try makeFile("a.txt", contents: "prima A")
+    _ = try makeFile("b.txt", contents: "prima B")
+
+    let result = await FileOperations.rename([
+      entry("a.txt", to: "b.txt"),
+      entry("b.txt", to: "a.txt"),
+    ])
+
+    #expect(result.failed == 0)
+    #expect(try contents("a.txt") == "prima B")
+    #expect(try contents("b.txt") == "prima A")
+    #expect(try names() == ["a.txt", "b.txt"])
+  }
+
+  @Test("Uno scorrimento di numeri riesce: 1→2, 2→3")
+  func renameShift() async throws {
+    _ = try makeFile("f1.txt", contents: "uno")
+    _ = try makeFile("f2.txt", contents: "due")
+
+    let result = await FileOperations.rename([
+      entry("f1.txt", to: "f2.txt"),
+      entry("f2.txt", to: "f3.txt"),
+    ])
+
+    #expect(result.failed == 0)
+    #expect(try names() == ["f2.txt", "f3.txt"])
+    #expect(try contents("f2.txt") == "uno")
+    #expect(try contents("f3.txt") == "due")
+  }
+
+  @Test("Cambiare solo le maiuscole funziona")
+  func renameCaseOnly() async throws {
+    _ = try makeFile("foto.jpg")
+
+    let result = await FileOperations.rename([entry("foto.jpg", to: "FOTO.jpg")])
+
+    #expect(result.failed == 0)
+    #expect(try names() == ["FOTO.jpg"])
+  }
+
+  @Test("Un nome occupato da un altro file non viene sovrascritto")
+  func renameDoesNotOverwrite() async throws {
+    _ = try makeFile("a.txt", contents: "mio")
+    _ = try makeFile("occupato.txt", contents: "altrui")
+
+    let result = await FileOperations.rename([entry("a.txt", to: "occupato.txt")])
+
+    #expect(result.failed == 1)
+    #expect(result.done.isEmpty)
+    #expect(try contents("a.txt") == "mio")
+    #expect(try contents("occupato.txt") == "altrui")
+  }
+
+  @Test("Se un nome finale è occupato da un file estraneo, niente va perso e nulla resta a metà")
+  func renameEntangledFailureRestores() async throws {
+    _ = try makeFile("a.txt", contents: "A")
+    _ = try makeFile("b.txt", contents: "B")
+    _ = try makeFile("c.txt", contents: "C")
+
+    // a → c non riesce (c è di un altro). b → a nemmeno: a non si è liberato.
+    let result = await FileOperations.rename([
+      entry("a.txt", to: "c.txt"),
+      entry("b.txt", to: "a.txt"),
+    ])
+
+    #expect(result.failed == 2)
+    #expect(result.done.isEmpty)
+    #expect(try contents("a.txt") == "A")
+    #expect(try contents("b.txt") == "B")
+    #expect(try contents("c.txt") == "C")
+    #expect(try names() == ["a.txt", "b.txt", "c.txt"])
+  }
+
+  @Test("Annullare una rinomina rimette i nomi di prima")
+  func renameUndo() async throws {
+    _ = try makeFile("a.txt", contents: "A")
+    _ = try makeFile("b.txt", contents: "B")
+
+    let result = await FileOperations.rename([
+      entry("a.txt", to: "b.txt"),
+      entry("b.txt", to: "a.txt"),
+    ])
+    let outcome = await ActionRunner.undo(.renameBack(result.done))
+
+    #expect(outcome.message == "Annullato")
+    #expect(try contents("a.txt") == "A")
+    #expect(try contents("b.txt") == "B")
+  }
+
   // MARK: Nomi
 
   @Test("Il primo nome libero salta quelli già presi")

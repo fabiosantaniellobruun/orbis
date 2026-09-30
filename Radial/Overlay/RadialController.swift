@@ -8,6 +8,7 @@ final class RadialController {
   private let model = RadialModel()
   private let monitor = DragMonitor()
   private let toast = ToastController()
+  private let rename = RenameController()
   private let dropView: RadialDropView
   private let panel: OverlayPanel
 
@@ -190,6 +191,19 @@ final class RadialController {
     // Il menu di prova non ha file: mostra solo quale azione è stata scelta.
     guard !urls.isEmpty else {
       toast.show(ToastContent(symbol: action.symbol, text: action.title), centeredAt: point, for: .milliseconds(1400))
+      return
+    }
+
+    // Rinomina ha bisogno di opzioni: si apre il suo pannello, e l'esito arriva dopo.
+    if action.id == .rename {
+      // Il tempo di vedere l'onda partire dal bottone.
+      try? await Task.sleep(for: .milliseconds(450))
+      rename.present(urls, near: point) { [weak self] entries in
+        Task {
+          let outcome = await ActionRunner.rename(entries)
+          self?.present(outcome, at: point)
+        }
+      }
       return
     }
 

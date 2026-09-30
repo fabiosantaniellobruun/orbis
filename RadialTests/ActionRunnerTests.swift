@@ -119,9 +119,9 @@ final class ActionRunnerTests {
   func unimplementedAction() async throws {
     let files = try makeFiles("uno.txt")
 
-    let outcome = try await ActionRunner.run(action(.rename), on: files)
+    let outcome = try await ActionRunner.run(action(.convert), on: files)
 
-    #expect(outcome.message == "Rinomina: in arrivo")
+    #expect(outcome.message == "Converti in: in arrivo")
     #expect(outcome.undo == nil)
     #expect(try names() == ["uno.txt"])
   }

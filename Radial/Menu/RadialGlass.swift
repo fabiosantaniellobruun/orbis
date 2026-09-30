@@ -6,6 +6,8 @@ struct RadialGlass<S: Shape>: ViewModifier {
 
   let shape: S
   var isAccented = false
+  /// Quanto bianco nel tema chiaro: i pannelli con molto testo ne vogliono di più dei bottoni.
+  var lightVeil = 0.5
 
   func body(content: Content) -> some View {
     content
@@ -19,7 +21,18 @@ struct RadialGlass<S: Shape>: ViewModifier {
   // Nel tema chiaro il vetro prende il tono di ciò che ha dietro: su uno sfondo scuro diventa
   // scuro e le icone scure non si leggono più. Un velo bianco lo tiene chiaro.
   private var veil: Color {
-    colorScheme == .light ? .white.opacity(0.5) : .clear
+    colorScheme == .light ? .white.opacity(lightVeil) : .clear
+  }
+}
+
+extension View {
+  /// Il pannello si sposta trascinandolo da qualunque punto libero. I controlli, avendo i loro
+  /// gesti, hanno la precedenza. Serve a ogni pannello con cui si interagisce: quelli che
+  /// seguono il puntatore (l'anello, l'avviso) non devono muoversi.
+  ///
+  /// `NSWindow.isMovableByWindowBackground` non basta: il contenuto SwiftUI se ne prende gli eventi.
+  func movableWindow() -> some View {
+    gesture(WindowDragGesture())
   }
 }
 

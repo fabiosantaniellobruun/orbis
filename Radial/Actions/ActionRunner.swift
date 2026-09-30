@@ -6,6 +6,8 @@ nonisolated enum UndoStep: Sendable {
   case discard([URL])
   /// Rimette a posto ciò che l'azione ha cestinato.
   case putBack([TrashedItem])
+  /// Ridà ai file il nome che avevano.
+  case renameBack([RenamedItem])
 }
 
 /// Cosa mostrare dopo un'azione.
@@ -62,9 +64,24 @@ enum ActionRunner {
         undo: .putBack(result.done)
       )
 
-    case .rename, .convert, .move, .resize:
+    case .rename:
+      // Servono le opzioni: se ne occupa il pannello di `RenameController`, che poi chiama `rename`.
+      return .failure("Rinomina passa dal suo pannello")
+
+    case .convert, .move, .resize:
       return ActionOutcome(symbol: action.symbol, message: "\(action.title): in arrivo")
     }
+  }
+
+  static func rename(_ entries: [RenameEntry]) async -> ActionOutcome {
+    let result = await FileOperations.rename(entries)
+    return outcome(
+      of: result,
+      one: "elemento rinominato",
+      many: "elementi rinominati",
+      failure: "Impossibile rinominare",
+      undo: .renameBack(result.done)
+    )
   }
 
   static func undo(_ step: UndoStep) async -> ActionOutcome {
@@ -74,6 +91,9 @@ enum ActionRunner {
       failed = await FileOperations.trash(urls).failed
     case .putBack(let items):
       failed = await FileOperations.putBack(items).failed
+    case .renameBack(let items):
+      let entries = items.map { RenameEntry(source: $0.renamed, newName: $0.original.lastPathComponent) }
+      failed = await FileOperations.rename(entries).failed
     }
     guard failed == 0 else { return .failure("Impossibile annullare") }
     return ActionOutcome(symbol: "arrow.uturn.backward.circle.fill", message: "Annullato")
