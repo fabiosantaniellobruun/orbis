@@ -4,7 +4,7 @@ Ciò che i test automatici non vedono: trascinamenti veri dal Finder, tasti veri
 pannelli, i tempi. Va rifatta prima di ogni rilascio, con la versione che si distribuisce (quella
 del DMG, in Applicazioni), non con quella di sviluppo.
 
-**Materiale:** la cartella `Prove Radial` sulla Scrivania.
+**Materiale:** la cartella `Prove Orbis` sulla Scrivania.
 
 | Cartella | Cosa c'è |
 |---|---|
@@ -89,7 +89,7 @@ premuto il mouse, premi e tieni ⇧ (o il tasto scelto nelle impostazioni).
 
 - [ ] **5a** Trascina `uno.txt`, `due.txt`, `tre.txt` su Rinomina: nome `nota`, numero progressivo.
       L'anteprima mostra `nota 1.txt`… Rinomina, poi Annulla: tornano i nomi di prima.
-- [ ] **5b** Impostazioni (⌘, dal menu di Radial) → Sposta: trascina la cartella `Clienti/Rossi`
+- [ ] **5b** Impostazioni (⌘, dal menu di Orbis) → Sposta: trascina la cartella `Clienti/Rossi`
       su una riga delle preferite. Compare con il percorso completo.
 - [ ] **5c** Trascina un file su Sposta: nel secondo anello c'è Rossi, con il percorso sotto.
       Rilascia: il file si sposta, e Annulla lo riporta indietro. Rossi non compare anche tra le
@@ -113,9 +113,9 @@ premuto il mouse, premi e tieni ⇧ (o il tasto scelto nelle impostazioni).
 
 ## 7. Il resto
 
-- [ ] **7a** "Apri Radial all'avvio del Mac": acceso, Radial compare in Impostazioni di Sistema →
+- [ ] **7a** "Apri Orbis all'avvio del Mac": acceso, Orbis compare in Impostazioni di Sistema →
       Generale → Elementi login. Spento, sparisce.
-- [ ] **7b** Menu di Radial nella barra: "Mostra menu di prova" apre l'anello al centro dello
+- [ ] **7b** Menu di Orbis nella barra: "Mostra menu di prova" apre l'anello al centro dello
       schermo; "Come si usa…" apre la finestra di benvenuto.
 - [ ] **7c** Impostazioni di Sistema → Accessibilità → Movimento → Riduci movimento: l'onda al
       rilascio non c'è più, il resto funziona.

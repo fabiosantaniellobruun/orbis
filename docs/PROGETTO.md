@@ -1,8 +1,11 @@
-# Radial — note di progetto
+# Orbis — note di progetto
 
 App da barra dei menu per macOS 26+. Mentre si trascinano dei file, tenendo premuto un tasto
 (Shift, di base) compare attorno al puntatore un anello di bottoni in vetro: si rilasciano i file
 su un bottone per eseguire l'azione.
+
+Fino all'ottobre 2026 si chiamava Radial: il nome era già usato, ed è cambiato prima della prima
+release. Commit e rami vecchi parlano ancora di Radial.
 
 Questo documento raccoglie le decisioni prese e il perché, lo stato dei lavori e come si lavora sul
 codice. Per usare l'app, vedi il [README](../README.it.md).
@@ -35,13 +38,13 @@ codice. Per usare l'app, vedi il [README](../README.it.md).
     combinazione, e il Finder cambia il significato del trascinamento (sposta, copia, alias).
   - Un tasto normale arriva anche all'app da cui si trascina. Lo spazio, per esempio, apre
     l'anteprima rapida nel Finder: per questo di base non si usa.
-  - Con ⌘ il Finder ammette solo lo spostamento e Radial rifiuta il rilascio (non accetta mai
+  - Con ⌘ il Finder ammette solo lo spostamento e Orbis rifiuta il rilascio (non accetta mai
     `.move`, per non far toccare gli originali): l'impostazione lo segnala.
 - **Niente sandbox, fuori dal Mac App Store**: rinomina e spostamento in sandbox sono molto limitati.
 - **Distribuzione da GitHub Releases e dalla landing, senza notarizzazione.** Notarizzare richiede
   l'Apple Developer Program (99 $ l'anno), anche fuori dallo Store: per ora non lo si usa. Il DMG è
   firmato ad hoc (su Apple silicon un'app senza firma non parte nemmeno), e chi lo scarica deve
-  autorizzare Radial una volta in Privacy e sicurezza; README e landing lo spiegano. Se un giorno
+  autorizzare Orbis una volta in Privacy e sicurezza; README e landing lo spiegano. Se un giorno
   si notarizza, lo script è già pronto (`docs/RELEASING.md`).
 - **Repository pubblico con licenza MIT**, README principale in inglese (`README.md`) e la versione
   italiana accanto (`README.it.md`). L'interfaccia dell'app per ora è in italiano.
@@ -49,12 +52,12 @@ codice. Per usare l'app, vedi il [README](../README.it.md).
   possono contenere nomi di file sono privati (`privacy: .private`).
 - **Tema chiaro o scuro secondo il sistema**. Nel tema chiaro un velo bianco sotto le icone tiene
   il vetro chiaro anche sugli sfondi scuri, dove altrimenti le icone scure si perderebbero.
-- **Icona** in formato Icon Composer (`Radial/AppIcon.icon`), ricavata da `Radial icon.png` (una foto di
+- **Icona** in formato Icon Composer (`Orbis/AppIcon.icon`), ricavata da `Orbis icon.png` (una foto di
   Sean Sinclair su Unsplash, citata nei crediti del README; 2048 px,
   a pieno campo): macOS la ritaglia nel quadrato arrotondato e le dà i riflessi di vetro. Il livello
   è opaco: con la traslucenza attiva i colori si slavano sul fondo. Per cambiarla basta sostituire
-  `Assets/RadialIcon.png` (1024 px), oppure aprire la cartella con Icon Composer.
-- **I pannelli con cui si interagisce si spostano** (`movableWindow()` in `RadialGlass.swift`),
+  `Assets/OrbisIcon.png` (1024 px), oppure aprire la cartella con Icon Composer.
+- **I pannelli con cui si interagisce si spostano** (`movableWindow()` in `OrbisGlass.swift`),
   trascinandoli da un punto libero. L'anello e l'avviso seguono il puntatore e non si spostano.
   `isMovableByWindowBackground` non basta: il contenuto SwiftUI se ne prende gli eventi.
 - **Secondo anello** per le azioni con opzioni: passando su un bottone che ne ha, si apre un arco di
@@ -64,7 +67,7 @@ codice. Per usare l'app, vedi il [README](../README.it.md).
   Vicino a un bordo dello schermo non c'è posto per le etichette (servono circa 455 punti di lato):
   invece di capovolgere l'arco, che diventerebbe irraggiungibile perché bisognerebbe attraversare
   il centro (e lì il sottomenu si chiude), sono le due voci ad andare dalla parte che ha posto
-  (`RadialAction.layout`). Rinomina sta sempre in alto. In verticale il pannello si sposta di
+  (`OrbisAction.layout`). Rinomina sta sempre in alto. In verticale il pannello si sposta di
   quanto serve perché stia l'arco. Il prezzo è che la posizione di Sposta cambia con il punto
   in cui si trascina: se dà fastidio, si può passare a un solo lato.
 - **Sposta**: prima le due cartelle usate più di recente, poi le quattro preferite scelte
@@ -130,9 +133,9 @@ codice. Per usare l'app, vedi il [README](../README.it.md).
   creazione o di modifica.
 - `FileOperations.rename` non sovrascrive mai. Quando un nome nuovo è il vecchio nome di un altro
   elemento del gruppo (scambi, scorrimento di numeri, sole maiuscole) mette prima da parte gli
-  elementi coinvolti con un nome provvisorio (`.radial-…`) e poi li porta al nome finale.
+  elementi coinvolti con un nome provvisorio (`.orbis-…`) e poi li porta al nome finale.
 - Annulla rimette i nomi di prima, con la stessa procedura.
-- Il pannello (`FormPanel`) può ricevere la tastiera. Radial si attiva mentre è aperto e restituisce
+- Il pannello (`FormPanel`) può ricevere la tastiera. Orbis si attiva mentre è aperto e restituisce
   il focus all'app di prima quando si chiude.
 
 ## Ridimensiona
@@ -217,12 +220,12 @@ percentuale.
 Serve Xcode 27 o successivo (SDK di macOS 26).
 
 ```bash
-xcodebuild -project Radial.xcodeproj -scheme Radial -configuration Debug -derivedDataPath build build
-open build/Build/Products/Debug/Radial.app
+xcodebuild -project Orbis.xcodeproj -scheme Orbis -configuration Debug -derivedDataPath build build
+open build/Build/Products/Debug/Orbis.app
 ```
 
 ```bash
-xcodebuild test -project Radial.xcodeproj -scheme Radial -derivedDataPath build -destination 'platform=macOS'
+xcodebuild test -project Orbis.xcodeproj -scheme Orbis -derivedDataPath build -destination 'platform=macOS'
 ```
 
 I test lavorano in cartelle temporanee. Quelli sul Cestino cestinano e ripristinano file di prova.
@@ -238,15 +241,15 @@ I test lavorano in cartelle temporanee. Quelli sul Cestino cestinano e ripristin
 - `--snapshot <percorso.png>` (solo Debug, prima di `--run`) dopo due secondi fotografa dall'interno
   le finestre visibili (`percorso.1.png`, `.2.png`…): serve a controllare l'impaginazione dei
   pannelli senza permessi di registrazione dello schermo. Il vetro, gli slider e i selettori
-  segmentati non escono: li compone il sistema. `RADIAL_SNAPSHOT_DELAY=<secondi>` aspetta di più
-  (per esempio che il pannello del GIF abbia letto il video e fatto l'anteprima). `RADIAL_RESIZE_MODE=dimensions|percent|ratio`
+  segmentati non escono: li compone il sistema. `ORBIS_SNAPSHOT_DELAY=<secondi>` aspetta di più
+  (per esempio che il pannello del GIF abbia letto il video e fatto l'anteprima). `ORBIS_RESIZE_MODE=dimensions|percent|ratio`
   (con `open --env`) apre Ridimensiona in quel modo, con il peso massimo attivo.
 - `--settings` (solo Debug) prova ad aprire le impostazioni; da dentro l'app si aprono con ⌘,.
 - Le preferenze (`favoriteFolders`, `recentFolders`, `stickyMenu`, `triggerShortcut`,
-  `didShowWelcome`) stanno in `defaults read it.fabiosbruun.Radial`.
+  `didShowWelcome`) stanno in `defaults read it.fabiosbruun.Orbis`.
 - `-stickyMenu YES` attiva la preferenza per una sola esecuzione.
 - I messaggi si leggono con
-  `log stream --info --predicate 'subsystem == "it.fabiosbruun.Radial"'`. Quelli che possono
+  `log stream --info --predicate 'subsystem == "it.fabiosbruun.Orbis"'`. Quelli che possono
   contenere nomi di file sono privati: per vederli in chiaro serve un profilo di log che li abiliti.
 
 Per creare il DMG da distribuire, vedi [RELEASING.md](RELEASING.md).

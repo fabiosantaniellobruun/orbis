@@ -1,15 +1,15 @@
-# Radial
+# Orbis
 
 **Trascina dei file, tieni premuto un tasto, rilasciali su un anello di azioni.**
 
-Radial è una piccola app per la barra dei menu di macOS. Inizia a trascinare dei file nel Finder,
+Orbis è una piccola app per la barra dei menu di macOS. Inizia a trascinare dei file nel Finder,
 tieni premuto **⇧** (o il tasto che preferisci) e attorno al puntatore compare un anello di
 bottoni in vetro. Rilascia i file su un bottone: rinominali in serie, clonali, spostali in una
 cartella recente, converti o ridimensiona le immagini, trasforma i video in GIF, comprimili, copia i loro percorsi o mandali nel Cestino.
 Ogni azione si può annullare.
 
 <p align="center">
-  <img src="docs/images/second-ring.jpg" alt="L'anello di Radial attorno al puntatore mentre si trascinano tre file, con il secondo anello di Sposta aperto: due cartelle recenti, quattro preferite e la scelta di una cartella, ognuna con il suo percorso completo" width="760">
+  <img src="docs/images/second-ring.jpg" alt="L'anello di Orbis attorno al puntatore mentre si trascinano tre file, con il secondo anello di Sposta aperto: due cartelle recenti, quattro preferite e la scelta di una cartella, ognuna con il suo percorso completo" width="760">
 </p>
 
 > **Stato:** beta (0.1). L'interfaccia è in **italiano**; una versione in inglese è in programma.
@@ -31,10 +31,10 @@ Ogni azione si può annullare.
   e del peso stimato.
 - **Video in GIF** con l'anteprima animata: scegli l'intervallo su una striscia di fotogrammi, la
   velocità, la misura e le proporzioni, i fotogrammi al secondo, i colori, il retino, le ripetizioni
-  e un peso massimo. Radial ha un suo encoder GIF (niente ffmpeg): una palette per tutta la clip,
+  e un peso massimo. Orbis ha un suo encoder GIF (niente ffmpeg): una palette per tutta la clip,
   un retino morbido, e da un fotogramma all'altro si salvano solo i pixel che cambiano.
 - **Clona**, **comprimi** (zip), **copia il percorso** e **cestina** ("Ripristina" del Finder funziona).
-- **Annulla** per qualche secondo dopo ogni azione che modifica dei file. Radial non sovrascrive
+- **Annulla** per qualche secondo dopo ogni azione che modifica dei file. Orbis non sovrascrive
   mai un file: se il nome è occupato, quello nuovo arriva come `nome 2`.
 - **Il tuo tasto**: ⇧ di base; nelle impostazioni scegli qualsiasi combinazione di modificatori o tasto.
 - Pensata per il **Liquid Glass** di macOS 26, segue il tema chiaro e scuro e rispetta "Riduci movimento".
@@ -52,30 +52,30 @@ Ogni azione si può annullare.
 
 ## Installazione
 
-1. Scarica `Radial.dmg` dall'[ultima versione](https://github.com/fabiosantaniellobruun/radial/releases/latest).
-2. Aprilo e trascina **Radial** in **Applicazioni**.
-3. Avvia Radial. Vive nella barra dei menu (non c'è l'icona nel Dock) e una breve finestra di benvenuto spiega come si usa.
+1. Scarica `Orbis.dmg` dall'[ultima versione](https://github.com/fabiosantaniellobruun/orbis/releases/latest).
+2. Aprilo e trascina **Orbis** in **Applicazioni**.
+3. Avvia Orbis. Vive nella barra dei menu (non c'è l'icona nel Dock) e una breve finestra di benvenuto spiega come si usa.
 
 ### Il primo avvio
 
-Radial è gratuita e open source, e non è firmata con un Developer ID di Apple (a pagamento): macOS
+Orbis è gratuita e open source, e non è firmata con un Developer ID di Apple (a pagamento): macOS
 non può verificarla e la prima volta la blocca. Basta autorizzarla una volta:
 
-1. Apri Radial. macOS dice che non è stata aperta perché Apple non ha potuto verificarla: premi **Fine**.
+1. Apri Orbis. macOS dice che non è stata aperta perché Apple non ha potuto verificarla: premi **Fine**.
 2. Apri **Impostazioni di Sistema → Privacy e sicurezza** e scorri fino a *Sicurezza*: accanto a
-   "Radial è stata bloccata" premi **Apri comunque**, e conferma con la password o il Touch ID.
+   "Orbis è stata bloccata" premi **Apri comunque**, e conferma con la password o il Touch ID.
 
 Oppure, dal Terminale, togli il segno di quarantena che il browser ha messo sul file scaricato:
 
 ```bash
-xattr -dr com.apple.quarantine /Applications/Radial.app
+xattr -dr com.apple.quarantine /Applications/Orbis.app
 ```
 
 Se preferisci non fidarti di un file scaricato, il codice è tutto qui: puoi leggerlo e
 [compilarlo da te](#compilare-dal-codice).
 
-Per disinstallare, esci da Radial dalla barra dei menu e trascinalo nel Cestino. Le preferenze si
-tolgono con `defaults delete it.fabiosbruun.Radial`.
+Per disinstallare, esci da Orbis dalla barra dei menu e trascinalo nel Cestino. Le preferenze si
+tolgono con `defaults delete it.fabiosbruun.Orbis`.
 
 ## Come si usa
 
@@ -103,7 +103,7 @@ Si aprono dall'icona nella barra dei menu (**⌘,**).
 
 ## Privacy
 
-Radial non chiede **nessun permesso**, non usa la **rete** e non invia **nessun dato**. Si accorge che
+Orbis non chiede **nessun permesso**, non usa la **rete** e non invia **nessun dato**. Si accorge che
 è in corso un trascinamento osservando gli eventi del mouse e la pasteboard di trascinamento. Guarda i
 file trascinati quando si apre l'anello (solo il tipo, per proporre il GIF per i video) e quando li
 rilasci su un'azione. I messaggi nel registro di sistema
@@ -114,16 +114,16 @@ che potrebbero contenere nomi di file sono privati.
 Serve Xcode 27 o successivo (SDK di macOS 26).
 
 ```bash
-git clone https://github.com/fabiosantaniellobruun/radial.git
-cd radial
-xcodebuild -project Radial.xcodeproj -scheme Radial -configuration Release -derivedDataPath build build
-open build/Build/Products/Release/Radial.app
+git clone https://github.com/fabiosantaniellobruun/orbis.git
+cd orbis
+xcodebuild -project Orbis.xcodeproj -scheme Orbis -configuration Release -derivedDataPath build build
+open build/Build/Products/Release/Orbis.app
 ```
 
 I test (lavorano in cartelle temporanee):
 
 ```bash
-xcodebuild test -project Radial.xcodeproj -scheme Radial -derivedDataPath build -destination 'platform=macOS'
+xcodebuild test -project Orbis.xcodeproj -scheme Orbis -derivedDataPath build -destination 'platform=macOS'
 ```
 
 Per creare un DMG da distribuire, vedi [docs/RELEASING.md](docs/RELEASING.md).
@@ -132,13 +132,13 @@ Per creare un DMG da distribuire, vedi [docs/RELEASING.md](docs/RELEASING.md).
 
 | Cartella | Cosa c'è |
 |---|---|
-| `Radial/Actions` | Le operazioni sui file (sposta, rinomina, converti, cestina…) e come si annullano |
-| `Radial/Input` | Il riconoscimento del trascinamento e il tasto configurabile |
-| `Radial/Menu` | La geometria dell'anello, i bottoni, le voci del secondo anello |
-| `Radial/Overlay` | I pannelli trasparenti e il controller |
-| `Radial/Rename`, `Resize`, `GIF` | I pannelli di rinomina in serie, ridimensionamento e video in GIF, con la loro logica e l'encoder GIF |
-| `Radial/Settings`, `Toast`, `Welcome` | Le impostazioni, l'avviso con Annulla, la finestra del primo avvio |
-| `RadialTests` | Le suite di [Swift Testing](https://developer.apple.com/xcode/swift-testing/) |
+| `Orbis/Actions` | Le operazioni sui file (sposta, rinomina, converti, cestina…) e come si annullano |
+| `Orbis/Input` | Il riconoscimento del trascinamento e il tasto configurabile |
+| `Orbis/Menu` | La geometria dell'anello, i bottoni, le voci del secondo anello |
+| `Orbis/Overlay` | I pannelli trasparenti e il controller |
+| `Orbis/Rename`, `Resize`, `GIF` | I pannelli di rinomina in serie, ridimensionamento e video in GIF, con la loro logica e l'encoder GIF |
+| `Orbis/Settings`, `Toast`, `Welcome` | Le impostazioni, l'avviso con Annulla, la finestra del primo avvio |
+| `OrbisTests` | Le suite di [Swift Testing](https://developer.apple.com/xcode/swift-testing/) |
 | `docs` | Le [note di progetto](docs/PROGETTO.md) e la [guida al rilascio](docs/RELEASING.md) |
 
 ## Contribuire

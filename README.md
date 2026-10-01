@@ -1,15 +1,15 @@
-# Radial
+# Orbis
 
 **Drag files, hold a key, drop them on a ring of actions.**
 
-Radial is a small macOS menu bar app. Start dragging files in the Finder, hold **⇧** (or any key
+Orbis is a small macOS menu bar app. Start dragging files in the Finder, hold **⇧** (or any key
 you choose), and a ring of glass buttons appears around your pointer. Drop the files on a button:
 rename them in bulk, clone them, move them to a recent folder, convert or resize images, turn videos
 into GIFs, compress, copy their
 paths or send them to the Trash. Every action can be undone.
 
 <p align="center">
-  <img src="docs/images/second-ring.jpg" alt="The Radial ring around the pointer while dragging three files, with the Move submenu open: two recent folders, four favorites and a folder picker, each with its full path" width="760">
+  <img src="docs/images/second-ring.jpg" alt="The Orbis ring around the pointer while dragging three files, with the Move submenu open: two recent folders, four favorites and a folder picker, each with its full path" width="760">
 </p>
 
 > **Status:** beta (0.1). The interface is currently in **Italian**; an English localization is planned.
@@ -27,11 +27,11 @@ paths or send them to the Trash. Every action can be undone.
   at once), scale by a percentage, or crop to 1:1, 4:3, 16:9 or any ratio. Choose the format and
   quality, or a maximum file size, with a live preview of dimensions and estimated weight.
 - **Video → GIF** with a live, animated preview: pick the range on a filmstrip, speed, size and
-  aspect ratio, frame rate, number of colors, dithering, looping and a maximum file size. Radial has
+  aspect ratio, frame rate, number of colors, dithering, looping and a maximum file size. Orbis has
   its own GIF encoder (no ffmpeg): one palette for the whole clip, smooth dithering, and only the
   pixels that change are stored from frame to frame.
 - **Clone**, **compress** (zip), **copy path** and **move to Trash** (Finder's *Put Back* keeps working).
-- **Undo** for a few seconds after each action that changes files. Radial never overwrites a file:
+- **Undo** for a few seconds after each action that changes files. Orbis never overwrites a file:
   if a name is taken, the new file arrives as `name 2`.
 - **Your key**: ⇧ by default; choose any modifier combination or key in Settings.
 - Designed for macOS 26 **Liquid Glass**, follows light/dark mode and respects *Reduce Motion*.
@@ -49,30 +49,30 @@ paths or send them to the Trash. Every action can be undone.
 
 ## Install
 
-1. Download `Radial.dmg` from the [latest release](https://github.com/fabiosantaniellobruun/radial/releases/latest).
-2. Open it and drag **Radial** into **Applications**.
-3. Launch Radial. It lives in the menu bar (there is no Dock icon), and a short welcome window explains how to use it.
+1. Download `Orbis.dmg` from the [latest release](https://github.com/fabiosantaniellobruun/orbis/releases/latest).
+2. Open it and drag **Orbis** into **Applications**.
+3. Launch Orbis. It lives in the menu bar (there is no Dock icon), and a short welcome window explains how to use it.
 
 ### The first launch
 
-Radial is free and open source, and it is not signed with a paid Apple Developer ID, so macOS cannot
+Orbis is free and open source, and it is not signed with a paid Apple Developer ID, so macOS cannot
 verify it and blocks it the first time. You only need to allow it once:
 
-1. Open Radial. macOS says it was not opened because Apple could not verify it: click **Done**.
-2. Open **System Settings → Privacy & Security** and scroll down to *Security*: next to "Radial was
+1. Open Orbis. macOS says it was not opened because Apple could not verify it: click **Done**.
+2. Open **System Settings → Privacy & Security** and scroll down to *Security*: next to "Orbis was
    blocked", click **Open Anyway**, then confirm with your password or Touch ID.
 
 Or, in Terminal, remove the quarantine flag that the browser added to the download:
 
 ```bash
-xattr -dr com.apple.quarantine /Applications/Radial.app
+xattr -dr com.apple.quarantine /Applications/Orbis.app
 ```
 
 If you would rather not trust a download, the code is all here: you can read it and
 [build it yourself](#build-from-source).
 
-To uninstall, quit Radial from the menu bar and drag it to the Trash. Its preferences can be removed
-with `defaults delete it.fabiosbruun.Radial`.
+To uninstall, quit Orbis from the menu bar and drag it to the Trash. Its preferences can be removed
+with `defaults delete it.fabiosbruun.Orbis`.
 
 ## Use
 
@@ -100,7 +100,7 @@ Open them from the menu bar icon (**⌘,**).
 
 ## Privacy
 
-Radial asks for **no permissions**, uses **no network** and sends **no data anywhere**. It notices that
+Orbis asks for **no permissions**, uses **no network** and sends **no data anywhere**. It notices that
 a drag is in progress by watching mouse events and the drag pasteboard. It looks at the dragged files
 when the ring opens (only their type, to offer GIF for videos) and when you drop them on an action.
 System log messages that could contain file names are marked private.
@@ -110,16 +110,16 @@ System log messages that could contain file names are marked private.
 You need Xcode 27 or later (macOS 26 SDK).
 
 ```bash
-git clone https://github.com/fabiosantaniellobruun/radial.git
-cd radial
-xcodebuild -project Radial.xcodeproj -scheme Radial -configuration Release -derivedDataPath build build
-open build/Build/Products/Release/Radial.app
+git clone https://github.com/fabiosantaniellobruun/orbis.git
+cd orbis
+xcodebuild -project Orbis.xcodeproj -scheme Orbis -configuration Release -derivedDataPath build build
+open build/Build/Products/Release/Orbis.app
 ```
 
 Run the tests (they work on temporary folders):
 
 ```bash
-xcodebuild test -project Radial.xcodeproj -scheme Radial -derivedDataPath build -destination 'platform=macOS'
+xcodebuild test -project Orbis.xcodeproj -scheme Orbis -derivedDataPath build -destination 'platform=macOS'
 ```
 
 To build a distributable DMG, see [docs/RELEASING.md](docs/RELEASING.md).
@@ -128,13 +128,13 @@ To build a distributable DMG, see [docs/RELEASING.md](docs/RELEASING.md).
 
 | Folder | What is in it |
 |---|---|
-| `Radial/Actions` | File operations (move, rename, convert, trash…) and their undo |
-| `Radial/Input` | Drag detection and the configurable trigger key |
-| `Radial/Menu` | Ring geometry, buttons, second-ring options |
-| `Radial/Overlay` | The transparent panels and the controller |
-| `Radial/Rename`, `Resize`, `GIF` | The bulk-rename, resize and video-to-GIF panels, their logic and the GIF encoder |
-| `Radial/Settings`, `Toast`, `Welcome` | Settings window, result notice with Undo, first-run window |
-| `RadialTests` | [Swift Testing](https://developer.apple.com/xcode/swift-testing/) suites |
+| `Orbis/Actions` | File operations (move, rename, convert, trash…) and their undo |
+| `Orbis/Input` | Drag detection and the configurable trigger key |
+| `Orbis/Menu` | Ring geometry, buttons, second-ring options |
+| `Orbis/Overlay` | The transparent panels and the controller |
+| `Orbis/Rename`, `Resize`, `GIF` | The bulk-rename, resize and video-to-GIF panels, their logic and the GIF encoder |
+| `Orbis/Settings`, `Toast`, `Welcome` | Settings window, result notice with Undo, first-run window |
+| `OrbisTests` | [Swift Testing](https://developer.apple.com/xcode/swift-testing/) suites |
 | `docs` | [Design notes](docs/PROGETTO.md) (in Italian) and the [release guide](docs/RELEASING.md) |
 
 ## Contributing

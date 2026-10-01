@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Prepara Radial per la distribuzione: compila in Release, firma, crea il DMG e, se ci sono le
+# Prepara Orbis per la distribuzione: compila in Release, firma, crea il DMG e, se ci sono le
 # credenziali, lo notarizza. Il risultato sta in dist/.
 #
 #   scripts/release.sh
@@ -13,15 +13,15 @@
 #   DEVELOPER_ID    l'identità di firma, per esempio
 #                   "Developer ID Application: Nome Cognome (ABCDE12345)"
 #   NOTARY_PROFILE  il profilo di notarytool nel portachiavi, creato con
-#                   xcrun notarytool store-credentials "radial-notary" …
+#                   xcrun notarytool store-credentials "orbis-notary" …
 #
 set -euo pipefail
 
 cd "$(dirname "$0")/.."
 
-PROJECT="Radial.xcodeproj"
-SCHEME="Radial"
-APP_NAME="Radial"
+PROJECT="Orbis.xcodeproj"
+SCHEME="Orbis"
+APP_NAME="Orbis"
 BUILD_DIR="build/release"
 DIST_DIR="dist"
 IDENTITY="${DEVELOPER_ID:-}"
@@ -56,7 +56,7 @@ mkdir -p "$BUILD_DIR" "$DIST_DIR"
 
 # MARK: Compilazione
 
-step "Compilo Radial $VERSION (Release)"
+step "Compilo Orbis $VERSION (Release)"
 # Il registro completo va su file: xcodebuild è molto rumoroso, e lo si legge solo se qualcosa va storto.
 if ! xcodebuild archive \
   -project "$PROJECT" \
@@ -144,6 +144,6 @@ printf '\n  %s\n  %s (stessa cosa, con il nome fisso per il link "ultima version
 
 if [ -z "$IDENTITY" ] || [ -z "$NOTARY_PROFILE" ]; then
   printf '\n'
-  warn "DMG non notarizzato: al primo avvio chi lo scarica deve autorizzare Radial una volta"
+  warn "DMG non notarizzato: al primo avvio chi lo scarica deve autorizzare Orbis una volta"
   warn "(Privacy e sicurezza → Apri comunque, come spiega il README). Per notarizzarlo: docs/RELEASING.md."
 fi
