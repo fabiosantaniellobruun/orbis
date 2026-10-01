@@ -5,9 +5,9 @@
 #
 #   scripts/release.sh
 #
-# Senza credenziali produce un DMG firmato "ad hoc": si apre, ma su un altro Mac Gatekeeper lo
-# blocca finché l'utente non lo autorizza a mano. Va bene per provare; per distribuire servono
-# una firma Developer ID e la notarizzazione (vedi docs/RELEASING.md).
+# Senza credenziali (la scelta attuale) produce un DMG firmato "ad hoc": su un altro Mac Gatekeeper
+# lo blocca finché l'utente non lo autorizza una volta, come spiega il README. Con un Developer ID
+# e la notarizzazione l'avviso sparisce (vedi docs/RELEASING.md).
 #
 # Variabili d'ambiente:
 #   DEVELOPER_ID    l'identità di firma, per esempio
@@ -144,6 +144,6 @@ printf '\n  %s\n  %s (stessa cosa, con il nome fisso per il link "ultima version
 
 if [ -z "$IDENTITY" ] || [ -z "$NOTARY_PROFILE" ]; then
   printf '\n'
-  warn "Questo DMG NON è notarizzato: su un altro Mac Gatekeeper lo bloccherà."
-  warn "Per distribuirlo servono DEVELOPER_ID e NOTARY_PROFILE. Vedi docs/RELEASING.md."
+  warn "DMG non notarizzato: al primo avvio chi lo scarica deve autorizzare Radial una volta"
+  warn "(Privacy e sicurezza → Apri comunque, come spiega il README). Per notarizzarlo: docs/RELEASING.md."
 fi

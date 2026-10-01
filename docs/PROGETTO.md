@@ -18,7 +18,7 @@ codice. Per usare l'app, vedi il [README](../README.it.md).
 | 5 | Sposta, con cartelle recenti e preferite | fatto |
 | 6 | Converti in, per le immagini (PNG, JPEG, HEIC, AVIF, TIFF) | fatto |
 | 7 | Impostazioni: tasto, menu aperto, avvio al login, cartelle preferite | fatto (manca: ordine delle azioni) |
-| 8 | Distribuzione: versione, DMG, script di rilascio, benvenuto al primo avvio | fatto, **manca la firma Developer ID e la notarizzazione** (servono le credenziali Apple) |
+| 8 | Distribuzione: versione, DMG, script di rilascio, benvenuto al primo avvio | fatto: DMG firmato ad hoc, senza notarizzazione (scelta, vedi Decisioni) |
 | 9 | Ridimensiona: dimensioni, percentuale, proporzioni, qualità e peso massimo | fatto |
 | 10 | Video in GIF, con tutti i controlli | fatto |
 | 11 | Interfaccia in inglese | da fare, prima di promuovere l'app fuori dall'Italia |
@@ -38,6 +38,13 @@ codice. Per usare l'app, vedi il [README](../README.it.md).
   - Con ⌘ il Finder ammette solo lo spostamento e Radial rifiuta il rilascio (non accetta mai
     `.move`, per non far toccare gli originali): l'impostazione lo segnala.
 - **Niente sandbox, fuori dal Mac App Store**: rinomina e spostamento in sandbox sono molto limitati.
+- **Distribuzione da GitHub Releases e dalla landing, senza notarizzazione.** Notarizzare richiede
+  l'Apple Developer Program (99 $ l'anno), anche fuori dallo Store: per ora non lo si usa. Il DMG è
+  firmato ad hoc (su Apple silicon un'app senza firma non parte nemmeno), e chi lo scarica deve
+  autorizzare Radial una volta in Privacy e sicurezza; README e landing lo spiegano. Se un giorno
+  si notarizza, lo script è già pronto (`docs/RELEASING.md`).
+- **Repository pubblico con licenza MIT**, README principale in inglese (`README.md`) e la versione
+  italiana accanto (`README.it.md`). L'interfaccia dell'app per ora è in italiano.
 - **Nessun permesso, nessuna rete, nessuna telemetria.** I messaggi nel registro di sistema che
   possono contenere nomi di file sono privati (`privacy: .private`).
 - **Tema chiaro o scuro secondo il sistema**. Nel tema chiaro un velo bianco sotto le icone tiene

@@ -52,9 +52,23 @@ paths or send them to the Trash. Every action can be undone.
 2. Open it and drag **Radial** into **Applications**.
 3. Launch Radial. It lives in the menu bar (there is no Dock icon), and a short welcome window explains how to use it.
 
-If macOS says it cannot verify the app (builds that are not notarized yet), open
-**System Settings → Privacy & Security**, scroll down and click **Open Anyway**, or run
-`xattr -dr com.apple.quarantine /Applications/Radial.app` once.
+### The first launch
+
+Radial is free and open source, and it is not signed with a paid Apple Developer ID, so macOS cannot
+verify it and blocks it the first time. You only need to allow it once:
+
+1. Open Radial. macOS says it was not opened because Apple could not verify it: click **Done**.
+2. Open **System Settings → Privacy & Security** and scroll down to *Security*: next to "Radial was
+   blocked", click **Open Anyway**, then confirm with your password or Touch ID.
+
+Or, in Terminal, remove the quarantine flag that the browser added to the download:
+
+```bash
+xattr -dr com.apple.quarantine /Applications/Radial.app
+```
+
+If you would rather not trust a download, the code is all here: you can read it and
+[build it yourself](#build-from-source).
 
 To uninstall, quit Radial from the menu bar and drag it to the Trash. Its preferences can be removed
 with `defaults delete it.fabiosbruun.Radial`.

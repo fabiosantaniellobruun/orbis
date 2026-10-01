@@ -55,9 +55,23 @@ Ogni azione si può annullare.
 2. Aprilo e trascina **Radial** in **Applicazioni**.
 3. Avvia Radial. Vive nella barra dei menu (non c'è l'icona nel Dock) e una breve finestra di benvenuto spiega come si usa.
 
-Se macOS dice che non può verificare l'app (le versioni non ancora notarizzate), apri
-**Impostazioni di Sistema → Privacy e sicurezza**, scorri in fondo e premi **Apri comunque**; oppure
-esegui una volta `xattr -dr com.apple.quarantine /Applications/Radial.app`.
+### Il primo avvio
+
+Radial è gratuita e open source, e non è firmata con un Developer ID di Apple (a pagamento): macOS
+non può verificarla e la prima volta la blocca. Basta autorizzarla una volta:
+
+1. Apri Radial. macOS dice che non è stata aperta perché Apple non ha potuto verificarla: premi **Fine**.
+2. Apri **Impostazioni di Sistema → Privacy e sicurezza** e scorri fino a *Sicurezza*: accanto a
+   "Radial è stata bloccata" premi **Apri comunque**, e conferma con la password o il Touch ID.
+
+Oppure, dal Terminale, togli il segno di quarantena che il browser ha messo sul file scaricato:
+
+```bash
+xattr -dr com.apple.quarantine /Applications/Radial.app
+```
+
+Se preferisci non fidarti di un file scaricato, il codice è tutto qui: puoi leggerlo e
+[compilarlo da te](#compilare-dal-codice).
 
 Per disinstallare, esci da Radial dalla barra dei menu e trascinalo nel Cestino. Le preferenze si
 tolgono con `defaults delete it.fabiosbruun.Radial`.

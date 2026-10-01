@@ -1,32 +1,13 @@
 # Come si rilascia Radial
 
-Radial si distribuisce fuori dal Mac App Store: un DMG scaricabile dal sito o da GitHub Releases.
-Perché gli utenti possano aprirlo con un doppio clic, senza avvisi di Gatekeeper, l'app deve essere
-**firmata con un certificato Developer ID** e **notarizzata** da Apple. Senza, il DMG funziona ma
-su un altro Mac macOS lo blocca finché l'utente non lo autorizza a mano (vedi in fondo).
+Radial si distribuisce fuori dal Mac App Store: un DMG su GitHub Releases, scaricabile anche dalla
+landing. **Per ora non è notarizzato**: notarizzare richiede l'Apple Developer Program (99 $ l'anno),
+anche per le app che non passano dallo Store. Il DMG è firmato "ad hoc" (senza, su Apple silicon
+l'app non partirebbe nemmeno), e chi lo scarica autorizza Radial una volta, come spiega il README.
 
-Lo script [`scripts/release.sh`](../scripts/release.sh) fa tutto: compila in Release, firma, crea il
-DMG, lo notarizza e lo rilega alla ricevuta di Apple. Senza credenziali produce comunque un DMG
-firmato "ad hoc", utile per provare.
-
-## Cosa serve, una volta sola
-
-1. **Apple Developer Program** (99 $ l'anno): [developer.apple.com/programs](https://developer.apple.com/programs/).
-   Senza, non si può né firmare con Developer ID né notarizzare.
-2. **Un certificato "Developer ID Application"**. In Xcode: Impostazioni → Accounts → il tuo team →
-   Manage Certificates → + → *Developer ID Application*. Si controlla con:
-   ```bash
-   security find-identity -v -p codesigning
-   ```
-   Cerca una riga come `Developer ID Application: Nome Cognome (ABCDE12345)`: è il valore di
-   `DEVELOPER_ID`.
-3. **Le credenziali per la notarizzazione**, salvate nel portachiavi con un nome a scelta. Serve una
-   [password specifica per l'app](https://support.apple.com/102654) (non quella dell'Apple ID):
-   ```bash
-   xcrun notarytool store-credentials "radial-notary" \
-     --apple-id "tua@email" --team-id "ABCDE12345" --password "xxxx-xxxx-xxxx-xxxx"
-   ```
-   Il nome (`radial-notary`) è il valore di `NOTARY_PROFILE`.
+Lo script [`scripts/release.sh`](../scripts/release.sh) fa tutto: compila in Release (universale,
+Apple silicon e Intel), firma, controlla e crea il DMG. Se un giorno ci saranno le credenziali Apple,
+lo stesso script firma con il Developer ID e notarizza (vedi in fondo).
 
 ## Ogni rilascio
 
@@ -39,23 +20,25 @@ firmato "ad hoc", utile per provare.
    ```
 3. **Crea il DMG**:
    ```bash
-   DEVELOPER_ID="Developer ID Application: Nome Cognome (ABCDE12345)" \
-   NOTARY_PROFILE="radial-notary" \
    scripts/release.sh
    ```
-   Ci vogliono qualche minuto, quasi tutti per l'attesa della notarizzazione. Alla fine in `dist/`:
+   Alla fine in `dist/`:
    - `Radial-<versione>.dmg`: il file da pubblicare;
    - `Radial.dmg`: lo stesso, con il nome fisso (serve al link "ultima versione", vedi sotto);
    - `Radial-<versione>.dmg.sha256`: il checksum, da pubblicare accanto al DMG.
-4. **Provalo su un Mac pulito** (o almeno in un altro account utente): scarica il DMG da Internet,
-   aprilo, trascina Radial in Applicazioni, avvialo. Non deve comparire nessun avviso, e al primo
-   avvio deve aprirsi la finestra di benvenuto.
+
+   Lo script avvisa che il DMG non è notarizzato: è previsto.
+4. **Provalo come lo proverà chi lo scarica**: caricalo (o scaricalo) da Internet, perché solo i file
+   scaricati hanno il segno di quarantena che fa scattare il blocco. Apri il DMG, trascina Radial in
+   Applicazioni, avvialo, e segui i passaggi del README ("The first launch"). Dopo l'autorizzazione
+   deve aprirsi la finestra di benvenuto.
 5. **Pubblica**:
    ```bash
    git tag v0.2.0 && git push origin v0.2.0
    gh release create v0.2.0 dist/Radial-0.2.0.dmg dist/Radial.dmg dist/Radial-0.2.0.dmg.sha256 \
      --title "Radial 0.2.0" --notes "Cosa è cambiato…"
    ```
+   Nelle note conviene ripetere in due righe come si autorizza l'app al primo avvio.
 
 ## Il link per il sito o per la landing
 
@@ -66,27 +49,63 @@ all'ultima versione, senza doverlo aggiornare:
 https://github.com/fabiosantaniellobruun/radial/releases/latest/download/Radial.dmg
 ```
 
-Sulla landing bastano: il pulsante di download con quel link, i requisiti (macOS 26 o successivo) e
-due righe su cosa fa. Se vuoi mostrare la versione, si legge da
+Sulla landing servono:
+
+- il pulsante di download con quel link e i requisiti (macOS 26 o successivo);
+- due righe su cosa fa, e magari il GIF dell'anello;
+- **come si apre la prima volta**, ben visibile accanto al pulsante: "macOS blocca le app non
+  notarizzate: apri Radial, premi Fine, poi Impostazioni di Sistema → Privacy e sicurezza → Apri
+  comunque". Senza, molti penseranno che l'app sia rotta o pericolosa;
+- il link al codice su GitHub: per chi non si fida di un'app non notarizzata, poterla leggere e
+  compilare è la garanzia che conta.
+
+Se vuoi mostrare la versione, si legge da
 `https://api.github.com/repos/fabiosantaniellobruun/radial/releases/latest` (campo `tag_name`).
 
-## Cosa vedrà chi scarica un DMG non notarizzato
+## Cosa vede chi scarica il DMG
 
-Finché non c'è la notarizzazione, macOS dice che "Radial non può essere aperto perché non è stato
-possibile verificare l'assenza di software dannoso". Per aprirlo una volta:
+Al primo avvio macOS dice che Radial non è stata aperta perché Apple non ha potuto verificare che
+sia priva di malware, con i pulsanti *Fine* e *Sposta nel Cestino*. Da macOS 15 non c'è più il
+trucco del clic destro → Apri: si passa da **Impostazioni di Sistema → Privacy e sicurezza → Apri
+comunque**, con la password. Una volta sola; gli aggiornamenti scaricati di nuovo chiedono di nuovo.
 
-- **Impostazioni di Sistema → Privacy e sicurezza**, in fondo: "Radial è stato bloccato" → **Apri
-  comunque**; oppure
-- dal Terminale: `xattr -dr com.apple.quarantine /Applications/Radial.app`.
+In alternativa, dal Terminale: `xattr -dr com.apple.quarantine /Applications/Radial.app`.
 
-Va scritto chiaramente nel README, finché serve.
+## Se un giorno si notarizza
+
+Con l'Apple Developer Program l'avviso sparisce: l'app si apre con un doppio clic.
+
+1. **Iscriviti** su [developer.apple.com/programs](https://developer.apple.com/programs/).
+2. **Crea un certificato "Developer ID Application"**. In Xcode: Impostazioni → Accounts → il tuo
+   team → Manage Certificates → + → *Developer ID Application*. Si controlla con:
+   ```bash
+   security find-identity -v -p codesigning
+   ```
+   Cerca una riga come `Developer ID Application: Nome Cognome (ABCDE12345)`: è il valore di
+   `DEVELOPER_ID`.
+3. **Salva le credenziali per la notarizzazione** nel portachiavi, con un nome a scelta. Serve una
+   [password specifica per l'app](https://support.apple.com/102654), non quella dell'Apple ID:
+   ```bash
+   xcrun notarytool store-credentials "radial-notary" \
+     --apple-id "tua@email" --team-id "ABCDE12345" --password "xxxx-xxxx-xxxx-xxxx"
+   ```
+   Il nome (`radial-notary`) è il valore di `NOTARY_PROFILE`.
+4. **Crea il DMG** con le due variabili:
+   ```bash
+   DEVELOPER_ID="Developer ID Application: Nome Cognome (ABCDE12345)" \
+   NOTARY_PROFILE="radial-notary" \
+   scripts/release.sh
+   ```
+   Ci vogliono qualche minuto, quasi tutti per l'attesa della notarizzazione. Poi si tolgono dal
+   README e dalla landing le istruzioni per il primo avvio.
 
 ## Idee per dopo
 
 - **Aggiornamenti automatici con [Sparkle](https://sparkle-project.org/)**: l'app controlla un
-  file `appcast.xml` (si può ospitare su GitHub Pages) e propone l'aggiornamento. Richiede una
-  chiave di firma degli aggiornamenti e una dipendenza Swift Package.
-- **Homebrew Cask**: `brew install --cask radial` dopo aver inviato un cask a
-  [homebrew-cask](https://github.com/Homebrew/homebrew-cask) (serve un'app notarizzata).
-- **Un rilascio automatico su GitHub Actions**: richiede un runner con macOS 26 e i certificati
-  come segreti del repository.
+  file `appcast.xml` (si può ospitare su GitHub Pages) e propone l'aggiornamento. Funziona anche
+  senza notarizzazione, ma ogni aggiornamento firmato ad hoc potrebbe richiedere di nuovo
+  l'autorizzazione: va provato.
+- **Homebrew Cask**: il repository ufficiale chiede app notarizzate. Un *tap* personale
+  (`brew install --cask fabiosantaniellobruun/tap/radial`) si può fare anche senza, ma il blocco al
+  primo avvio resta.
+- **Un rilascio automatico su GitHub Actions**: richiede un runner con macOS 26.
