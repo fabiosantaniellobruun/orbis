@@ -214,12 +214,19 @@ private struct SubItem: View {
         .resizable()
         .frame(width: 28, height: 28)
     } else if let text = option.glyphText {
-      // Un formato si riconosce dalla sigla.
-      Text(text)
-        .font(.system(size: 11, weight: .bold, design: .rounded))
-        .foregroundStyle(isAccented ? AnyShapeStyle(.white) : AnyShapeStyle(.primary))
-        .minimumScaleFactor(0.7)
-        .lineLimit(1)
+      // Un formato si riconosce dalla sigla; i PNG da un SVG hanno sotto la scala.
+      VStack(spacing: 0) {
+        Text(text)
+          .font(.system(size: 11, weight: .bold, design: .rounded))
+        if let detail = option.glyphDetail {
+          Text(detail)
+            .font(.system(size: 10, weight: .semibold, design: .rounded))
+            .opacity(0.75)
+        }
+      }
+      .foregroundStyle(isAccented ? AnyShapeStyle(.white) : AnyShapeStyle(.primary))
+      .minimumScaleFactor(0.7)
+      .lineLimit(1)
     } else {
       Image(systemName: option.symbol)
         .font(.system(size: 18, weight: .medium))

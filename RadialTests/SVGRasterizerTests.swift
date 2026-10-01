@@ -176,5 +176,8 @@ final class SVGRasterizerTests {
     // Il menu di prova resta com'era.
     #expect(!RadialOption.convertOptions(for: [], formats: formats).contains { $0.id.hasPrefix("svg:") })
     #expect(RadialOption.svgOptions.last?.svgScales == [1, 2, 3, 4])
+    // Nel bottone "PNG", e sotto la scala.
+    #expect(RadialOption.svgOptions.allSatisfy { $0.glyphText == "PNG" })
+    #expect(RadialOption.svgOptions.map(\.glyphDetail) == ["1x", "2x", "3x", "4x", "1–4x"])
   }
 }
