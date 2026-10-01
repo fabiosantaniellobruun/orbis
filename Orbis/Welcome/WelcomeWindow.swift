@@ -31,8 +31,9 @@ final class WelcomeWindowController {
         NSApp.sendAction(Selector(("showSettingsWindow:")), to: nil, from: nil)
       }
     ))
+    // Alta quanto il contenuto: con un'altezza fissa i testi lunghi si troncano.
     let window = NSWindow(
-      contentRect: NSRect(x: 0, y: 0, width: 480, height: 520),
+      contentRect: NSRect(origin: .zero, size: hostingView.fittingSize),
       styleMask: [.titled, .closable, .fullSizeContentView],
       backing: .buffered,
       defer: false
@@ -84,6 +85,7 @@ private struct WelcomeView: View {
 
       Label {
         Text("Orbis vive nella barra dei menu, in alto a destra. Non chiede nessun permesso, non usa la rete e non legge i tuoi file finché non rilasci qualcosa su un'azione.")
+          .fixedSize(horizontal: false, vertical: true)
       } icon: {
         Image(systemName: "lock.shield")
       }

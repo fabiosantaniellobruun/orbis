@@ -63,8 +63,13 @@ Orbis is free and open source, and it is not signed with a paid Apple Developer 
 verify it and blocks it the first time. You only need to allow it once:
 
 1. Open Orbis. macOS says it was not opened because Apple could not verify it: click **Done**.
-2. Open **System Settings → Privacy & Security** and scroll down to *Security*: next to "Orbis was
-   blocked", click **Open Anyway**, then confirm with your password or Touch ID.
+2. Open **System Settings → Privacy & Security** and scroll down to *Security*: next to "Orbis.app
+   was blocked to protect your Mac", click **Open Anyway**, then confirm with your password or
+   Touch ID.
+
+<p align="center">
+  <img src="docs/images/open-anyway.png" alt="System Settings, Privacy & Security (in Italian): under Security, the notice that Orbis.app was blocked, with the Open Anyway button next to it" width="600">
+</p>
 
 Or, in Terminal, remove the quarantine flag that the browser added to the download:
 

@@ -67,7 +67,12 @@ non può verificarla e la prima volta la blocca. Basta autorizzarla una volta:
 
 1. Apri Orbis. macOS dice che non è stata aperta perché Apple non ha potuto verificarla: premi **Fine**.
 2. Apri **Impostazioni di Sistema → Privacy e sicurezza** e scorri fino a *Sicurezza*: accanto a
-   "Orbis è stata bloccata" premi **Apri comunque**, e conferma con la password o il Touch ID.
+   "Il Mac ha bloccato Orbis.app per garantire la sicurezza" premi **Apri comunque**, e conferma
+   con la password o il Touch ID.
+
+<p align="center">
+  <img src="docs/images/open-anyway.png" alt="Impostazioni di Sistema, Privacy e sicurezza: sotto Sicurezza, l'avviso che il Mac ha bloccato Orbis.app, con accanto il pulsante Apri comunque" width="600">
+</p>
 
 Oppure, dal Terminale, togli il segno di quarantena che il browser ha messo sul file scaricato:
 
