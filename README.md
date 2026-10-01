@@ -21,7 +21,8 @@ paths or send them to the Trash. Every action can be undone.
   Swaps and shifts like `1→2, 2→3` are handled safely.
 - **Move** to the last two folders you used, your four favorites or any folder. Every entry shows the
   folder name and, in small type, its **full path**, so folders with the same name are never confused.
-- **Convert images** to PNG, JPEG, HEIC, AVIF or TIFF, keeping metadata and orientation.
+- **Convert images** to PNG, JPEG, HEIC, AVIF or TIFF, keeping metadata and orientation, and **SVGs to
+  PNG** at 1x, 2x, 3x or 4x, or all four at once (`logo.png`, `logo@2x.png`…).
 - **Resize images**: fit them in a width and height (a whole batch of landscape and portrait photos
   at once), scale by a percentage, or crop to 1:1, 4:3, 16:9 or any ratio. Choose the format and
   quality, or a maximum file size, with a live preview of dimensions and estimated weight.
@@ -140,6 +141,10 @@ To build a distributable DMG, see [docs/RELEASING.md](docs/RELEASING.md).
 
 Issues and pull requests are welcome. Please keep the tests passing and add some for new behavior;
 the file operations in particular should never overwrite or lose anything.
+
+## Credits
+
+The app icon is made from a photo by [Sean Sinclair](https://unsplash.com/it/@seanwsinclair?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText) on [Unsplash](https://unsplash.com/it/foto/unimmagine-sfocata-di-uno-sfondo-color-arcobaleno-C_NJKfnTR5A?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText).
 
 ## License
 

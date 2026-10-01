@@ -8,6 +8,8 @@ struct RadialOption: Identifiable {
     case chooseFolder
     case format(ImageFormat)
     case gif
+    /// Un SVG in PNG, a una o più scale.
+    case svgScales([Int])
   }
 
   let id: String
@@ -29,6 +31,10 @@ struct RadialOption: Identifiable {
 
   var format: ImageFormat? {
     if case .format(let format) = kind { format } else { nil }
+  }
+
+  var svgScales: [Int]? {
+    if case .svgScales(let scales) = kind { scales } else { nil }
   }
 
   // MARK: Sposta
@@ -71,18 +77,31 @@ struct RadialOption: Identifiable {
     id: "gif", kind: .gif, title: "GIF", subtitle: "Animazione dal video", symbol: "film", glyphText: "GIF"
   )
 
+  /// Gli SVG diventano PNG a una scala, o a tutte e quattro insieme.
+  static let svgOptions: [RadialOption] = [
+    RadialOption(id: "svg:1", kind: .svgScales([1]), title: "PNG 1x", subtitle: "Alla misura dell'SVG", symbol: "photo", glyphText: "1x"),
+    RadialOption(id: "svg:2", kind: .svgScales([2]), title: "PNG 2x", subtitle: "Doppia, per gli schermi Retina", symbol: "photo", glyphText: "2x"),
+    RadialOption(id: "svg:3", kind: .svgScales([3]), title: "PNG 3x", subtitle: "Tripla", symbol: "photo", glyphText: "3x"),
+    RadialOption(id: "svg:4", kind: .svgScales([4]), title: "PNG 4x", subtitle: "Quadrupla", symbol: "photo", glyphText: "4x"),
+    RadialOption(
+      id: "svg:all", kind: .svgScales(SVGRasterizer.scales), title: "PNG 1x–4x",
+      subtitle: "Tutte e quattro: @2x, @3x, @4x", symbol: "photo", glyphText: "1–4x"
+    ),
+  ]
+
   /// I formati che questo Mac sa scrivere, nell'ordine di ImageFormat.
   static func convertOptions(formats: [ImageFormat] = ImageFormat.available) -> [RadialOption] {
     formats.map(RadialOption.init(format:))
   }
 
-  /// Le voci adatte ai file trascinati: il GIF se ci sono video, i formati se c'è altro. Senza
-  /// sapere cosa si trascina (il menu di prova), tutte.
+  /// Le voci adatte ai file trascinati: il GIF se ci sono video, le scale PNG se ci sono SVG, i
+  /// formati se c'è altro. Senza sapere cosa si trascina (il menu di prova), GIF e formati.
   static func convertOptions(for urls: [URL], formats: [ImageFormat] = ImageFormat.available) -> [RadialOption] {
     let videos = urls.filter(VideoReader.isVideo).count
+    let svgs = urls.filter(SVGRasterizer.isSVG).count
     let hasVideos = urls.isEmpty || videos > 0
-    let hasOthers = urls.isEmpty || videos < urls.count
-    return (hasVideos ? [.gif] : []) + (hasOthers ? convertOptions(formats: formats) : [])
+    let hasOthers = urls.isEmpty || videos + svgs < urls.count
+    return (hasVideos ? [.gif] : []) + (svgs > 0 ? svgOptions : []) + (hasOthers ? convertOptions(formats: formats) : [])
   }
 
   // MARK: Comune

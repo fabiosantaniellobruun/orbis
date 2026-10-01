@@ -49,7 +49,8 @@ codice. Per usare l'app, vedi il [README](../README.it.md).
   possono contenere nomi di file sono privati (`privacy: .private`).
 - **Tema chiaro o scuro secondo il sistema**. Nel tema chiaro un velo bianco sotto le icone tiene
   il vetro chiaro anche sugli sfondi scuri, dove altrimenti le icone scure si perderebbero.
-- **Icona** in formato Icon Composer (`Radial/AppIcon.icon`), ricavata da `Radial icon.png` (2048 px,
+- **Icona** in formato Icon Composer (`Radial/AppIcon.icon`), ricavata da `Radial icon.png` (una foto di
+  Sean Sinclair su Unsplash, citata nei crediti del README; 2048 px,
   a pieno campo): macOS la ritaglia nel quadrato arrotondato e le dà i riflessi di vetro. Il livello
   è opaco: con la traslucenza attiva i colori si slavano sul fondo. Per cambiarla basta sostituire
   `Assets/RadialIcon.png` (1024 px), oppure aprire la cartella con Icon Composer.
@@ -77,8 +78,20 @@ codice. Per usare l'app, vedi il [README](../README.it.md).
   toolchain. Il file nuovo arriva accanto all'originale, che resta; le trasparenze verso JPEG
   finiscono su fondo bianco (senza, il fondo diventerebbe nero); orientamento e metadati
   (data di scatto, posizione) si conservano; di un'immagine animata si prende il primo fotogramma.
-- **Onda al rilascio**: dal bottone scelto parte una lente di vetro con il bordo iridescente
-  (`HoloRipple`). Con "Riduci movimento" attivo non compare.
+- **Le voci di Converti in dipendono dai file trascinati**: GIF per i video, le scale PNG per gli
+  SVG, i formati per le altre immagini (nel menu di prova GIF e formati).
+- **SVG in PNG a 1x, 2x, 3x, 4x**, o tutte e quattro insieme, con i nomi alla maniera di Apple
+  (`logo.png`, `logo@2x.png`…) e la risoluzione dichiarata di 72 dpi per scala. ImageIO non legge
+  gli SVG: li apre `NSImage` (come immagini vettoriali) e li disegna in un contesto ingrandito, quindi
+  a ogni scala il disegno è nitido. 1x è la misura scritta nell'SVG (larghezza e altezza, o il
+  viewBox); oltre 16384 pixel per lato non si esporta.
+- **Onda al rilascio**, come un sasso nell'acqua (`WaterRipple`): dal bordo del bottone scelto
+  partono tre creste di vetro che si allargano e si spengono (lunghezza d'onda 30, velocità 290
+  punti al secondo, vita 0,3 s, gli stessi valori della landing). Il vetro del sistema rifrange ciò
+  che c'è sotto; un filo rosso fuori e uno azzurro dentro ogni cresta danno l'aberrazione cromatica
+  dell'icona. Uno shader che deformi davvero le finestre sotto richiederebbe il permesso di
+  registrazione dello schermo (che macOS chiede di riconfermare periodicamente): per ora no. La
+  lente olografica di prima (`HoloRipple`) è stata tolta. Con "Riduci movimento" l'onda non compare.
 - Preferenza `stickyMenu`: il menu resta aperto dopo aver rilasciato il tasto.
 - **Primo avvio**: l'app non ha icona nel Dock, quindi una finestra di benvenuto spiega come si usa
   (una volta sola; si riapre da "Come si usa…" nel menu).
@@ -219,7 +232,8 @@ I test lavorano in cartelle temporanee. Quelli sul Cestino cestinano e ripristin
 - `--run <azione> <percorsi…>` (solo Debug, da mettere per ultimo) esegue un'azione senza passare
   dal menu: `clone`, `compress`, `copyPath`, `trash`, `rename` e `resize` (aprono il pannello).
   Per `move` il primo percorso è la cartella di destinazione, per `convert` il formato (`png`,
-  `jpeg`, `heic`, `avif`, `tiff`, oppure `gif` per aprire il pannello del GIF su un video), per `resize` può essere una larghezza massima in pixel (e allora
+  `jpeg`, `heic`, `avif`, `tiff`, `gif` per aprire il pannello del GIF su un video, `svg:1`…`svg:4`
+  o `svg:all` per gli SVG), per `resize` può essere una larghezza massima in pixel (e allora
   il pannello non si apre); gli altri sono i file.
 - `--snapshot <percorso.png>` (solo Debug, prima di `--run`) dopo due secondi fotografa dall'interno
   le finestre visibili (`percorso.1.png`, `.2.png`…): serve a controllare l'impaginazione dei

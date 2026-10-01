@@ -105,6 +105,37 @@ nonisolated enum FileOperations {
     return result
   }
 
+  // MARK: SVG in PNG
+
+  /// Esporta ogni SVG in PNG alle scale chieste, accanto all'originale: "logo.png", "logo@2x.png"…
+  /// Chi non è un SVG si salta e si conta a parte.
+  @concurrent
+  static func rasterizeSVGs(_ urls: [URL], scales: [Int]) async -> BatchResult<URL> {
+    var result = BatchResult<URL>()
+    for url in urls {
+      guard SVGRasterizer.isSVG(url) else {
+        result.skipped += 1
+        continue
+      }
+      let (stem, _) = nameParts(of: url)
+      for scale in scales {
+        let destination = availableURL(
+          in: url.deletingLastPathComponent(),
+          stem: SVGRasterizer.stem(stem, scale: scale),
+          extension: "png"
+        )
+        do {
+          try SVGRasterizer.png(url, scale: scale).write(to: destination, options: .withoutOverwriting)
+          result.done.append(destination)
+        } catch {
+          log.error("SVG in PNG non riuscito: \(String(describing: error), privacy: .private)")
+          result.failed += 1
+        }
+      }
+    }
+    return result
+  }
+
   // MARK: Ridimensiona
 
   /// Scrive la versione ridimensionata di ogni immagine accanto all'originale ("foto ridimensionata.jpg"),

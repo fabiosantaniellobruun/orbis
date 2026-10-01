@@ -31,7 +31,8 @@ struct RadialMenuView: View {
   var body: some View {
     ZStack {
       if let origin = rippleOrigin, !reduceMotion {
-        HoloRipple(startDiameter: origin.diameter, spread: 110)
+        // Parte dal bordo del bottone acceso, che è più grande di un sesto.
+        WaterRipple(startDiameter: origin.diameter * 1.18)
           .offset(origin.offset)
           .transition(.identity)
       }
@@ -180,9 +181,13 @@ private struct SubItem: View {
     ZStack {
       button
         .offset(appeared ? target : origin)
-      label
-        .offset(appeared ? labelTarget : origin)
-        .opacity(appeared ? 1 : 0)
+      // Un formato si riconosce dalla sigla nel bottone: l'etichetta accanto non serve. Le
+      // cartelle invece la tengono, con il percorso.
+      if option.glyphText == nil {
+        label
+          .offset(appeared ? labelTarget : origin)
+          .opacity(appeared ? 1 : 0)
+      }
     }
     .opacity(isDimmed ? 0 : 1)
     .animation(.easeOut(duration: 0.15), value: isDimmed)

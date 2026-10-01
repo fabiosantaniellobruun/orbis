@@ -14,11 +14,13 @@ lo stesso script firma con il Developer ID e notarizza (vedi in fondo).
 1. **Aggiorna la versione** in Xcode (target Radial → General → Version), oppure in
    `Radial.xcodeproj/project.pbxproj` (`MARKETING_VERSION`, nelle due configurazioni del target).
    Usa tre numeri: `0.2.0`, `1.0.0`.
-2. **Controlla che i test passino**:
+2. **Fai le [prove a mano](PROVE.md)** con la versione Release installata in Applicazioni: i
+   trascinamenti veri, i pannelli, i tasti. I test automatici non li vedono.
+3. **Controlla che i test passino**:
    ```bash
    xcodebuild test -project Radial.xcodeproj -scheme Radial -derivedDataPath build -destination 'platform=macOS'
    ```
-3. **Crea il DMG**:
+4. **Crea il DMG**:
    ```bash
    scripts/release.sh
    ```
@@ -28,11 +30,11 @@ lo stesso script firma con il Developer ID e notarizza (vedi in fondo).
    - `Radial-<versione>.dmg.sha256`: il checksum, da pubblicare accanto al DMG.
 
    Lo script avvisa che il DMG non è notarizzato: è previsto.
-4. **Provalo come lo proverà chi lo scarica**: caricalo (o scaricalo) da Internet, perché solo i file
+5. **Provalo come lo proverà chi lo scarica**: caricalo (o scaricalo) da Internet, perché solo i file
    scaricati hanno il segno di quarantena che fa scattare il blocco. Apri il DMG, trascina Radial in
    Applicazioni, avvialo, e segui i passaggi del README ("The first launch"). Dopo l'autorizzazione
    deve aprirsi la finestra di benvenuto.
-5. **Pubblica**:
+6. **Pubblica**:
    ```bash
    git tag v0.2.0 && git push origin v0.2.0
    gh release create v0.2.0 dist/Radial-0.2.0.dmg dist/Radial.dmg dist/Radial-0.2.0.dmg.sha256 \

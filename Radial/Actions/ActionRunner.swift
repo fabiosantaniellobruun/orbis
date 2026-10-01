@@ -84,6 +84,34 @@ enum ActionRunner {
     }
   }
 
+  static func rasterizeSVGs(_ urls: [URL], scales: [Int]) async -> ActionOutcome {
+    let result = await FileOperations.rasterizeSVGs(urls, scales: scales)
+
+    guard !result.done.isEmpty else {
+      if result.failed == 0, result.skipped > 0 {
+        return ActionOutcome(symbol: "info.circle.fill", message: result.skipped == 1 ? "Il file non è un SVG" : "I file non sono SVG")
+      }
+      return .failure("Impossibile convertire l'SVG")
+    }
+
+    var message: String
+    if result.done.count == 1, let created = result.done.first {
+      message = "\(created.lastPathComponent) creato"
+    } else {
+      message = "\(result.done.count) PNG creati"
+      if scales.count > 1, let first = scales.first, let last = scales.last {
+        message += " (\(first)x–\(last)x)"
+      }
+    }
+    if result.failed > 0 {
+      message += ", \(result.failed) non \(result.failed == 1 ? "riuscito" : "riusciti")"
+    }
+    if result.skipped > 0 {
+      message += ", \(result.skipped) \(result.skipped == 1 ? "saltato" : "saltati")"
+    }
+    return ActionOutcome(message: message, undo: .discard(result.done))
+  }
+
   static func resize(_ request: ResizeRequest) async -> ActionOutcome {
     let result = await FileOperations.resize(request)
 

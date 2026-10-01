@@ -23,7 +23,8 @@ Ogni azione si può annullare.
 - **Sposta** nelle ultime due cartelle usate, nelle tue quattro preferite o in una qualsiasi. Ogni
   voce mostra il nome della cartella e, in piccolo, il **percorso completo**: cartelle con lo stesso
   nome non si confondono.
-- **Converti le immagini** in PNG, JPEG, HEIC, AVIF o TIFF, conservando metadati e orientamento.
+- **Converti le immagini** in PNG, JPEG, HEIC, AVIF o TIFF, conservando metadati e orientamento, e **gli
+  SVG in PNG** a 1x, 2x, 3x o 4x, o in tutte e quattro insieme (`logo.png`, `logo@2x.png`…).
 - **Ridimensiona le immagini**: falle stare in una larghezza e un'altezza (anche un gruppo di foto
   orizzontali e verticali insieme), scalale in percentuale o ritagliale a 1:1, 4:3, 16:9 o a un
   rapporto a scelta. Scegli formato e qualità, oppure un peso massimo, con l'anteprima delle misure
@@ -144,6 +145,10 @@ Per creare un DMG da distribuire, vedi [docs/RELEASING.md](docs/RELEASING.md).
 
 Segnalazioni e pull request sono benvenute. Fai passare i test e aggiungine per i comportamenti
 nuovi: le operazioni sui file, in particolare, non devono mai sovrascrivere né perdere nulla.
+
+## Crediti
+
+L'icona dell'app è fatta da una foto di [Sean Sinclair](https://unsplash.com/it/@seanwsinclair?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText) su [Unsplash](https://unsplash.com/it/foto/unimmagine-sfocata-di-uno-sfondo-color-arcobaleno-C_NJKfnTR5A?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText).
 
 ## Licenza
 
