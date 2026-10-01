@@ -9,7 +9,7 @@ into GIFs, compress, copy their
 paths or send them to the Trash. Every action can be undone.
 
 <p align="center">
-  <img src="docs/images/second-ring.jpg" alt="The Orbis ring around the pointer while dragging three files, with the Move submenu open: two recent folders, four favorites and a folder picker, each with its full path" width="760">
+  <img src="docs/images/convert.jpg" alt="The Orbis ring around a photo being dragged on the Mac desktop, with the pointer on Convert to: the second ring offers PNG, JPEG, HEIC, AVIF and TIFF" width="880">
 </p>
 
 > **Status:** beta (0.1). The interface is currently in **Italian**; an English localization is planned.
@@ -35,6 +35,10 @@ paths or send them to the Trash. Every action can be undone.
   if a name is taken, the new file arrives as `name 2`.
 - **Your key**: ⇧ by default; choose any modifier combination or key in Settings.
 - Designed for macOS 26 **Liquid Glass**, follows light/dark mode and respects *Reduce Motion*.
+
+<p align="center">
+  <img src="docs/images/second-ring.jpg" alt="The Orbis ring while dragging three photos, with the pointer on Move: the second ring lists two recent folders, four favorites and a folder picker, each with its full path, so the two folders named Rossi are told apart" width="880">
+</p>
 
 <p align="center">
   <img src="docs/images/rename.jpg" alt="The bulk rename panel with a live preview" width="330">

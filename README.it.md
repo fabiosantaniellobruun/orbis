@@ -9,7 +9,7 @@ cartella recente, converti o ridimensiona le immagini, trasforma i video in GIF,
 Ogni azione si può annullare.
 
 <p align="center">
-  <img src="docs/images/second-ring.jpg" alt="L'anello di Orbis attorno al puntatore mentre si trascinano tre file, con il secondo anello di Sposta aperto: due cartelle recenti, quattro preferite e la scelta di una cartella, ognuna con il suo percorso completo" width="760">
+  <img src="docs/images/convert.jpg" alt="L'anello di Orbis attorno a una foto trascinata sulla scrivania del Mac, con il puntatore su Converti in: il secondo anello propone PNG, JPEG, HEIC, AVIF e TIFF" width="880">
 </p>
 
 > **Stato:** beta (0.1). L'interfaccia è in **italiano**; una versione in inglese è in programma.
@@ -38,6 +38,10 @@ Ogni azione si può annullare.
   mai un file: se il nome è occupato, quello nuovo arriva come `nome 2`.
 - **Il tuo tasto**: ⇧ di base; nelle impostazioni scegli qualsiasi combinazione di modificatori o tasto.
 - Pensata per il **Liquid Glass** di macOS 26, segue il tema chiaro e scuro e rispetta "Riduci movimento".
+
+<p align="center">
+  <img src="docs/images/second-ring.jpg" alt="L'anello di Orbis mentre si trascinano tre foto, con il puntatore su Sposta: il secondo anello elenca due cartelle recenti, quattro preferite e la scelta di una cartella, ognuna con il suo percorso completo, così le due cartelle Rossi non si confondono" width="880">
+</p>
 
 <p align="center">
   <img src="docs/images/rename.jpg" alt="Il pannello di rinomina in serie con l'anteprima in tempo reale" width="330">
