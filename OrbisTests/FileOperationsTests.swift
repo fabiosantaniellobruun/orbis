@@ -44,6 +44,18 @@ final class FileOperationsTests {
     return String(decoding: data, as: UTF8.self).split(separator: "\n").map(String.init).sorted()
   }
 
+  private func contents(of entry: String, in archive: URL) throws -> String {
+    let process = Process()
+    let output = Pipe()
+    process.executableURL = URL(filePath: "/usr/bin/unzip")
+    process.arguments = ["-p", archive.path(percentEncoded: false), entry]
+    process.standardOutput = output
+    try process.run()
+    let data = output.fileHandleForReading.readDataToEndOfFile()
+    process.waitUntilExit()
+    return String(decoding: data, as: UTF8.self)
+  }
+
   // MARK: Clona
 
   @Test("Clona mette la copia accanto all'originale, con lo stesso contenuto")
@@ -131,6 +143,43 @@ final class FileOperationsTests {
     let archive = try await FileOperations.compress([file])
 
     #expect(try entries(of: archive) == ["-r.txt"])
+  }
+
+  @Test("Due elementi con lo stesso nome da cartelle diverse entrano tutti e due, il secondo come «nome 2»")
+  func compressSameNamesFromDifferentFolders() async throws {
+    let first = try makeFolder("a")
+    let second = try makeFolder("b")
+    let files = [first.appendingPathComponent("foto.txt"), second.appendingPathComponent("foto.txt")]
+    try "uno".write(to: files[0], atomically: true, encoding: .utf8)
+    try "due".write(to: files[1], atomically: true, encoding: .utf8)
+
+    let archive = try await FileOperations.compress(files)
+
+    #expect(archive.deletingLastPathComponent().standardizedFileURL == first.standardizedFileURL)
+    #expect(try entries(of: archive) == ["foto 2.txt", "foto.txt"])
+    #expect(try contents(of: "foto.txt", in: archive) == "uno")
+    #expect(try contents(of: "foto 2.txt", in: archive) == "due")
+    // Le copie fatte per l'archivio non restano in giro, e gli originali non cambiano.
+    #expect(try FileManager.default.contentsOfDirectory(atPath: second.path(percentEncoded: false)) == ["foto.txt"])
+  }
+
+  @Test("Se accanto al file non si può scrivere, l'archivio va nella cartella di riserva")
+  func compressFallsBackWhenFolderIsReadOnly() async throws {
+    let locked = try makeFolder("Protetta")
+    let file = locked.appendingPathComponent("foto.jpg")
+    try "prova".write(to: file, atomically: true, encoding: .utf8)
+    let downloads = try makeFolder("Download")
+    try FileManager.default.setAttributes([.posixPermissions: 0o555], ofItemAtPath: locked.path(percentEncoded: false))
+    defer {
+      try? FileManager.default.setAttributes([.posixPermissions: 0o755], ofItemAtPath: locked.path(percentEncoded: false))
+    }
+
+    let archive = try await FileOperations.compress([file], fallback: downloads)
+
+    #expect(archive.deletingLastPathComponent().standardizedFileURL == downloads.standardizedFileURL)
+    #expect(archive.lastPathComponent == "foto.jpg.zip")
+    #expect(try entries(of: archive) == ["foto.jpg"])
+    #expect(try FileManager.default.contentsOfDirectory(atPath: locked.path(percentEncoded: false)) == ["foto.jpg"])
   }
 
   // MARK: Cestino

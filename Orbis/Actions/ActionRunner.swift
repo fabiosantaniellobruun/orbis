@@ -44,7 +44,13 @@ enum ActionRunner {
     case .compress:
       do {
         let archive = try await FileOperations.compress(urls)
-        return ActionOutcome(message: "\(archive.lastPathComponent) creato", undo: .discard([archive]))
+        // Se accanto ai file non si poteva scrivere, l'archivio è in Download: va detto.
+        let nextToItems = archive.deletingLastPathComponent().standardizedFileURL
+          == urls.first?.deletingLastPathComponent().standardizedFileURL
+        return ActionOutcome(
+          message: "\(archive.lastPathComponent) creato\(nextToItems ? "" : " in Download")",
+          undo: .discard([archive])
+        )
       } catch {
         log.error("Comprimi non riuscito: \(String(describing: error), privacy: .private)")
         return .failure("Impossibile comprimere")

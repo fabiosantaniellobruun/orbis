@@ -194,31 +194,79 @@ nonisolated enum FileOperations {
   // MARK: Comprimi
 
   /// Crea un archivio zip accanto al primo elemento: "foto.jpg.zip" per un elemento solo,
-  /// "Archivio.zip" per più elementi.
+  /// "Archivio.zip" per più elementi. Se lì non si può scrivere (un disco in sola lettura, una
+  /// cartella senza permessi), l'archivio va in `fallback`, cioè Download.
   @concurrent
-  static func compress(_ urls: [URL]) async throws -> URL {
+  static func compress(_ urls: [URL], fallback: URL = .downloadsDirectory) async throws -> URL {
     guard let first = urls.first else { throw FileOperationError.noFiles }
-    let destination = availableURL(
-      in: first.deletingLastPathComponent(),
-      stem: urls.count == 1 ? first.lastPathComponent : "Archivio",
-      extension: "zip"
-    )
-    do {
-      // zip registra i percorsi relativi alla cartella da cui parte e aggiunge a un archivio
-      // esistente: un giro per ogni cartella d'origine.
-      let byParent = Dictionary(grouping: urls) { $0.deletingLastPathComponent() }
-      for (parent, items) in byParent {
-        let names = items.map { "./\($0.lastPathComponent)" }
-        try await run(
-          "/usr/bin/zip",
-          ["-r", "-q", "-y", "-X", destination.path(percentEncoded: false)] + names + ["-x", "*.DS_Store"],
-          in: parent
-        )
-      }
-    } catch {
-      try? FileManager.default.removeItem(at: destination)
-      throw error
+    let fileManager = FileManager.default
+    // L'archivio si prepara in una cartella temporanea, sullo stesso disco se si può, e arriva a
+    // destinazione solo finito. Non è solo ordine: zip, lanciato da Orbis, non riesce a creare file
+    // direttamente in ~/Applications (esce con 15, "impossibile creare il file"), mentre Orbis può
+    // spostarci l'archivio finito.
+    let workspace = (try? fileManager.url(
+      for: .itemReplacementDirectory, in: .userDomainMask, appropriateFor: first, create: true
+    )) ?? fileManager.temporaryDirectory.appendingPathComponent("Orbis-\(UUID().uuidString)", isDirectory: true)
+    try fileManager.createDirectory(at: workspace, withIntermediateDirectories: true)
+    defer { try? fileManager.removeItem(at: workspace) }
+
+    let archive = workspace.appendingPathComponent("Archivio.zip")
+    // zip registra i percorsi relativi alla cartella da cui parte e aggiunge a un archivio
+    // esistente: un giro per ogni cartella d'origine.
+    let sources = try archiveSources(for: urls, staging: workspace.appendingPathComponent("Doppioni", isDirectory: true))
+    for (directory, names) in sources {
+      try await run(
+        "/usr/bin/zip",
+        ["-r", "-q", "-y", "-X", archive.path(percentEncoded: false)] + names.map { "./\($0)" } + ["-x", "*.DS_Store"],
+        in: directory
+      )
     }
+
+    let stem = urls.count == 1 ? first.lastPathComponent : "Archivio"
+    do {
+      return try place(archive, in: first.deletingLastPathComponent(), stem: stem)
+    } catch {
+      log.notice("Comprimi: accanto agli elementi non si può scrivere, l'archivio va in Download")
+      return try place(archive, in: fallback, stem: stem)
+    }
+  }
+
+  /// Da quale cartella zip prende ogni elemento, e con che nome. Due elementi con lo stesso nome da
+  /// cartelle diverse finirebbero nello stesso posto dell'archivio, e il secondo prenderebbe il posto
+  /// del primo: il doppione si copia in `staging` come "foto 2.txt", come Orbis fa sempre con i
+  /// nomi occupati. Sui dischi APFS la copia è istantanea e non occupa spazio.
+  private static func archiveSources(for urls: [URL], staging: URL) throws -> [(directory: URL, names: [String])] {
+    var sources: [(directory: URL, names: [String])] = []
+    var taken = Set<String>()
+    func add(_ name: String, from directory: URL) {
+      taken.insert(RenamePlan.nameKey(name))
+      if let index = sources.firstIndex(where: { $0.directory == directory }) {
+        sources[index].names.append(name)
+      } else {
+        sources.append((directory, [name]))
+      }
+    }
+
+    for url in urls {
+      guard taken.contains(RenamePlan.nameKey(url.lastPathComponent)) else {
+        add(url.lastPathComponent, from: url.deletingLastPathComponent())
+        continue
+      }
+      let (stem, ext) = nameParts(of: url)
+      func candidate(_ number: Int) -> String { ext.isEmpty ? "\(stem) \(number)" : "\(stem) \(number).\(ext)" }
+      var number = 2
+      while taken.contains(RenamePlan.nameKey(candidate(number))) { number += 1 }
+      try FileManager.default.createDirectory(at: staging, withIntermediateDirectories: true)
+      try FileManager.default.copyItem(at: url, to: staging.appendingPathComponent(candidate(number)))
+      add(candidate(number), from: staging)
+    }
+    return sources
+  }
+
+  /// Sposta l'archivio finito nella cartella, con il primo nome libero.
+  private static func place(_ archive: URL, in directory: URL, stem: String) throws -> URL {
+    let destination = availableURL(in: directory, stem: stem, extension: "zip")
+    try FileManager.default.moveItem(at: archive, to: destination)
     return destination
   }
 
