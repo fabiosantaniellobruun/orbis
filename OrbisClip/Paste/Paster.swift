@@ -7,6 +7,9 @@ enum Paster {
     case pasted(String)
     /// Sotto il clic non c'era un campo di testo: l'elemento è rimasto negli appunti.
     case copied(String)
+    /// Nel Finder: il file creato.
+    case created(URL)
+    case failed(String)
     case unavailable
   }
 
@@ -16,6 +19,22 @@ enum Paster {
     let target = point.map(PasteTarget.inspect(at:))
     let kind = target?.kind ?? .other
     guard write(item, for: kind, to: .general) else { return .unavailable }
+    if case .finder(let desktop) = kind, let target {
+      // Se non si sa quale cartella, l'elemento resta almeno negli appunti.
+      if !desktop {
+        // La finestra del clic passa in primo piano, così il Finder dice la sua cartella.
+        click(at: target.point)
+        try? await Task.sleep(for: .milliseconds(150))
+      }
+      guard let folder = desktop ? URL.desktopDirectory : FinderFolder.frontFolder() else {
+        return .copied(target.description)
+      }
+      do {
+        return .created(try FinderExport.create(item, in: folder))
+      } catch {
+        return .failed(error.localizedDescription)
+      }
+    }
     guard let target, kind != .other else { return .copied(target?.description ?? "pannello di prova") }
 
     // Il clic originale non è arrivato all'app: se ne manda uno nello stesso punto, così il campo

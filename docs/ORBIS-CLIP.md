@@ -43,7 +43,10 @@ voci di "Da fare".
 - **File: se ne conserva una copia** (fino a 10 MB), che resta valida se l'originale si sposta.
 - **Il testo si incolla con la sua formattazione**, quando ce l'ha.
 - **Nel Finder si crea un file**: un'immagine in PNG, un testo in .txt (o .rtf, se formattato), un
-  link in .webloc, una copia del file salvato.
+  link in .webloc, una copia del file salvato; mai sopra un file esistente ("nome 2"). Sulla
+  scrivania la cartella è nota; per una finestra la si chiede al Finder con AppleScript (le API di
+  accessibilità non la dicono), e la prima volta macOS chiede il permesso Automazione. Se la
+  finestra non mostra una cartella (Recenti, AirDrop) l'elemento resta negli appunti.
 - **Aggiungere elementi**: dal menu contestuale, con il servizio "Aggiungi a Orbis Clip" (testi
   selezionati, link, file nel Finder), oppure dal menu della barra con "Aggiungi dagli appunti…",
   che serve per le immagini copiate da un browser (il menu Servizi non le riceve).
@@ -53,6 +56,8 @@ voci di "Da fare".
 
 ## Permessi
 
+- **Automazione (Finder)**: solo per creare un file in una finestra del Finder. Serve anche
+  l'entitlement `com.apple.security.automation.apple-events`, per il runtime protetto.
 - **Accessibilità**: per l'event tap e per mandare clic e ⌘V. All'avvio l'app lo chiede e riprova
   ogni due secondi finché non arriva.
 - **La firma conta.** macOS lega il permesso alla firma dell'app; con la firma ad hoc cambia a ogni
@@ -66,8 +71,7 @@ voci di "Da fare".
 
 ## Da fare
 
-- File creati nel Finder (serve il permesso Automazione per sapere quale cartella è aperta in una
-  finestra), anteprime dei link.
+- Anteprime dei link.
 - Impostazioni: la combinazione (tasti e tasto del mouse), l'avvio al login.
 - Password dal Portachiavi esistente: quelle dell'app Password e del portachiavi iCloud non sono
   leggibili da altre app; quelle del portachiavi "login" sì, ma il sistema chiede conferma per
