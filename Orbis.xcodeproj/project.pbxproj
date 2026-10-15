@@ -9,6 +9,8 @@
 /* Begin PBXFileReference section */
 		0A0000000000000000000004 /* Orbis.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Orbis.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0A0000000000000000000010 /* OrbisTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = OrbisTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		0A000000000000000000002B /* OrbisClip.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = OrbisClip.xcconfig; sourceTree = "<group>"; };
+		0A0000000000000000000020 /* Orbis Clip.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Orbis Clip.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXContainerItemProxy section */
@@ -21,6 +23,16 @@
 		};
 /* End PBXContainerItemProxy section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		0A000000000000000000002A /* Exceptions for "OrbisClip" folder in "OrbisClip" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 0A0000000000000000000026 /* OrbisClip */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		0A0000000000000000000005 /* Orbis */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
@@ -30,6 +42,19 @@
 		0A0000000000000000000011 /* OrbisTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = OrbisTests;
+			sourceTree = "<group>";
+		};
+		0A0000000000000000000021 /* OrbisClip */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				0A000000000000000000002A /* Exceptions for "OrbisClip" folder in "OrbisClip" target */,
+			);
+			path = OrbisClip;
+			sourceTree = "<group>";
+		};
+		0A0000000000000000000022 /* Shared */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = Shared;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -49,6 +74,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		0A0000000000000000000023 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -56,6 +88,9 @@
 			isa = PBXGroup;
 			children = (
 				0A0000000000000000000005 /* Orbis */,
+				0A0000000000000000000021 /* OrbisClip */,
+				0A0000000000000000000022 /* Shared */,
+				0A000000000000000000002C /* Config */,
 				0A0000000000000000000011 /* OrbisTests */,
 				0A0000000000000000000003 /* Products */,
 			);
@@ -66,8 +101,17 @@
 			children = (
 				0A0000000000000000000004 /* Orbis.app */,
 				0A0000000000000000000010 /* OrbisTests.xctest */,
+				0A0000000000000000000020 /* Orbis Clip.app */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		0A000000000000000000002C /* Config */ = {
+			isa = PBXGroup;
+			children = (
+				0A000000000000000000002B /* OrbisClip.xcconfig */,
+			);
+			path = Config;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -87,6 +131,7 @@
 			);
 			fileSystemSynchronizedGroups = (
 				0A0000000000000000000005 /* Orbis */,
+				0A0000000000000000000022 /* Shared */,
 			);
 			name = Orbis;
 			packageProductDependencies = (
@@ -118,6 +163,29 @@
 			productReference = 0A0000000000000000000010 /* OrbisTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
+		0A0000000000000000000026 /* OrbisClip */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 0A0000000000000000000029 /* Build configuration list for PBXNativeTarget "OrbisClip" */;
+			buildPhases = (
+				0A0000000000000000000024 /* Sources */,
+				0A0000000000000000000023 /* Frameworks */,
+				0A0000000000000000000025 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				0A0000000000000000000021 /* OrbisClip */,
+				0A0000000000000000000022 /* Shared */,
+			);
+			name = OrbisClip;
+			packageProductDependencies = (
+			);
+			productName = OrbisClip;
+			productReference = 0A0000000000000000000020 /* Orbis Clip.app */;
+			productType = "com.apple.product-type.application";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -134,6 +202,9 @@
 					0A0000000000000000000012 = {
 						CreatedOnToolsVersion = 27.0;
 						TestTargetID = 0A0000000000000000000006;
+					};
+					0A0000000000000000000026 = {
+						CreatedOnToolsVersion = 27.0;
 					};
 				};
 			};
@@ -153,6 +224,7 @@
 			targets = (
 				0A0000000000000000000006 /* Orbis */,
 				0A0000000000000000000012 /* OrbisTests */,
+				0A0000000000000000000026 /* OrbisClip */,
 			);
 		};
 /* End PBXProject section */
@@ -172,6 +244,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		0A0000000000000000000025 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -183,6 +262,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		0A0000000000000000000013 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		0A0000000000000000000024 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -338,6 +424,66 @@
 			};
 			name = Release;
 		};
+		0A0000000000000000000027 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 0A000000000000000000002B /* OrbisClip.xcconfig */;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_APP_SANDBOX = NO;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = OrbisClip/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Orbis Clip";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
+				INFOPLIST_KEY_LSUIElement = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "© 2026 Fabio Santaniello Bruun";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MARKETING_VERSION = 0.1;
+				PRODUCT_BUNDLE_IDENTIFIER = it.fabiosbruun.OrbisClip;
+				PRODUCT_MODULE_NAME = OrbisClip;
+				PRODUCT_NAME = "Orbis Clip";
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 6.0;
+			};
+			name = Debug;
+		};
+		0A0000000000000000000028 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 0A000000000000000000002B /* OrbisClip.xcconfig */;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_APP_SANDBOX = NO;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = OrbisClip/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Orbis Clip";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
+				INFOPLIST_KEY_LSUIElement = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "© 2026 Fabio Santaniello Bruun";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MARKETING_VERSION = 0.1;
+				PRODUCT_BUNDLE_IDENTIFIER = it.fabiosbruun.OrbisClip;
+				PRODUCT_MODULE_NAME = OrbisClip;
+				PRODUCT_NAME = "Orbis Clip";
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 6.0;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -364,6 +510,15 @@
 			buildConfigurations = (
 				0A0000000000000000000019 /* Debug */,
 				0A000000000000000000001A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		0A0000000000000000000029 /* Build configuration list for PBXNativeTarget "OrbisClip" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				0A0000000000000000000027 /* Debug */,
+				0A0000000000000000000028 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

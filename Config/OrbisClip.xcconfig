@@ -1,0 +1,21 @@
+// Firma di Orbis Clip.
+//
+// Il permesso Accessibilità è legato alla firma dell'app. Con la firma ad hoc ("-") la firma
+// cambia a ogni build, e il permesso va tolto e ridato ogni volta. Con un certificato, anche
+// autofirmato, resta valido: chi ce l'ha lo indica in OrbisClip.local.xcconfig (escluso da git),
+// per esempio
+//
+//   CODE_SIGN_IDENTITY = Orbis Clip Dev
+//   CODE_SIGN_STYLE = Manual
+//
+// Senza quel file si firma ad hoc, e il progetto compila su qualunque Mac.
+
+CODE_SIGN_IDENTITY = -
+CODE_SIGN_STYLE = Automatic
+
+// In Debug Xcode mette il codice in una libreria a parte (`Orbis Clip.debug.dylib`). Con il
+// runtime protetto una libreria si carica solo se ha lo stesso Team ID dell'app, e un certificato
+// autofirmato non ne ha: l'app non partirebbe. Tutto nell'eseguibile, quindi.
+ENABLE_DEBUG_DYLIB = NO
+
+#include? "OrbisClip.local.xcconfig"
