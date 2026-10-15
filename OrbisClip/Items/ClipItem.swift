@@ -22,6 +22,8 @@ nonisolated struct ClipItem: Identifiable, Hashable, Codable, Sendable {
   var content: Content
   var addedAt = Date()
   var lastUsedAt: Date?
+  /// Per i link: l'anteprima del sito, scaricata dopo l'aggiunta.
+  var preview: ClipBlob?
 
   /// Il testo in cui si cerca, oltre al nome e alla scorciatoia.
   var searchableContent: String {
@@ -37,7 +39,7 @@ nonisolated struct ClipItem: Identifiable, Hashable, Codable, Sendable {
   var blobs: [ClipBlob] {
     switch content {
     case .image(let blob), .file(let blob): [blob]
-    case .text, .link, .password: []
+    case .text, .link, .password: preview.map { [$0] } ?? []
     }
   }
 

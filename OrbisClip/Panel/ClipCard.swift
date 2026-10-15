@@ -27,7 +27,7 @@ private struct GlassCard: View {
 
   var body: some View {
     HStack(spacing: 10) {
-      Thumbnail(content: item.content)
+      Thumbnail(content: item.content, preview: item.preview)
         .frame(width: 40, height: 40)
       VStack(alignment: .leading, spacing: 2) {
         Text(item.name)
@@ -72,6 +72,7 @@ private struct GlassCard: View {
 
 private struct Thumbnail: View {
   let content: ClipItem.Content
+  var preview: ClipBlob?
 
   private let shape = RoundedRectangle(cornerRadius: 9, style: .continuous)
 
@@ -79,23 +80,35 @@ private struct Thumbnail: View {
     switch content {
     case .image(let blob):
       if let image = Thumbnails.image(for: blob) {
-        Image(nsImage: image)
-          .resizable()
-          .scaledToFill()
-          .clipShape(shape)
+        photo(image)
       }
     case .file(let blob):
       Image(nsImage: NSWorkspace.shared.icon(forFile: blob.url.path(percentEncoded: false)))
         .resizable()
         .scaledToFit()
     case .link:
-      // L'anteprima del sito arriverà da LinkPresentation.
-      symbol("globe", color: .blue)
+      if let preview, let image = Thumbnails.image(for: preview) {
+        photo(image)
+      } else {
+        symbol("globe", color: .blue)
+      }
     case .password:
       symbol("key.fill", color: .gray)
     case .text:
       symbol("text.alignleft", color: .yellow)
     }
+  }
+
+  /// Riempie il riquadro e si ritaglia sul riquadro: un'immagine larga altrimenti ne uscirebbe.
+  private func photo(_ image: NSImage) -> some View {
+    // Il riquadro vuoto prende la misura proposta, l'immagine ci si sovrappone e si ritaglia lì.
+    Color.clear
+      .overlay {
+        Image(nsImage: image)
+          .resizable()
+          .scaledToFill()
+      }
+      .clipShape(shape)
   }
 
   private func symbol(_ name: String, color: Color) -> some View {

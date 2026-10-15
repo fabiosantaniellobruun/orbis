@@ -22,6 +22,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     if !arguments.contains("--snapshot") {
       controller.start()
     }
+    Task { await store.loadMissingPreviews() }
 
     // "Aggiungi a Orbis Clip" nel menu contestuale, dichiarato in Info.plist.
     services.onReceive = { [weak self] pasteboard in self?.add(from: pasteboard) }
@@ -71,6 +72,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
   private func add(_ draft: ClipDraft) {
     addWindow.show(draft) { [store] item in
       store.add(item)
+      Task { await store.loadMissingPreviews() }
       log.info("Aggiunto un elemento")
     }
   }
