@@ -74,6 +74,24 @@ import Observation
     save()
   }
 
+  /// Scarica l'anteprima dei link che non ce l'hanno ancora: appena aggiunti, o quando mancava la
+  /// rete. Si riprova a ogni avvio.
+  func loadMissingPreviews() async {
+    for item in items where item.preview == nil {
+      guard case .link(let url) = item.content,
+            let png = await LinkPreview.png(for: url),
+            let blob = try? ClipStorage.store(png, named: "Anteprima.png")
+      else { continue }
+      // Nel frattempo l'elemento può essere stato eliminato.
+      guard var current = self.item(item.id) else {
+        ClipStorage.remove(blob)
+        continue
+      }
+      current.preview = blob
+      update(current)
+    }
+  }
+
   // MARK: Disco
 
   private func load() {

@@ -50,7 +50,9 @@ voci di "Da fare".
 - **Aggiungere elementi**: dal menu contestuale, con il servizio "Aggiungi a Orbis Clip" (testi
   selezionati, link, file nel Finder), oppure dal menu della barra con "Aggiungi dagli appunti…",
   che serve per le immagini copiate da un browser (il menu Servizi non le riceve).
-- **La rete si usa per le anteprime dei link** (LinkPresentation). Ancora da fare.
+- **La rete si usa per le anteprime dei link** (LinkPresentation): l'immagine che la pagina
+  dichiara per la condivisione o, se non c'è, la sua icona, ridotta a 240 pixel. Si scarica dopo
+  l'aggiunta e, per i link che non ce l'hanno (rete assente), a ogni avvio.
 - **Le password stanno nel Portachiavi**, mai su disco in chiaro; negli appunti vanno con
   `org.nspasteboard.ConcealedType`, perché i gestori di appunti non le conservino.
 
@@ -71,7 +73,6 @@ voci di "Da fare".
 
 ## Da fare
 
-- Anteprime dei link.
 - Impostazioni: la combinazione (tasti e tasto del mouse), l'avvio al login.
 - Password dal Portachiavi esistente: quelle dell'app Password e del portachiavi iCloud non sono
   leggibili da altre app; quelle del portachiavi "login" sì, ma il sistema chiede conferma per
