@@ -10,6 +10,10 @@ release. Commit e rami vecchi parlano ancora di Radial.
 Questo documento raccoglie le decisioni prese e il perché, lo stato dei lavori e come si lavora sul
 codice. Per usare l'app, vedi il [README](../README.it.md).
 
+Nello stesso repository c'è una seconda app, Orbis Clip, con le sue note in
+[ORBIS-CLIP.md](ORBIS-CLIP.md). Il codice che usano tutte e due (il vetro, la scorciatoia, le
+fotografie di debug) sta in `Shared/`.
+
 ## Stato
 
 | # | Fase | Stato |
