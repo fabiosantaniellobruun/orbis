@@ -12,6 +12,7 @@ import SwiftUI
   @ObservationIgnored private let model: ClipPanelModel
   @ObservationIgnored private let trigger = ClickTrigger()
   @ObservationIgnored private var panel: ClipPanel?
+  @ObservationIgnored private let toast = ToastController()
   /// Il punto del clic che ha aperto il pannello, in coordinate globali con l'origine in alto a
   /// sinistra; `nil` per il pannello di prova.
   @ObservationIgnored private var clickPoint: CGPoint?
@@ -149,6 +150,20 @@ import SwiftUI
     Task {
       let outcome = await Paster.paste(item, at: point)
       log.info("Elemento scelto: \(String(describing: outcome), privacy: .public)")
+      show(outcome)
     }
+  }
+
+  /// Un avviso accanto al puntatore, quando non si vede già il risultato nel campo.
+  private func show(_ outcome: Paster.Outcome) {
+    let content: ToastContent
+    switch outcome {
+    case .pasted: return
+    case .copied: content = ToastContent(symbol: "doc.on.clipboard", text: "Copiato negli appunti")
+    case .created(let url): content = ToastContent(symbol: "doc.badge.plus", text: "Creato «\(url.lastPathComponent)»")
+    case .failed(let message): content = ToastContent(symbol: "exclamationmark.triangle", text: message)
+    case .unavailable: content = ToastContent(symbol: "key", text: "Le password non sono ancora collegate")
+    }
+    toast.show(content, at: .centered(at: NSEvent.mouseLocation), for: .seconds(2))
   }
 }

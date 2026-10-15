@@ -3,11 +3,13 @@ import ApplicationServices
 
 /// Dove si incollerà: il punto del clic e che cosa c'era sotto, letto con le API di accessibilità.
 struct PasteTarget {
-  enum Kind {
+  enum Kind: Equatable {
     /// Un campo di una riga: accetta solo testo, quindi di immagini e file si incolla il nome.
     case singleLineText
     /// Un'area di testo, anche di una pagina web: può accettare immagini e file.
     case richText
+    /// Il Finder: l'elemento diventa un file sulla scrivania o nella cartella della finestra.
+    case finder(desktop: Bool)
     /// Non un campo di testo: l'elemento finisce negli appunti.
     case other
   }
@@ -22,7 +24,7 @@ struct PasteTarget {
   /// Si chiama due volte: all'apertura del pannello, che chiede anche alle app basate su Chromium
   /// di pubblicare i loro campi, e di nuovo al momento di incollare, quando lo hanno fatto.
   static func inspect(at point: CGPoint) -> PasteTarget {
-    guard let pid = windowOwner(at: point) else {
+    guard let (pid, isDesktop) = windowOwner(at: point) else {
       return PasteTarget(point: point, kind: .other, description: "nessuna finestra", app: nil)
     }
     let app = NSRunningApplication(processIdentifier: pid)
@@ -50,7 +52,9 @@ struct PasteTarget {
     if let focused = appElement.focusedElement, kind(of: focused) != .other, focused.frame?.contains(point) == true {
       return PasteTarget(point: point, kind: kind(of: focused), description: "\(focused.roleDescription) con il focus in \(bundle)", app: app)
     }
-    return PasteTarget(point: point, kind: .other, description: "\(element?.roleDescription ?? "?") in \(bundle)", app: app)
+    // Nel Finder un campo di testo (rinomina, ricerca) resta un campo; tutto il resto è una cartella.
+    let kind: Kind = bundle == "com.apple.finder" ? .finder(desktop: isDesktop) : .other
+    return PasteTarget(point: point, kind: kind, description: "\(element?.roleDescription ?? "?") in \(bundle)", app: app)
   }
 
   private static func kind(of element: AXUIElement) -> Kind {
@@ -96,9 +100,10 @@ struct PasteTarget {
     }
   }
 
-  /// L'app della finestra più in alto sotto il punto, senza contare Orbis Clip. Nomi e contenuto
-  /// delle finestre richiederebbero un permesso; proprietario e posizione no.
-  private static func windowOwner(at point: CGPoint) -> pid_t? {
+  /// L'app della finestra più in alto sotto il punto, senza contare Orbis Clip, o il Finder se sotto
+  /// c'è la scrivania. Nomi e contenuto delle finestre richiederebbero un permesso; proprietario e
+  /// posizione no.
+  private static func windowOwner(at point: CGPoint) -> (pid: pid_t, isDesktop: Bool)? {
     let options: CGWindowListOption = [.optionOnScreenOnly, .excludeDesktopElements]
     guard let windows = CGWindowListCopyWindowInfo(options, kCGNullWindowID) as? [[String: Any]] else { return nil }
     let me = ProcessInfo.processInfo.processIdentifier
@@ -111,10 +116,10 @@ struct PasteTarget {
             let rect = CGRect(dictionaryRepresentation: bounds),
             rect.contains(point)
       else { continue }
-      return pid
+      return (pid, false)
     }
-    // Sulla scrivania: è del Finder.
-    return NSRunningApplication.runningApplications(withBundleIdentifier: "com.apple.finder").first?.processIdentifier
+    let finder = NSRunningApplication.runningApplications(withBundleIdentifier: "com.apple.finder").first
+    return finder.map { ($0.processIdentifier, true) }
   }
 }
 
