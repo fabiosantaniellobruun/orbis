@@ -9,6 +9,7 @@ struct LibraryView: View {
 
   @State private var selection: ClipItem.ID?
   @State private var query = ""
+  @State private var isAddingPassword = false
 
   /// Prima i preferiti, poi gli altri; in ciascun gruppo i più recenti in alto.
   private var shownItems: [ClipItem] {
@@ -45,8 +46,16 @@ struct LibraryView: View {
       }
     }
     .toolbar {
-      Button("Aggiungi dagli appunti", systemImage: "plus", action: addFromClipboard)
-        .help("Aggiungi ciò che c'è negli appunti")
+      Menu("Aggiungi", systemImage: "plus") {
+        Button("Aggiungi dagli appunti", action: addFromClipboard)
+        Button("Nuova password…") { isAddingPassword = true }
+      }
+    }
+    .sheet(isPresented: $isAddingPassword) {
+      NewPasswordView(store: store) { added in
+        isAddingPassword = false
+        if let added { selection = added }
+      }
     }
     .onDeleteCommand {
       if let selection { store.remove(selection) }
@@ -173,9 +182,96 @@ private struct ContentDetail: View {
       Button("Mostra nel Finder") {
         NSWorkspace.shared.activateFileViewerSelecting([blob.url])
       }
-    case .password:
-      Text("Le password arriveranno con il Portachiavi.")
-        .foregroundStyle(.secondary)
+    case .password(let account):
+      PasswordChanger(account: account)
     }
+  }
+}
+
+/// La password non si mostra: si può solo sostituire.
+private struct PasswordChanger: View {
+  let account: String
+
+  @State private var password = ""
+  @State private var message: String?
+
+  var body: some View {
+    SecureField("Nuova password", text: $password)
+    HStack {
+      Text(message ?? "Salvata nel Portachiavi di login.")
+        .font(.caption)
+        .foregroundStyle(.secondary)
+      Spacer()
+      Button("Cambia password") {
+        do {
+          try PasswordStore.save(password, account: account)
+          password = ""
+          message = "Password cambiata."
+        } catch {
+          message = error.localizedDescription
+        }
+      }
+      .disabled(password.isEmpty)
+    }
+  }
+}
+
+private struct NewPasswordView: View {
+  let store: ClipStore
+  /// L'elemento aggiunto, o `nil` se si è annullato.
+  var onDone: (ClipItem.ID?) -> Void
+
+  @State private var name = ""
+  @State private var shortcut = ""
+  @State private var isFavorite = true
+  @State private var password = ""
+  @State private var error: String?
+
+  private var trimmedName: String { name.trimmingCharacters(in: .whitespaces) }
+
+  var body: some View {
+    VStack(spacing: 0) {
+      Form {
+        TextField("Nome", text: $name, prompt: Text("per esempio Wi-Fi ufficio"))
+        TextField("Scorciatoia", text: $shortcut, prompt: Text("per esempio wifi"))
+        Toggle("Tra i preferiti", isOn: $isFavorite)
+        SecureField("Password", text: $password)
+        if let error {
+          Text(error).foregroundStyle(.red)
+        }
+      }
+      .formStyle(.grouped)
+      .scrollDisabled(true)
+      HStack {
+        Spacer()
+        Button("Annulla", role: .cancel) { onDone(nil) }
+          .keyboardShortcut(.cancelAction)
+        Button("Aggiungi", action: add)
+          .keyboardShortcut(.defaultAction)
+          .disabled(trimmedName.isEmpty || password.isEmpty)
+      }
+      .padding([.horizontal, .bottom], 20)
+    }
+    .frame(width: 380)
+    .fixedSize(horizontal: false, vertical: true)
+  }
+
+  private func add() {
+    let account = UUID().uuidString
+    do {
+      try PasswordStore.save(password, account: account)
+    } catch {
+      self.error = error.localizedDescription
+      return
+    }
+    let shortcut = shortcut.trimmingCharacters(in: .whitespaces)
+    let item = ClipItem(
+      name: trimmedName,
+      shortcut: shortcut.isEmpty ? nil : shortcut,
+      isFavorite: isFavorite,
+      content: .password(account: account)
+    )
+    store.add(item)
+    onDone(item.id)
   }
 }

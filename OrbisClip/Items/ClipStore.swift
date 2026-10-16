@@ -64,7 +64,10 @@ import Observation
   func remove(_ id: ClipItem.ID) {
     guard let index = items.firstIndex(where: { $0.id == id }) else { return }
     let removed = items.remove(at: index)
-    if persists { removed.blobs.forEach(ClipStorage.remove) }
+    if persists {
+      removed.blobs.forEach(ClipStorage.remove)
+      if case .password(let account) = removed.content { PasswordStore.delete(account: account) }
+    }
     save()
   }
 

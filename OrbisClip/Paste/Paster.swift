@@ -76,13 +76,25 @@ enum Paster {
       } else {
         pasteboard.writeObjects([blob.url as NSURL])
       }
-    case .password:
-      // Arriverà con il Portachiavi. La password andrà negli appunti con il tipo
-      // `org.nspasteboard.ConcealedType`, che dice ai gestori di appunti di non conservarla.
-      log.info("Le password non sono ancora collegate al Portachiavi")
-      return false
+    case .password(let account):
+      guard let password = PasswordStore.password(account: account) else { return false }
+      pasteboard.clearContents()
+      pasteboard.setString(password, forType: .string)
+      // Dice ai gestori di appunti di non conservarla (nspasteboard.org).
+      pasteboard.setData(Data(), forType: NSPasteboard.PasteboardType("org.nspasteboard.ConcealedType"))
+      clearLater(pasteboard)
     }
     return true
+  }
+
+  /// Una password non resta negli appunti: dopo un minuto si toglie, se nel frattempo non si è
+  /// copiato altro.
+  private static func clearLater(_ pasteboard: NSPasteboard) {
+    let written = pasteboard.changeCount
+    Task {
+      try? await Task.sleep(for: .seconds(60))
+      if pasteboard.changeCount == written { pasteboard.clearContents() }
+    }
   }
 
   // MARK: Eventi

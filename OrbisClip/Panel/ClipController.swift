@@ -167,7 +167,7 @@ import SwiftUI
     case .copied: content = ToastContent(symbol: "doc.on.clipboard", text: "Copiato negli appunti")
     case .created(let url): content = ToastContent(symbol: "doc.badge.plus", text: "Creato «\(url.lastPathComponent)»")
     case .failed(let message): content = ToastContent(symbol: "exclamationmark.triangle", text: message)
-    case .unavailable: content = ToastContent(symbol: "key", text: "Le password non sono ancora collegate")
+    case .unavailable: content = ToastContent(symbol: "key", text: "Password non trovata nel Portachiavi")
     }
     toast.show(content, at: .centered(at: NSEvent.mouseLocation), for: .seconds(2))
   }
