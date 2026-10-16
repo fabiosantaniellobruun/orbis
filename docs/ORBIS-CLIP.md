@@ -54,8 +54,11 @@ voci di "Da fare".
 - **La rete si usa per le anteprime dei link** (LinkPresentation): l'immagine che la pagina
   dichiara per la condivisione o, se non c'è, la sua icona, ridotta a 240 pixel. Si scarica dopo
   l'aggiunta e, per i link che non ce l'hanno (rete assente), a ogni avvio.
-- **Le password stanno nel Portachiavi**, mai su disco in chiaro; negli appunti vanno con
-  `org.nspasteboard.ConcealedType`, perché i gestori di appunti non le conservino.
+- **Le password stanno nel Portachiavi** di login (servizio `it.fabiosbruun.OrbisClip`, una voce
+  per elemento), mai su disco in chiaro: `items.json` ne conserva solo il riferimento. Si aggiungono
+  e si cambiano nella finestra Elementi, senza mai mostrarle. Negli appunti vanno con
+  `org.nspasteboard.ConcealedType`, perché i gestori di appunti non le conservino, e dopo un minuto
+  si tolgono. Eliminando l'elemento si toglie anche la voce del Portachiavi.
 
 ## Permessi
 
@@ -74,9 +77,9 @@ voci di "Da fare".
 
 ## Da fare
 
-- Password dal Portachiavi esistente: quelle dell'app Password e del portachiavi iCloud non sono
+- Usare le password già salvate: quelle dell'app Password e del portachiavi iCloud non sono
   leggibili da altre app; quelle del portachiavi "login" sì, ma il sistema chiede conferma per
-  ciascuna.
+  ciascuna. Per ora le password si inseriscono in Orbis Clip.
 
 ## Come si prova
 
