@@ -16,9 +16,9 @@ lo stesso script firma con il Developer ID e notarizza (vedi in fondo).
    Usa tre numeri: `0.2.0`, `1.0.0`.
 2. **Fai le [prove a mano](PROVE.md)** con la versione Release installata in Applicazioni: i
    trascinamenti veri, i pannelli, i tasti. I test automatici non li vedono.
-3. **Controlla che i test passino**:
+3. **Controlla che i test passino** (in italiano: controllano i messaggi):
    ```bash
-   xcodebuild test -project Orbis.xcodeproj -scheme Orbis -derivedDataPath build -destination 'platform=macOS'
+   xcodebuild test -project Orbis.xcodeproj -scheme Orbis -derivedDataPath build -destination 'platform=macOS' -testLanguage it
    ```
 4. **Crea il DMG**:
    ```bash
@@ -41,6 +41,34 @@ lo stesso script firma con il Developer ID e notarizza (vedi in fondo).
      --title "Orbis 0.2.0" --notes "Cosa è cambiato…"
    ```
    Nelle note conviene ripetere in due righe come si autorizza l'app al primo avvio.
+
+## Orbis Clip
+
+Si rilascia con lo stesso script:
+
+```bash
+scripts/release.sh OrbisClip
+```
+
+In `dist/` arrivano `OrbisClip-<versione>.dmg`, `OrbisClip.dmg` e il checksum, accanto a quelli di
+Orbis (lo script toglie solo i file dell'app che sta rilasciando).
+
+- **La firma.** Senza `DEVELOPER_ID`, Orbis Clip si firma con il certificato autofirmato
+  "Orbis Clip Dev" del portachiavi di login (`SIGN_IDENTITY` per usarne un altro). Il permesso
+  Accessibilità è legato alla firma: con lo stesso certificato resta valido da una versione
+  all'altra; con un altro certificato, o con la firma ad hoc, chi aggiorna deve toglierlo e ridarlo.
+  **Conserva una copia del certificato con la sua chiave** (Accesso Portachiavi → esporta come
+  .p12): perderlo vuol dire ridare il permesso a tutti al rilascio successivo.
+- **Il tag e "latest".** Le due app stanno nello stesso repository, e il link "ultima versione"
+  (`releases/latest/download/Orbis.dmg`) segue l'ultimo rilascio marcato *latest*. I rilasci di
+  Orbis Clip hanno un tag loro e non sono mai *latest*, così quel link resta di Orbis:
+  ```bash
+  git tag clip-v0.1.0 && git push origin clip-v0.1.0
+  gh release create clip-v0.1.0 dist/OrbisClip-0.1.0.dmg dist/OrbisClip.dmg dist/OrbisClip-0.1.0.dmg.sha256 \
+    --title "Orbis Clip 0.1.0" --latest=false --notes "…"
+  ```
+  Il link a Orbis Clip contiene quindi la versione:
+  `https://github.com/fabiosantaniellobruun/orbis/releases/download/clip-v0.1.0/OrbisClip.dmg`.
 
 ## Il link per il sito o per la landing
 
