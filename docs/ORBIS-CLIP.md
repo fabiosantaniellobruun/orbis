@@ -56,7 +56,8 @@ voci di "Da fare".
   l'aggiunta e, per i link che non ce l'hanno (rete assente), a ogni avvio.
 - **Le password stanno nel Portachiavi** di login (servizio `it.fabiosbruun.OrbisClip`, una voce
   per elemento), mai su disco in chiaro: `items.json` ne conserva solo il riferimento. Si aggiungono
-  e si cambiano nella finestra Elementi, senza mai mostrarle. Negli appunti vanno con
+  e si cambiano nella finestra Elementi, senza mai mostrarle. Prima di incollarne una si chiede
+  Touch ID (o la password del Mac, dove Touch ID non c'è). Negli appunti vanno con
   `org.nspasteboard.ConcealedType`, perché i gestori di appunti non le conservino, e dopo un minuto
   si tolgono. Eliminando l'elemento si toglie anche la voce del Portachiavi.
 
