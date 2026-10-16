@@ -1,5 +1,4 @@
 import AppKit
-import ServiceManagement
 import SwiftUI
 
 struct SettingsView: View {
@@ -19,9 +18,6 @@ struct SettingsView: View {
 private struct GeneralSettings: View {
   @AppStorage(TriggerShortcut.storageKey) private var storedShortcut = Data()
   @AppStorage("stickyMenu") private var staysOpen = false
-
-  @State private var opensAtLogin = SMAppService.mainApp.status == .enabled
-  @State private var loginItemNeedsApproval = SMAppService.mainApp.status == .requiresApproval
 
   private var shortcut: Binding<TriggerShortcut> {
     Binding(
@@ -57,33 +53,9 @@ private struct GeneralSettings: View {
         }
       }
 
-      Section {
-        Toggle("Apri Orbis all'avvio del Mac", isOn: Binding(get: { opensAtLogin }, set: setLoginItem))
-      } header: {
-        Text("Avvio")
-      } footer: {
-        if loginItemNeedsApproval {
-          Text("macOS chiede una conferma: Impostazioni di Sistema → Generali → Elementi login.")
-            .foregroundStyle(.orange)
-        }
-      }
+      LoginItemSection(appName: "Orbis")
     }
     .formStyle(.grouped)
-  }
-
-  private func setLoginItem(_ enabled: Bool) {
-    do {
-      if enabled {
-        try SMAppService.mainApp.register()
-      } else {
-        try SMAppService.mainApp.unregister()
-      }
-    } catch {
-      log.error("Elemento login: \(error.localizedDescription, privacy: .private)")
-    }
-    let status = SMAppService.mainApp.status
-    opensAtLogin = status == .enabled || status == .requiresApproval
-    loginItemNeedsApproval = status == .requiresApproval
   }
 }
 

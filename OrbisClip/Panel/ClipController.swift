@@ -42,6 +42,11 @@ import SwiftUI
     }
   }
 
+  /// Dopo una modifica nelle impostazioni.
+  func reloadTrigger() {
+    trigger.reload()
+  }
+
   /// Il pannello al centro dello schermo, senza un punto in cui incollare: l'elemento scelto
   /// finisce negli appunti.
   func showPreview() {

@@ -17,6 +17,10 @@ struct OrbisClipApp: App {
     .defaultSize(width: 760, height: 520)
     // `--library` apre la finestra all'avvio, per provarla.
     .defaultLaunchBehavior(CommandLine.arguments.contains("--library") ? .presented : .suppressed)
+
+    Settings {
+      ClipSettingsView { appDelegate.controller.reloadTrigger() }
+    }
   }
 
   static let libraryID = "library"
@@ -26,10 +30,13 @@ private struct MenuContent: View {
   let appDelegate: AppDelegate
 
   @Environment(\.openWindow) private var openWindow
+  @Environment(\.openSettings) private var openSettings
+  // Per rileggere la combinazione quando cambia nelle impostazioni.
+  @AppStorage(ClipTrigger.storageKey) private var storedTrigger = Data()
 
   var body: some View {
     if appDelegate.controller.hasAccessibility {
-      Text("\(ClipTrigger.load().displayString) apre il pannello")
+      Text("\(((try? JSONDecoder().decode(ClipTrigger.self, from: storedTrigger)) ?? .standard).displayString) apre il pannello")
     } else {
       Text("Serve il permesso Accessibilità")
       Button("Apri Privacy e sicurezza…") {
@@ -50,6 +57,11 @@ private struct MenuContent: View {
     Button("Mostra pannello di prova") {
       appDelegate.controller.showPreview()
     }
+    Button("Impostazioni…") {
+      NSApp.activate()
+      openSettings()
+    }
+    .keyboardShortcut(",")
     Divider()
     Button("Esci da Orbis Clip") {
       NSApp.terminate(nil)

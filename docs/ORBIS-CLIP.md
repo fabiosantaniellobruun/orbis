@@ -25,7 +25,8 @@ voci di "Da fare".
 - **⇧ + clic destro**, prima il tasto e poi il clic: il clic si intercetta con un event tap e non
   arriva all'app, che altrimenti aprirebbe il suo menu contestuale (si apre al mouse-down). Un
   monitor globale non basterebbe: vede il clic ma non lo ferma. La combinazione è configurabile,
-  sia i tasti sia il tasto del mouse (`ClipTrigger`); manca ancora l'impostazione.
+  sia i tasti sia il tasto del mouse (`ClipTrigger`), nelle Impostazioni, con l'avvio al login.
+  Registratore della combinazione e avvio al login sono gli stessi di Orbis, in `Shared/`.
 - **Il pannello resta aperto**: si sceglie con un clic, o con le frecce e Invio; Esc o un clic fuori
   lo chiudono. Riceve la tastiera senza attivare l'app (`.nonactivatingPanel` che può diventare
   finestra chiave), così l'app in cui si è fatto clic resta in primo piano.
@@ -73,7 +74,6 @@ voci di "Da fare".
 
 ## Da fare
 
-- Impostazioni: la combinazione (tasti e tasto del mouse), l'avvio al login.
 - Password dal Portachiavi esistente: quelle dell'app Password e del portachiavi iCloud non sono
   leggibili da altre app; quelle del portachiavi "login" sì, ma il sistema chiede conferma per
   ciascuna.
