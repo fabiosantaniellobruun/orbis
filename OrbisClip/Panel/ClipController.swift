@@ -163,7 +163,7 @@ import SwiftUI
   private func show(_ outcome: Paster.Outcome) {
     let content: ToastContent
     switch outcome {
-    case .pasted: return
+    case .pasted, .cancelled: return
     case .copied: content = ToastContent(symbol: "doc.on.clipboard", text: "Copiato negli appunti")
     case .created(let url): content = ToastContent(symbol: "doc.badge.plus", text: "Creato «\(url.lastPathComponent)»")
     case .failed(let message): content = ToastContent(symbol: "exclamationmark.triangle", text: message)

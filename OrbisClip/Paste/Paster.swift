@@ -1,4 +1,5 @@
 import AppKit
+import LocalAuthentication
 
 /// Incolla un elemento dove si era fatto clic: lo mette negli appunti, riporta il cursore di testo
 /// nel punto del clic e preme ⌘V. L'elemento resta negli appunti, pronto per incollarlo ancora.
@@ -11,6 +12,8 @@ enum Paster {
     case created(URL)
     case failed(String)
     case unavailable
+    /// Touch ID (o la password del Mac) non confermato.
+    case cancelled
   }
 
   static func paste(_ item: ClipItem, at point: CGPoint?) async -> Outcome {
@@ -18,6 +21,7 @@ enum Paster {
     // Chromium non avevano ancora pubblicato i loro campi.
     let target = point.map(PasteTarget.inspect(at:))
     let kind = target?.kind ?? .other
+    if case .password = item.content, !(await confirmOwner(for: item.name)) { return .cancelled }
     guard write(item, for: kind, to: .general) else { return .unavailable }
     if case .finder(let desktop) = kind, let target {
       // Se non si sa quale cartella, l'elemento resta almeno negli appunti.
@@ -85,6 +89,17 @@ enum Paster {
       clearLater(pasteboard)
     }
     return true
+  }
+
+  /// Touch ID, o la password del Mac dove Touch ID non c'è o non riesce.
+  private static func confirmOwner(for name: String) async -> Bool {
+    let context = LAContext()
+    do {
+      return try await context.evaluatePolicy(.deviceOwnerAuthentication, localizedReason: "incollare la password «\(name)»")
+    } catch {
+      log.info("Password non confermata: \(error.localizedDescription, privacy: .public)")
+      return false
+    }
   }
 
   /// Una password non resta negli appunti: dopo un minuto si toglie, se nel frattempo non si è
