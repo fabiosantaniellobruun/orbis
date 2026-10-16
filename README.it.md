@@ -118,6 +118,27 @@ file trascinati quando si apre l'anello (solo il tipo, per proporre il GIF per i
 rilasci su un'azione. I messaggi nel registro di sistema
 che potrebbero contenere nomi di file sono privati.
 
+## Orbis Clip
+
+Una seconda app dello stesso repository, per le cose che incolli ogni giorno: testi (con la loro
+formattazione), link, immagini, file e password. Li aggiungi tu, con un nome e, se vuoi, una
+scorciatoia; non c'è una cronologia degli appunti. Tieni premuto **⇧** e fai **clic destro**: accanto
+al puntatore compaiono gli ultimi sei preferiti e gli ultimi quattro elementi usati. Scrivi per
+cercare (`lin` trova il link di LinkedIn), premi Invio, e l'elemento si incolla dove avevi fatto
+clic. Sulla scrivania o in una finestra del Finder diventa un file.
+
+Scarica `OrbisClip.dmg` dai [rilasci di Orbis Clip](https://github.com/fabiosantaniellobruun/orbis/releases?q=clip&expanded=true).
+Il primo avvio è come per Orbis (Privacy e sicurezza → Apri comunque), poi Orbis Clip chiede:
+
+- **Accessibilità**, per intercettare ⇧ + clic destro prima che l'app sotto il puntatore apra il suo
+  menu, e per incollare;
+- **Automazione (Finder)**, solo la prima volta che incolli in una finestra del Finder, per sapere
+  quale cartella mostra.
+
+Usa la rete solo per le anteprime dei link. Le password restano nel Portachiavi di login, per
+incollarle serve Touch ID, e dopo un minuto escono dagli appunti. Gli elementi si salvano in
+`~/Library/Application Support/Orbis Clip`.
+
 ## Compilare dal codice
 
 Serve Xcode 27 o successivo (SDK di macOS 26).
@@ -129,10 +150,12 @@ xcodebuild -project Orbis.xcodeproj -scheme Orbis -configuration Release -derive
 open build/Build/Products/Release/Orbis.app
 ```
 
-I test (lavorano in cartelle temporanee):
+Per Orbis Clip, lo schema è `OrbisClip`.
+
+I test (lavorano in cartelle temporanee, e controllano i messaggi in italiano):
 
 ```bash
-xcodebuild test -project Orbis.xcodeproj -scheme Orbis -derivedDataPath build -destination 'platform=macOS'
+xcodebuild test -project Orbis.xcodeproj -scheme Orbis -derivedDataPath build -destination 'platform=macOS' -testLanguage it
 ```
 
 Per creare un DMG da distribuire, vedi [docs/RELEASING.md](docs/RELEASING.md).
@@ -146,7 +169,10 @@ Per creare un DMG da distribuire, vedi [docs/RELEASING.md](docs/RELEASING.md).
 | `Orbis/Menu` | La geometria dell'anello, i bottoni, le voci del secondo anello |
 | `Orbis/Overlay` | I pannelli trasparenti e il controller |
 | `Orbis/Rename`, `Resize`, `GIF` | I pannelli di rinomina in serie, ridimensionamento e video in GIF, con la loro logica e l'encoder GIF |
-| `Orbis/Settings`, `Toast`, `Welcome` | Le impostazioni, l'avviso con Annulla, la finestra del primo avvio |
+| `Orbis/Settings`, `Welcome` | Le impostazioni, la finestra del primo avvio |
+| `OrbisClip` | Orbis Clip: il pannello, l'incolla, gli elementi salvati, le impostazioni |
+| `Shared` | Il codice comune alle due app: vetro, avvisi, registratore della combinazione, lingua, avvio al login |
+| `Config` | La firma e gli entitlement di Orbis Clip |
 | `OrbisTests` | Le suite di [Swift Testing](https://developer.apple.com/xcode/swift-testing/) |
 | `docs` | Le [note di progetto](docs/PROGETTO.md) e la [guida al rilascio](docs/RELEASING.md) |
 

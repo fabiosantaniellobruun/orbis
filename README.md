@@ -114,6 +114,25 @@ a drag is in progress by watching mouse events and the drag pasteboard. It looks
 when the ring opens (only their type, to offer GIF for videos) and when you drop them on an action.
 System log messages that could contain file names are marked private.
 
+## Orbis Clip
+
+A second app from the same repository, for things you paste day after day: texts (with their
+formatting), links, images, files and passwords. You add them yourself, with a name and an optional
+shortcut; there is no clipboard history. Hold **⇧** and **right-click**: next to the pointer appear
+your last six favorites and the last four items you used. Start typing to search (`lin` finds your
+LinkedIn link), press Return, and the item is pasted where you clicked. On the desktop or in a Finder
+window it becomes a file.
+
+Download `OrbisClip.dmg` from the [Orbis Clip releases](https://github.com/fabiosantaniellobruun/orbis/releases?q=clip&expanded=true).
+The first launch works like Orbis (Privacy & Security → Open Anyway), and then Orbis Clip asks for:
+
+- **Accessibility**, to catch ⇧ + right-click before the app under the pointer opens its menu, and to
+  paste;
+- **Automation (Finder)**, only the first time you paste into a Finder window, to know its folder.
+
+It uses the network only for link previews. Passwords stay in your login Keychain, need Touch ID to
+paste, and leave the clipboard after a minute. Items are saved in `~/Library/Application Support/Orbis Clip`.
+
 ## Build from source
 
 You need Xcode 27 or later (macOS 26 SDK).
@@ -125,10 +144,12 @@ xcodebuild -project Orbis.xcodeproj -scheme Orbis -configuration Release -derive
 open build/Build/Products/Release/Orbis.app
 ```
 
-Run the tests (they work on temporary folders):
+For Orbis Clip, use the scheme `OrbisClip`.
+
+Run the tests (they work on temporary folders, and check the Italian messages):
 
 ```bash
-xcodebuild test -project Orbis.xcodeproj -scheme Orbis -derivedDataPath build -destination 'platform=macOS'
+xcodebuild test -project Orbis.xcodeproj -scheme Orbis -derivedDataPath build -destination 'platform=macOS' -testLanguage it
 ```
 
 To build a distributable DMG, see [docs/RELEASING.md](docs/RELEASING.md).
@@ -142,7 +163,10 @@ To build a distributable DMG, see [docs/RELEASING.md](docs/RELEASING.md).
 | `Orbis/Menu` | Ring geometry, buttons, second-ring options |
 | `Orbis/Overlay` | The transparent panels and the controller |
 | `Orbis/Rename`, `Resize`, `GIF` | The bulk-rename, resize and video-to-GIF panels, their logic and the GIF encoder |
-| `Orbis/Settings`, `Toast`, `Welcome` | Settings window, result notice with Undo, first-run window |
+| `Orbis/Settings`, `Welcome` | Settings window, first-run window |
+| `OrbisClip` | Orbis Clip: the panel, pasting, saved items, settings |
+| `Shared` | Code both apps use: glass, notices, shortcut recorder, language and login item settings |
+| `Config` | Orbis Clip's signing settings and entitlements |
 | `OrbisTests` | [Swift Testing](https://developer.apple.com/xcode/swift-testing/) suites |
 | `docs` | [Design notes](docs/PROGETTO.md) (in Italian) and the [release guide](docs/RELEASING.md) |
 

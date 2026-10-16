@@ -1,9 +1,10 @@
 #!/bin/bash
 #
-# Prepara Orbis per la distribuzione: compila in Release, firma, crea il DMG e, se ci sono le
-# credenziali, lo notarizza. Il risultato sta in dist/.
+# Prepara Orbis, o Orbis Clip, per la distribuzione: compila in Release, firma, crea il DMG e, se
+# ci sono le credenziali, lo notarizza. Il risultato sta in dist/.
 #
-#   scripts/release.sh
+#   scripts/release.sh             Orbis
+#   scripts/release.sh OrbisClip   Orbis Clip
 #
 # Senza credenziali (la scelta attuale) produce un DMG firmato "ad hoc": su un altro Mac Gatekeeper
 # lo blocca finché l'utente non lo autorizza una volta, come spiega il README. Con un Developer ID
@@ -14,15 +15,23 @@
 #                   "Developer ID Application: Nome Cognome (ABCDE12345)"
 #   NOTARY_PROFILE  il profilo di notarytool nel portachiavi, creato con
 #                   xcrun notarytool store-credentials "orbis-notary" …
+#   SIGN_IDENTITY   solo per Orbis Clip, senza DEVELOPER_ID: il certificato con cui firmarla (di
+#                   base "Orbis Clip Dev"). Il permesso Accessibilità è legato alla firma: con lo
+#                   stesso certificato resta valido da un aggiornamento all'altro, con la firma ad
+#                   hoc va ridato ogni volta.
 #
 set -euo pipefail
 
 cd "$(dirname "$0")/.."
 
 PROJECT="Orbis.xcodeproj"
-SCHEME="Orbis"
-APP_NAME="Orbis"
-BUILD_DIR="build/release"
+SCHEME="${1:-Orbis}"
+case "$SCHEME" in
+  Orbis) APP_NAME="Orbis" ;;
+  OrbisClip) APP_NAME="Orbis Clip" ;;
+  *) printf 'Uso: scripts/release.sh [Orbis|OrbisClip]\n' >&2; exit 1 ;;
+esac
+BUILD_DIR="build/release/$SCHEME"
 DIST_DIR="dist"
 IDENTITY="${DEVELOPER_ID:-}"
 NOTARY_PROFILE="${NOTARY_PROFILE:-}"
@@ -38,25 +47,33 @@ VERSION="$(xcodebuild -project "$PROJECT" -scheme "$SCHEME" -configuration Relea
 [ -n "$VERSION" ] || fail "Non riesco a leggere la versione dal progetto."
 
 APP="$DIST_DIR/$APP_NAME.app"
-DMG="$DIST_DIR/$APP_NAME-$VERSION.dmg"
+# Il nome del DMG senza spazi, perché finisce negli indirizzi di GitHub Releases.
+DMG="$DIST_DIR/$SCHEME-$VERSION.dmg"
 
 if [ -n "$IDENTITY" ]; then
   security find-identity -v -p codesigning | grep -qF "$IDENTITY" \
     || fail "L'identità \"$IDENTITY\" non è nel portachiavi. Controlla con: security find-identity -v -p codesigning"
   SIGN_FLAGS=(--timestamp --options runtime)
   SIGN_IDENTITY="$IDENTITY"
+elif [ "$SCHEME" = OrbisClip ] && security find-identity -p codesigning | grep -qF "\"${SIGN_IDENTITY:-Orbis Clip Dev}\""; then
+  # Un certificato autofirmato non è "valido" per macOS (non viene da Apple), ma firma lo stesso.
+  SIGN_IDENTITY="${SIGN_IDENTITY:-Orbis Clip Dev}"
+  warn "DEVELOPER_ID non impostata: firmo con \"$SIGN_IDENTITY\", nessuna notarizzazione."
+  SIGN_FLAGS=(--options runtime)
 else
   warn "DEVELOPER_ID non impostata: firma ad hoc, nessuna notarizzazione."
+  [ "$SCHEME" = OrbisClip ] && warn "Con la firma ad hoc il permesso Accessibilità andrà ridato a ogni aggiornamento."
   SIGN_FLAGS=(--options runtime)
   SIGN_IDENTITY="-"
 fi
 
-rm -rf "$BUILD_DIR" "$DIST_DIR"
+# Solo i file di questa app: in dist/ può esserci il rilascio dell'altra.
+rm -rf "$BUILD_DIR" "$APP" "$DIST_DIR/$SCHEME"*.dmg*
 mkdir -p "$BUILD_DIR" "$DIST_DIR"
 
 # MARK: Compilazione
 
-step "Compilo Orbis $VERSION (Release)"
+step "Compilo $APP_NAME $VERSION (Release)"
 # Il registro completo va su file: xcodebuild è molto rumoroso, e lo si legge solo se qualcosa va storto.
 if ! xcodebuild archive \
   -project "$PROJECT" \
@@ -80,7 +97,8 @@ cp -R "$ARCHIVED_APP" "$APP"
 # MARK: Controlli sull'app
 
 step "Controllo la firma"
-codesign --force --sign "$SIGN_IDENTITY" "${SIGN_FLAGS[@]}" "$APP"
+# Gli entitlement si conservano: Orbis Clip ha quello per chiedere al Finder la sua cartella.
+codesign --force --sign "$SIGN_IDENTITY" "${SIGN_FLAGS[@]}" --preserve-metadata=entitlements "$APP"
 codesign --verify --deep --strict --verbose=2 "$APP"
 codesign -dvv "$APP" 2>&1 | grep -E "Identifier|Authority|TeamIdentifier|Runtime|Signature" || true
 
@@ -136,14 +154,14 @@ fi
 # MARK: Risultato
 
 # Con un nome che non cambia, il link "ultima versione" di GitHub Releases resta sempre lo stesso.
-cp "$DMG" "$DIST_DIR/$APP_NAME.dmg"
+cp "$DMG" "$DIST_DIR/$SCHEME.dmg"
 
 step "Fatto"
-( cd "$DIST_DIR" && shasum -a 256 "$APP_NAME-$VERSION.dmg" | tee "$APP_NAME-$VERSION.dmg.sha256" )
-printf '\n  %s\n  %s (stessa cosa, con il nome fisso per il link "ultima versione")\n' "$DMG" "$DIST_DIR/$APP_NAME.dmg"
+( cd "$DIST_DIR" && shasum -a 256 "$SCHEME-$VERSION.dmg" | tee "$SCHEME-$VERSION.dmg.sha256" )
+printf '\n  %s\n  %s (stessa cosa, con il nome fisso per il link "ultima versione")\n' "$DMG" "$DIST_DIR/$SCHEME.dmg"
 
 if [ -z "$IDENTITY" ] || [ -z "$NOTARY_PROFILE" ]; then
   printf '\n'
-  warn "DMG non notarizzato: al primo avvio chi lo scarica deve autorizzare Orbis una volta"
+  warn "DMG non notarizzato: al primo avvio chi lo scarica deve autorizzare $APP_NAME una volta"
   warn "(Privacy e sicurezza → Apri comunque, come spiega il README). Per notarizzarlo: docs/RELEASING.md."
 fi
