@@ -6,13 +6,13 @@ enum FinderExport {
   enum ExportError: LocalizedError {
     case password
 
-    var errorDescription: String? { "Le password non diventano file." }
+    var errorDescription: String? { String(localized: "Le password non diventano file.") }
   }
 
   static func create(_ item: ClipItem, in folder: URL) throws -> URL {
     // Nei nomi di file "/" e ":" non sono ammessi.
     let stem = item.name.replacing(/[\/:]/, with: "-").trimmingCharacters(in: .whitespaces)
-    let name = stem.isEmpty ? "Elemento" : stem
+    let name = stem.isEmpty ? String(localized: "Elemento") : stem
     switch item.content {
     case .text(let text, let rtf):
       let url = FileNames.availableURL(in: folder, stem: name, extension: rtf == nil ? "txt" : "rtf")

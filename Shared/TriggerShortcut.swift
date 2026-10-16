@@ -91,8 +91,8 @@ nonisolated struct TriggerShortcut: Codable, Equatable, Sendable {
 /// I nomi dei tasti che non hanno un carattere da mostrare.
 nonisolated enum KeyNames {
   private static let special: [UInt16: String] = [
-    49: "Spazio", 36: "Invio", 76: "Invio (tastierino)", 48: "Tab", 53: "Esc", 51: "⌫", 117: "⌦",
-    123: "←", 124: "→", 125: "↓", 126: "↑", 115: "Home", 119: "Fine", 116: "Pag↑", 121: "Pag↓",
+    49: String(localized: "Spazio"), 36: String(localized: "Invio"), 76: String(localized: "Invio (tastierino)"), 48: "Tab", 53: "Esc", 51: "⌫", 117: "⌦",
+    123: "←", 124: "→", 125: "↓", 126: "↑", 115: "Home", 119: String(localized: "Fine"), 116: String(localized: "Pag↑"), 121: String(localized: "Pag↓"),
     122: "F1", 120: "F2", 99: "F3", 118: "F4", 96: "F5", 97: "F6", 98: "F7", 100: "F8", 101: "F9",
     109: "F10", 103: "F11", 111: "F12", 105: "F13", 107: "F14", 113: "F15", 106: "F16", 64: "F17",
     79: "F18", 80: "F19", 90: "F20",
@@ -103,6 +103,6 @@ nonisolated enum KeyNames {
     if let characters = characters?.trimmingCharacters(in: .whitespacesAndNewlines), !characters.isEmpty {
       return characters.uppercased()
     }
-    return "Tasto \(keyCode)"
+    return String(localized: "Tasto \(keyCode)")
   }
 }

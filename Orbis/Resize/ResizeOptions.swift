@@ -93,9 +93,9 @@ nonisolated struct ResizeOptions: Sendable, Equatable {
 
     var title: String {
       switch self {
-      case .dimensions: "Dimensioni"
-      case .percent: "Percentuale"
-      case .ratio: "Proporzioni"
+      case .dimensions: String(localized: "Dimensioni")
+      case .percent: String(localized: "Percentuale")
+      case .ratio: String(localized: "Proporzioni")
       }
     }
   }
@@ -158,13 +158,13 @@ nonisolated struct ResizeOptions: Sendable, Equatable {
     case .percent: [Int]()
     case .ratio: [longSide].compactMap { $0 }
     }
-    if sides.contains(where: { $0 < 1 }) { return "Le misure devono essere almeno 1 pixel" }
-    if sides.contains(where: { $0 > Self.maxPixels }) { return "Le misure non possono superare \(Self.maxPixels) pixel" }
+    if sides.contains(where: { $0 < 1 }) { return String(localized: "Le misure devono essere almeno 1 pixel") }
+    if sides.contains(where: { $0 > Self.maxPixels }) { return String(localized: "Le misure non possono superare \(Self.maxPixels) pixel") }
     if mode == .dimensions, !keepsProportions, width == nil || height == nil {
-      return "Senza proporzioni bloccate servono larghezza e altezza"
+      return String(localized: "Senza proporzioni bloccate servono larghezza e altezza")
     }
-    if mode == .percent, !Self.percentRange.contains(percent) { return "La percentuale va da 1 a 500" }
-    if mode == .ratio, !effectiveRatio.isValid { return "Il rapporto non è valido" }
+    if mode == .percent, !Self.percentRange.contains(percent) { return String(localized: "La percentuale va da 1 a 500") }
+    if mode == .ratio, !effectiveRatio.isValid { return String(localized: "Il rapporto non è valido") }
     return nil
   }
 

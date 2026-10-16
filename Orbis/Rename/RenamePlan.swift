@@ -9,11 +9,11 @@ nonisolated enum RenameProblem: Sendable, Equatable {
 
   var message: String {
     switch self {
-    case .empty: "Il nome è vuoto"
-    case .invalidCharacters: "Contiene caratteri non validi (/ o :)"
-    case .tooLong: "Il nome è troppo lungo"
-    case .duplicate: "Due elementi avrebbero lo stesso nome"
-    case .alreadyExists: "Esiste già un elemento con questo nome"
+    case .empty: String(localized: "Il nome è vuoto")
+    case .invalidCharacters: String(localized: "Contiene caratteri non validi (/ o :)")
+    case .tooLong: String(localized: "Il nome è troppo lungo")
+    case .duplicate: String(localized: "Due elementi avrebbero lo stesso nome")
+    case .alreadyExists: String(localized: "Esiste già un elemento con questo nome")
     }
   }
 }

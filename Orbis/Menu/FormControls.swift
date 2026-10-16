@@ -3,10 +3,10 @@ import SwiftUI
 /// I pezzi dei moduli di Orbis (Rinomina, Ridimensiona…).
 
 struct FieldRow<Content: View>: View {
-  let title: String
+  let title: LocalizedStringKey
   @ViewBuilder let content: Content
 
-  init(_ title: String, @ViewBuilder content: () -> Content) {
+  init(_ title: LocalizedStringKey, @ViewBuilder content: () -> Content) {
     self.title = title
     self.content = content()
   }
@@ -24,10 +24,10 @@ struct FieldRow<Content: View>: View {
 /// Un interruttore con l'etichetta a sinistra e l'interruttore sul bordo destro: in colonna
 /// gli interruttori stanno tutti sulla stessa linea, qualunque sia la lunghezza delle etichette.
 struct SwitchRow: View {
-  let title: String
+  let title: LocalizedStringKey
   @Binding var isOn: Bool
 
-  init(_ title: String, isOn: Binding<Bool>) {
+  init(_ title: LocalizedStringKey, isOn: Binding<Bool>) {
     self.title = title
     self._isOn = isOn
   }

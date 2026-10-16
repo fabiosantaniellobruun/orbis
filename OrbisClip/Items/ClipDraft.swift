@@ -26,7 +26,7 @@ extension ClipDraft {
       return
     }
     if let png = Self.png(from: pasteboard) {
-      self.init(content: .image(try ClipStorage.store(png, named: "Immagine.png")), suggestedName: "Immagine")
+      self.init(content: .image(try ClipStorage.store(png, named: String(localized: "Immagine.png"))), suggestedName: String(localized: "Immagine"))
       return
     }
     if let url = (pasteboard.readObjects(forClasses: [NSURL.self]) as? [URL])?.first(where: Self.isWebLink) {

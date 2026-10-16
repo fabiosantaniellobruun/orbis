@@ -28,7 +28,7 @@ fotografie di debug) sta in `Shared/`.
 | 8 | Distribuzione: versione, DMG, script di rilascio, benvenuto al primo avvio | fatto: DMG firmato ad hoc, senza notarizzazione (scelta, vedi Decisioni) |
 | 9 | Ridimensiona: dimensioni, percentuale, proporzioni, qualità e peso massimo | fatto |
 | 10 | Video in GIF, con tutti i controlli | fatto |
-| 11 | Interfaccia in inglese | da fare, prima di promuovere l'app fuori dall'Italia |
+| 11 | Interfaccia in inglese | fatto: segue il sistema, o si sceglie in Impostazioni → Generale |
 
 ## Decisioni
 
@@ -51,7 +51,14 @@ fotografie di debug) sta in `Shared/`.
   autorizzare Orbis una volta in Privacy e sicurezza; README e landing lo spiegano. Se un giorno
   si notarizza, lo script è già pronto (`docs/RELEASING.md`).
 - **Repository pubblico con licenza MIT**, README principale in inglese (`README.md`) e la versione
-  italiana accanto (`README.it.md`). L'interfaccia dell'app per ora è in italiano.
+  italiana accanto (`README.it.md`).
+- **Interfaccia in italiano e in inglese**, con un catalogo (`Localizable.xcstrings`) per app; il
+  codice resta scritto in italiano, che è la lingua di partenza. I testi composti nel codice passano
+  da `String(localized:)`; i componenti dei moduli (`FieldRow`, `SwitchRow`) prendono
+  `LocalizedStringKey`. La lingua si sceglie nelle Impostazioni (`LanguageSection`, in `Shared/`):
+  macOS la legge all'avvio dalle preferenze dell'app (`AppleLanguages`), quindi l'app si riapre.
+  I test controllano i messaggi in italiano: vanno lanciati con `-testLanguage it`, altrimenti
+  seguono la lingua scelta per Orbis.
 - **Nessun permesso, nessuna rete, nessuna telemetria.** I messaggi nel registro di sistema che
   possono contenere nomi di file sono privati (`privacy: .private`).
 - **Tema chiaro o scuro secondo il sistema**. Nel tema chiaro un velo bianco sotto le icone tiene
@@ -229,7 +236,7 @@ open build/Build/Products/Debug/Orbis.app
 ```
 
 ```bash
-xcodebuild test -project Orbis.xcodeproj -scheme Orbis -derivedDataPath build -destination 'platform=macOS'
+xcodebuild test -project Orbis.xcodeproj -scheme Orbis -derivedDataPath build -destination 'platform=macOS' -testLanguage it
 ```
 
 I test lavorano in cartelle temporanee. Quelli sul Cestino cestinano e ripristinano file di prova.

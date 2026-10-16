@@ -18,8 +18,8 @@ nonisolated struct ActionOutcome: Sendable {
   var message: String
   var undo: UndoStep?
 
-  static func failure(_ message: String) -> ActionOutcome {
-    ActionOutcome(symbol: "exclamationmark.triangle.fill", message: message)
+  static func failure(_ message: String.LocalizationValue) -> ActionOutcome {
+    ActionOutcome(symbol: "exclamationmark.triangle.fill", message: String(localized: message))
   }
 }
 
@@ -48,7 +48,9 @@ enum ActionRunner {
         let nextToItems = archive.deletingLastPathComponent().standardizedFileURL
           == urls.first?.deletingLastPathComponent().standardizedFileURL
         return ActionOutcome(
-          message: "\(archive.lastPathComponent) creato\(nextToItems ? "" : " in Download")",
+          message: nextToItems
+            ? String(localized: "\(archive.lastPathComponent) creato")
+            : String(localized: "\(archive.lastPathComponent) creato in Download"),
           undo: .discard([archive])
         )
       } catch {
@@ -60,7 +62,7 @@ enum ActionRunner {
       let paths = urls.map(\.displayPath)
       pasteboard.clearContents()
       pasteboard.setString(paths.joined(separator: "\n"), forType: .string)
-      return ActionOutcome(message: paths.count == 1 ? "Percorso copiato" : "\(paths.count) percorsi copiati")
+      return ActionOutcome(message: paths.count == 1 ? String(localized: "Percorso copiato") : String(localized: "\(paths.count) percorsi copiati"))
 
     case .trash:
       let result = await FileOperations.trash(urls)
@@ -95,25 +97,25 @@ enum ActionRunner {
 
     guard !result.done.isEmpty else {
       if result.failed == 0, result.skipped > 0 {
-        return ActionOutcome(symbol: "info.circle.fill", message: result.skipped == 1 ? "Il file non è un SVG" : "I file non sono SVG")
+        return ActionOutcome(symbol: "info.circle.fill", message: result.skipped == 1 ? String(localized: "Il file non è un SVG") : String(localized: "I file non sono SVG"))
       }
       return .failure("Impossibile convertire l'SVG")
     }
 
     var message: String
     if result.done.count == 1, let created = result.done.first {
-      message = "\(created.lastPathComponent) creato"
+      message = String(localized: "\(created.lastPathComponent) creato")
     } else {
-      message = "\(result.done.count) PNG creati"
+      message = String(localized: "\(result.done.count) PNG creati")
       if scales.count > 1, let first = scales.first, let last = scales.last {
         message += " (\(first)x–\(last)x)"
       }
     }
     if result.failed > 0 {
-      message += ", \(result.failed) non \(result.failed == 1 ? "riuscito" : "riusciti")"
+      message += (result.failed == 1 ? String(localized: ", \(result.failed) non riuscito") : String(localized: ", \(result.failed) non riusciti"))
     }
     if result.skipped > 0 {
-      message += ", \(result.skipped) \(result.skipped == 1 ? "saltato" : "saltati")"
+      message += (result.skipped == 1 ? String(localized: ", \(result.skipped) saltato") : String(localized: ", \(result.skipped) saltati"))
     }
     return ActionOutcome(message: message, undo: .discard(result.done))
   }
@@ -123,22 +125,24 @@ enum ActionRunner {
 
     guard !result.done.isEmpty else {
       if result.failed == 0, result.skipped > 0 {
-        return ActionOutcome(symbol: "info.circle.fill", message: "Nessuna immagine da ridimensionare")
+        return ActionOutcome(symbol: "info.circle.fill", message: String(localized: "Nessuna immagine da ridimensionare"))
       }
       return .failure("Impossibile ridimensionare")
     }
 
     let count = result.done.count
-    var message = "\(count) \(count == 1 ? "immagine ridimensionata" : "immagini ridimensionate")"
+    var message = count == 1 ? String(localized: "\(count) immagine ridimensionata") : String(localized: "\(count) immagini ridimensionate")
     let overweight = result.done.count { !$0.reachedTarget }
     if overweight > 0 {
-      message += ", \(overweight) \(overweight == 1 ? "resta sopra" : "restano sopra") il peso richiesto"
+      message += overweight == 1
+        ? String(localized: ", \(overweight) resta sopra il peso richiesto")
+        : String(localized: ", \(overweight) restano sopra il peso richiesto")
     }
     if result.failed > 0 {
-      message += ", \(result.failed) non \(result.failed == 1 ? "riuscita" : "riuscite")"
+      message += (result.failed == 1 ? String(localized: ", \(result.failed) non riuscita") : String(localized: ", \(result.failed) non riuscite"))
     }
     if result.skipped > 0 {
-      message += ", \(result.skipped) \(result.skipped == 1 ? "saltato" : "saltati")"
+      message += (result.skipped == 1 ? String(localized: ", \(result.skipped) saltato") : String(localized: ", \(result.skipped) saltati"))
     }
     return ActionOutcome(message: message, undo: .discard(result.done.map(\.url)))
   }
@@ -148,19 +152,23 @@ enum ActionRunner {
 
     guard !result.done.isEmpty else {
       if result.failed == 0, result.skipped > 0 {
-        let reason = result.skipped == 1 ? "non è un'immagine da convertire" : "non sono immagini da convertire"
-        return ActionOutcome(symbol: "info.circle.fill", message: "\(result.skipped == 1 ? "Il file" : "I file") \(reason) in \(format.title)")
+        let message = result.skipped == 1
+          ? String(localized: "Il file non è un'immagine da convertire in \(format.title)")
+          : String(localized: "I file non sono immagini da convertire in \(format.title)")
+        return ActionOutcome(symbol: "info.circle.fill", message: message)
       }
       return .failure("Impossibile convertire")
     }
 
     let count = result.done.count
-    var message = "\(count) \(count == 1 ? "immagine convertita" : "immagini convertite") in \(format.title)"
+    var message = count == 1
+      ? String(localized: "\(count) immagine convertita in \(format.title)")
+      : String(localized: "\(count) immagini convertite in \(format.title)")
     if result.failed > 0 {
-      message += ", \(result.failed) non \(result.failed == 1 ? "riuscita" : "riuscite")"
+      message += (result.failed == 1 ? String(localized: ", \(result.failed) non riuscita") : String(localized: ", \(result.failed) non riuscite"))
     }
     if result.skipped > 0 {
-      message += ", \(result.skipped) \(result.skipped == 1 ? "saltato" : "saltati")"
+      message += (result.skipped == 1 ? String(localized: ", \(result.skipped) saltato") : String(localized: ", \(result.skipped) saltati"))
     }
     return ActionOutcome(message: message, undo: .discard(result.done))
   }
@@ -170,7 +178,7 @@ enum ActionRunner {
 
     guard !result.done.isEmpty else {
       if result.failed == 0, result.skipped > 0 {
-        return ActionOutcome(symbol: "info.circle.fill", message: "Nessun video da trasformare in GIF")
+        return ActionOutcome(symbol: "info.circle.fill", message: String(localized: "Nessun video da trasformare in GIF"))
       }
       return .failure("Impossibile creare il GIF")
     }
@@ -178,20 +186,20 @@ enum ActionRunner {
     var message: String
     if result.done.count == 1, let item = result.done.first {
       let weight = ByteCountFormatter.string(fromByteCount: Int64(item.byteCount), countStyle: .file)
-      message = "\(item.url.lastPathComponent) creato, \(weight)"
-      if !item.reachedTarget { message += ", sopra il peso richiesto" }
+      message = String(localized: "\(item.url.lastPathComponent) creato, \(weight)")
+      if !item.reachedTarget { message += String(localized: ", sopra il peso richiesto") }
     } else {
-      message = "\(result.done.count) GIF creati"
+      message = String(localized: "\(result.done.count) GIF creati")
       let overweight = result.done.count { !$0.reachedTarget }
       if overweight > 0 {
-        message += ", \(overweight) sopra il peso richiesto"
+        message += String(localized: ", \(overweight) sopra il peso richiesto")
       }
     }
     if result.failed > 0 {
-      message += ", \(result.failed) non \(result.failed == 1 ? "riuscito" : "riusciti")"
+      message += (result.failed == 1 ? String(localized: ", \(result.failed) non riuscito") : String(localized: ", \(result.failed) non riusciti"))
     }
     if result.skipped > 0 {
-      message += ", \(result.skipped) \(result.skipped == 1 ? "saltato" : "saltati")"
+      message += (result.skipped == 1 ? String(localized: ", \(result.skipped) saltato") : String(localized: ", \(result.skipped) saltati"))
     }
     return ActionOutcome(message: message, undo: .discard(result.done.map(\.url)))
   }
@@ -202,16 +210,18 @@ enum ActionRunner {
 
     guard !result.done.isEmpty else {
       if result.failed == 0, result.skipped > 0 {
-        return ActionOutcome(symbol: "info.circle.fill", message: "Già in «\(name)»")
+        return ActionOutcome(symbol: "info.circle.fill", message: String(localized: "Già in «\(name)»"))
       }
       return .failure("Impossibile spostare")
     }
 
     store.recordRecent(folder)
     let count = result.done.count
-    var message = "\(count) \(count == 1 ? "elemento spostato" : "elementi spostati") in «\(name)»"
+    var message = count == 1
+      ? String(localized: "\(count) elemento spostato in «\(name)»")
+      : String(localized: "\(count) elementi spostati in «\(name)»")
     if result.failed > 0 {
-      message += ", \(result.failed) non \(result.failed == 1 ? "riuscito" : "riusciti")"
+      message += (result.failed == 1 ? String(localized: ", \(result.failed) non riuscito") : String(localized: ", \(result.failed) non riusciti"))
     }
     return ActionOutcome(message: message, undo: .moveBack(result.done))
   }
@@ -241,20 +251,20 @@ enum ActionRunner {
       failed = await FileOperations.moveBack(items).failed
     }
     guard failed == 0 else { return .failure("Impossibile annullare") }
-    return ActionOutcome(symbol: "arrow.uturn.backward.circle.fill", message: "Annullato")
+    return ActionOutcome(symbol: "arrow.uturn.backward.circle.fill", message: String(localized: "Annullato"))
   }
 
   private static func outcome<Item>(
     of result: BatchResult<Item>,
-    one: String,
-    many: String,
-    failure: String,
+    one: String.LocalizationValue,
+    many: String.LocalizationValue,
+    failure: String.LocalizationValue,
     undo: UndoStep
   ) -> ActionOutcome {
     guard !result.done.isEmpty else { return .failure(failure) }
-    var message = "\(result.done.count) \(result.done.count == 1 ? one : many)"
+    var message = "\(result.done.count) \(String(localized: result.done.count == 1 ? one : many))"
     if result.failed > 0 {
-      message += ", \(result.failed) non \(result.failed == 1 ? "riuscito" : "riusciti")"
+      message += (result.failed == 1 ? String(localized: ", \(result.failed) non riuscito") : String(localized: ", \(result.failed) non riusciti"))
     }
     return ActionOutcome(message: message, undo: undo)
   }

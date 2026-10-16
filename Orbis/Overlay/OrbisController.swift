@@ -336,7 +336,7 @@ final class OrbisController {
         }
       }
       if !opened {
-        let message = urls.count == 1 ? "Il file non è un'immagine da ridimensionare" : "I file non sono immagini da ridimensionare"
+        let message = urls.count == 1 ? String(localized: "Il file non è un'immagine da ridimensionare") : String(localized: "I file non sono immagini da ridimensionare")
         present(ActionOutcome(symbol: "info.circle.fill", message: message), at: anchor)
       }
       return
@@ -396,14 +396,14 @@ final class OrbisController {
       Task { await self?.makeGIFs(request, for: action, at: anchor) }
     }
     if !opened {
-      let message = urls.count == 1 ? "Il file non è un video da trasformare in GIF" : "I file non sono video da trasformare in GIF"
+      let message = urls.count == 1 ? String(localized: "Il file non è un video da trasformare in GIF") : String(localized: "I file non sono video da trasformare in GIF")
       present(ActionOutcome(symbol: "info.circle.fill", message: message), at: anchor)
     }
   }
 
   /// Crea i GIF, con l'avviso "in corso" che dice a che punto si è: può volerci un po'.
   private func makeGIFs(_ request: GIFRequest, for action: OrbisAction, at anchor: ToastAnchor) async {
-    let working = showWorking(action, at: anchor, text: "Creo il GIF")
+    let working = showWorking(action, at: anchor, text: String(localized: "Creo il GIF"))
     gifPercent = -1
     let outcome = await ActionRunner.makeGIFs(request) { [weak self] fraction in
       Task { @MainActor in
@@ -412,7 +412,7 @@ final class OrbisController {
         guard let self, percent > self.gifPercent, self.toast.isShowingWork else { return }
         self.gifPercent = percent
         self.toast.show(
-          ToastContent(symbol: "film", text: "Creo il GIF · \(percent)%", isWorking: true),
+          ToastContent(symbol: "film", text: String(localized: "Creo il GIF · \(percent)%"), isWorking: true),
           at: anchor,
           for: nil
         )
@@ -445,8 +445,8 @@ final class OrbisController {
     open.canChooseFiles = false
     open.canCreateDirectories = true
     open.allowsMultipleSelection = false
-    open.prompt = "Sposta qui"
-    open.message = "Scegli la cartella di destinazione"
+    open.prompt = String(localized: "Sposta qui")
+    open.message = String(localized: "Scegli la cartella di destinazione")
     open.directoryURL = DestinationStore().destinations().first?.url
     let response = await open.begin()
     NSApp.hide(nil)

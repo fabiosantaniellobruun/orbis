@@ -55,7 +55,7 @@ struct OrbisOption: Identifiable {
   }
 
   static let chooseFolder = OrbisOption(
-    id: "choose", kind: .chooseFolder, title: "Scegli cartella…", subtitle: "Sfoglia il Mac",
+    id: "choose", kind: .chooseFolder, title: String(localized: "Scegli cartella…"), subtitle: String(localized: "Sfoglia il Mac"),
     symbol: "ellipsis"
   )
 
@@ -78,19 +78,19 @@ struct OrbisOption: Identifiable {
   }
 
   static let gif = OrbisOption(
-    id: "gif", kind: .gif, title: "GIF", subtitle: "Animazione dal video", symbol: "film", glyphText: "GIF"
+    id: "gif", kind: .gif, title: "GIF", subtitle: String(localized: "Animazione dal video"), symbol: "film", glyphText: "GIF"
   )
 
   /// Gli SVG diventano PNG a una scala, o a tutte e quattro insieme. Nel bottone "PNG", e sotto la
   /// scala: senza la sigla, "2x" non direbbe in cosa si converte.
   static let svgOptions: [OrbisOption] = [
-    OrbisOption(id: "svg:1", kind: .svgScales([1]), title: "PNG 1x", subtitle: "Alla misura dell'SVG", symbol: "photo", glyphText: "PNG", glyphDetail: "1x"),
-    OrbisOption(id: "svg:2", kind: .svgScales([2]), title: "PNG 2x", subtitle: "Doppia, per gli schermi Retina", symbol: "photo", glyphText: "PNG", glyphDetail: "2x"),
-    OrbisOption(id: "svg:3", kind: .svgScales([3]), title: "PNG 3x", subtitle: "Tripla", symbol: "photo", glyphText: "PNG", glyphDetail: "3x"),
-    OrbisOption(id: "svg:4", kind: .svgScales([4]), title: "PNG 4x", subtitle: "Quadrupla", symbol: "photo", glyphText: "PNG", glyphDetail: "4x"),
+    OrbisOption(id: "svg:1", kind: .svgScales([1]), title: "PNG 1x", subtitle: String(localized: "Alla misura dell'SVG"), symbol: "photo", glyphText: "PNG", glyphDetail: "1x"),
+    OrbisOption(id: "svg:2", kind: .svgScales([2]), title: "PNG 2x", subtitle: String(localized: "Doppia, per gli schermi Retina"), symbol: "photo", glyphText: "PNG", glyphDetail: "2x"),
+    OrbisOption(id: "svg:3", kind: .svgScales([3]), title: "PNG 3x", subtitle: String(localized: "Tripla"), symbol: "photo", glyphText: "PNG", glyphDetail: "3x"),
+    OrbisOption(id: "svg:4", kind: .svgScales([4]), title: "PNG 4x", subtitle: String(localized: "Quadrupla"), symbol: "photo", glyphText: "PNG", glyphDetail: "4x"),
     OrbisOption(
       id: "svg:all", kind: .svgScales(SVGRasterizer.scales), title: "PNG 1x–4x",
-      subtitle: "Tutte e quattro: @2x, @3x, @4x", symbol: "photo", glyphText: "PNG", glyphDetail: "1–4x"
+      subtitle: String(localized: "Tutte e quattro: @2x, @3x, @4x"), symbol: "photo", glyphText: "PNG", glyphDetail: "1–4x"
     ),
   ]
 

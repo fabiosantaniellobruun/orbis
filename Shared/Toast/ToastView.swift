@@ -61,7 +61,8 @@ struct ToastBubble: View {
       if content.canUndo {
         Divider()
           .frame(height: 16)
-        Button("Annulla", action: onUndo)
+        // "Annulla" qui è annullare l'azione (Undo), non un pulsante Annulla (Cancel): chiave propria.
+        Button(String(localized: "toast.undo", defaultValue: "Annulla"), action: onUndo)
           .buttonStyle(.plain)
           .fontWeight(.semibold)
           .foregroundStyle(Color.fixedAccent)

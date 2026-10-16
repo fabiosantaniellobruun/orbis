@@ -113,8 +113,8 @@ private struct WelcomeView: View {
 
 private struct Step: View {
   let number: Int
-  let title: String
-  let detail: String
+  let title: LocalizedStringKey
+  let detail: LocalizedStringKey
 
   var body: some View {
     HStack(alignment: .top, spacing: 14) {

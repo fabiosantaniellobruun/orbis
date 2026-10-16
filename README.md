@@ -12,7 +12,7 @@ paths or send them to the Trash. Every action can be undone.
   <img src="docs/images/convert.jpg" alt="The Orbis ring around a photo being dragged on the Mac desktop, with the pointer on Convert to: the second ring offers PNG, JPEG, HEIC, AVIF and TIFF" width="880">
 </p>
 
-> **Status:** beta (0.1). The interface is currently in **Italian**; an English localization is planned.
+> **Status:** beta (0.1). The interface is in **English** and **Italian**: it follows the system language, or choose one in Settings → General.
 
 ## Features
 

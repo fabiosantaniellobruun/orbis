@@ -41,7 +41,7 @@ struct ShortcutRecorder: View {
   private var label: String {
     guard recorder.isRecording else { return shortcut.displayString }
     let live = TriggerShortcut(modifiers: recorder.liveModifiers).displayString
-    return live.isEmpty ? "Premi la combinazione…" : live
+    return live.isEmpty ? String(localized: "Premi la combinazione…") : live
   }
 }
 

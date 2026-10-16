@@ -25,7 +25,7 @@ nonisolated enum ClipStorage {
 
     var errorDescription: String? {
       switch self {
-      case .tooLarge(let name): "«\(name)» supera i 10 MB: Orbis Clip conserva solo file più piccoli."
+      case .tooLarge(let name): String(localized: "«\(name)» supera i 10 MB: Orbis Clip conserva solo file più piccoli.")
       }
     }
   }

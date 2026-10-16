@@ -49,6 +49,7 @@ struct ClipSettingsView: View {
         }
       }
 
+      LanguageSection()
       LoginItemSection(appName: "Orbis Clip")
     }
     .formStyle(.grouped)

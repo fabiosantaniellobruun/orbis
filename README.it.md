@@ -12,7 +12,7 @@ Ogni azione si può annullare.
   <img src="docs/images/convert.jpg" alt="L'anello di Orbis attorno a una foto trascinata sulla scrivania del Mac, con il puntatore su Converti in: il secondo anello propone PNG, JPEG, HEIC, AVIF e TIFF" width="880">
 </p>
 
-> **Stato:** beta (0.1). L'interfaccia è in **italiano**; una versione in inglese è in programma.
+> **Stato:** beta (0.1). L'interfaccia è in **italiano** e in **inglese**: segue la lingua del sistema, oppure la scegli in Impostazioni → Generale.
 > [English README](README.md).
 
 ## Cosa fa

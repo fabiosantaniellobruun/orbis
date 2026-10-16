@@ -280,8 +280,9 @@ struct ResizeView: View {
     } else {
       let count = plan.jobs.count
       let skipped = plan.skippedCount
-      let base = count == 1 ? "1 immagine" : "\(count) immagini"
-      Text(skipped > 0 ? "\(base), \(skipped) \(skipped == 1 ? "saltato" : "saltati")" : base)
+      let base = count == 1 ? String(localized: "1 immagine") : String(localized: "\(count) immagini")
+      let skippedText = skipped == 1 ? String(localized: "\(skipped) saltato") : String(localized: "\(skipped) saltati")
+      Text(skipped > 0 ? "\(base), \(skippedText)" : base)
         .foregroundStyle(.secondary)
     }
   }

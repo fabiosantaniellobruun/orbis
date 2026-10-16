@@ -27,7 +27,7 @@ struct ClipPanelView: View {
         }
       }
       if model.visibleItems.isEmpty {
-        SectionLabel(title: model.isSearching ? "Nessun elemento" : "Ancora nessun preferito: aggiungili da Orbis Clip → Elementi…")
+        SectionLabel(title: model.isSearching ? String(localized: "Nessun elemento") : String(localized: "Ancora nessun preferito: aggiungili da Orbis Clip → Elementi…"))
       }
     }
     .padding(8)

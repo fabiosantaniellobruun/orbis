@@ -31,7 +31,7 @@ final class AddItemWindowController {
       }
     )
     let window = NSWindow(contentViewController: NSHostingController(rootView: view))
-    window.title = "Aggiungi a Orbis Clip"
+    window.title = String(localized: "Aggiungi a Orbis Clip")
     window.styleMask = [.titled, .closable]
     window.isReleasedWhenClosed = false
     window.center()

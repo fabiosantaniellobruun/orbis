@@ -60,7 +60,7 @@ private struct GlassCard: View {
     case .file(let blob):
       return blob.name
     case .image(let blob):
-      guard let rep = Thumbnails.image(for: blob)?.representations.first else { return "Immagine" }
+      guard let rep = Thumbnails.image(for: blob)?.representations.first else { return String(localized: "Immagine") }
       return "\(rep.pixelsWide) × \(rep.pixelsHigh) px"
     case .password:
       return "••••••••"

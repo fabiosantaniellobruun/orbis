@@ -10,9 +10,9 @@ nonisolated struct GIFOptions: Sendable, Equatable {
 
     var title: String {
       switch self {
-      case .forever: "Sempre"
-      case .once: "Una volta"
-      case .times: "Più volte"
+      case .forever: String(localized: "Sempre")
+      case .once: String(localized: "Una volta")
+      case .times: String(localized: "Più volte")
       }
     }
   }
@@ -121,14 +121,14 @@ nonisolated struct GIFOptions: Sendable, Equatable {
   /// Cosa impedisce di creare il GIF, se c'è qualcosa.
   var problem: String? {
     let sides = [width, height].compactMap { $0 }
-    if sides.contains(where: { $0 < 1 }) { return "Le misure devono essere almeno 1 pixel" }
-    if sides.contains(where: { $0 > Self.maxSide }) { return "Le misure non possono superare \(Self.maxSide) pixel" }
-    if end - start < 0.05 { return "Scegli un intervallo più lungo" }
-    if !Self.fpsRange.contains(fps) { return "I fotogrammi al secondo vanno da 5 a 30" }
+    if sides.contains(where: { $0 < 1 }) { return String(localized: "Le misure devono essere almeno 1 pixel") }
+    if sides.contains(where: { $0 > Self.maxSide }) { return String(localized: "Le misure non possono superare \(Self.maxSide) pixel") }
+    if end - start < 0.05 { return String(localized: "Scegli un intervallo più lungo") }
+    if !Self.fpsRange.contains(fps) { return String(localized: "I fotogrammi al secondo vanno da 5 a 30") }
     if frameCount > Self.maxFrames {
-      return "Troppi fotogrammi (\(frameCount)): accorcia l'intervallo o abbassa i fotogrammi al secondo"
+      return String(localized: "Troppi fotogrammi (\(frameCount)): accorcia l'intervallo o abbassa i fotogrammi al secondo")
     }
-    if loop == .times, plays < 2 { return "Per ripeterlo servono almeno 2 volte" }
+    if loop == .times, plays < 2 { return String(localized: "Per ripeterlo servono almeno 2 volte") }
     return nil
   }
 }
