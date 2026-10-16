@@ -27,10 +27,10 @@ nonisolated struct ClipTrigger: Codable, Equatable, Sendable {
 
   var buttonName: String {
     switch mouseButton {
-    case 0: "clic"
-    case 1: "clic destro"
-    case 2: "clic centrale"
-    default: "tasto \(mouseButton + 1) del mouse"
+    case 0: String(localized: "clic")
+    case 1: String(localized: "clic destro")
+    case 2: String(localized: "clic centrale")
+    default: String(localized: "tasto \(mouseButton + 1) del mouse")
     }
   }
 

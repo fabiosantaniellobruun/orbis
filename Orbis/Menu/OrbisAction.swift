@@ -12,14 +12,14 @@ nonisolated struct OrbisAction: Identifiable, Hashable {
 
   private static let definitions: [ID: OrbisAction] = Dictionary(
     uniqueKeysWithValues: [
-      OrbisAction(id: .rename, title: "Rinomina", symbol: "character.cursor.ibeam"),
-      OrbisAction(id: .clone, title: "Clona", symbol: "plus.square.on.square"),
-      OrbisAction(id: .convert, title: "Converti in", symbol: "arrow.triangle.2.circlepath"),
-      OrbisAction(id: .move, title: "Sposta", symbol: "folder"),
-      OrbisAction(id: .resize, title: "Ridimensiona", symbol: "arrow.up.left.and.arrow.down.right"),
-      OrbisAction(id: .compress, title: "Comprimi", symbol: "archivebox"),
-      OrbisAction(id: .copyPath, title: "Copia percorso", symbol: "link"),
-      OrbisAction(id: .trash, title: "Cestina", symbol: "trash"),
+      OrbisAction(id: .rename, title: String(localized: "Rinomina"), symbol: "character.cursor.ibeam"),
+      OrbisAction(id: .clone, title: String(localized: "Clona"), symbol: "plus.square.on.square"),
+      OrbisAction(id: .convert, title: String(localized: "Converti in"), symbol: "arrow.triangle.2.circlepath"),
+      OrbisAction(id: .move, title: String(localized: "Sposta"), symbol: "folder"),
+      OrbisAction(id: .resize, title: String(localized: "Ridimensiona"), symbol: "arrow.up.left.and.arrow.down.right"),
+      OrbisAction(id: .compress, title: String(localized: "Comprimi"), symbol: "archivebox"),
+      OrbisAction(id: .copyPath, title: String(localized: "Copia percorso"), symbol: "link"),
+      OrbisAction(id: .trash, title: String(localized: "Cestina"), symbol: "trash"),
     ].map { ($0.id, $0) }
   )
 

@@ -12,7 +12,8 @@ nonisolated enum PasswordStore {
     var errorDescription: String? {
       switch self {
       case .keychain(let status):
-        "Il Portachiavi non ha salvato la password: \(SecCopyErrorMessageString(status, nil) as String? ?? "errore \(status)")."
+        let reason = SecCopyErrorMessageString(status, nil) as String? ?? String(localized: "errore \(status)")
+        return String(localized: "Il Portachiavi non ha salvato la password: \(reason).")
       }
     }
   }

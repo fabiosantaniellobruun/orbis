@@ -95,7 +95,7 @@ enum Paster {
   private static func confirmOwner(for name: String) async -> Bool {
     let context = LAContext()
     do {
-      return try await context.evaluatePolicy(.deviceOwnerAuthentication, localizedReason: "incollare la password «\(name)»")
+      return try await context.evaluatePolicy(.deviceOwnerAuthentication, localizedReason: String(localized: "incollare la password «\(name)»"))
     } catch {
       log.info("Password non confermata: \(error.localizedDescription, privacy: .public)")
       return false

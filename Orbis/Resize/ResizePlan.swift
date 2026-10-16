@@ -48,10 +48,10 @@ nonisolated struct ResizePlan: Sendable, Equatable {
 
     var message: String {
       switch self {
-      case .notAnImage: "Non è un'immagine"
-      case .animated: "Ha più immagini: non si ridimensiona"
-      case .unwritableFormat: "Il Mac non sa scrivere questo formato: sceglierne un altro"
-      case .unchanged: "Stesse misure e stesso formato: niente da fare"
+      case .notAnImage: String(localized: "Non è un'immagine")
+      case .animated: String(localized: "Ha più immagini: non si ridimensiona")
+      case .unwritableFormat: String(localized: "Il Mac non sa scrivere questo formato: sceglierne un altro")
+      case .unchanged: String(localized: "Stesse misure e stesso formato: niente da fare")
       }
     }
   }

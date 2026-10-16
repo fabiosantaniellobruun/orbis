@@ -53,6 +53,7 @@ private struct GeneralSettings: View {
         }
       }
 
+      LanguageSection()
       LoginItemSection(appName: "Orbis")
     }
     .formStyle(.grouped)
@@ -120,8 +121,8 @@ private struct MoveSettings: View {
     panel.canChooseFiles = false
     panel.canCreateDirectories = true
     panel.allowsMultipleSelection = false
-    panel.prompt = "Scegli"
-    panel.message = "Scegli una cartella preferita"
+    panel.prompt = String(localized: "Scegli")
+    panel.message = String(localized: "Scegli una cartella preferita")
     panel.directoryURL = favorites[slot]
     Task {
       guard await panel.begin() == .OK, let url = panel.url else { return }
@@ -182,7 +183,7 @@ private struct FolderLabel: View {
       VStack(alignment: .leading, spacing: 1) {
         Text(FileManager.default.displayName(atPath: path))
           .lineLimit(1)
-        Text(exists ? OrbisOption.displayPath(url) : "Non trovata · \(OrbisOption.displayPath(url))")
+        Text(exists ? OrbisOption.displayPath(url) : String(localized: "Non trovata · \(OrbisOption.displayPath(url))"))
           .font(.system(size: 11))
           .foregroundStyle(exists ? AnyShapeStyle(.secondary) : AnyShapeStyle(.red))
           .lineLimit(1)

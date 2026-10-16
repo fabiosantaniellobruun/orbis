@@ -1,0 +1,877 @@
+{
+  "sourceLanguage": "it",
+  "strings": {
+    "": {
+      "shouldTranslate": false
+    },
+    "%@ apre il pannello": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ opens the panel"
+          }
+        }
+      }
+    },
+    "%lld": {
+      "shouldTranslate": false
+    },
+    "Aggiungi": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Add"
+          }
+        }
+      }
+    },
+    "Aggiungi a Orbis Clip": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Add to Orbis Clip"
+          }
+        }
+      }
+    },
+    "Aggiungi dagli appunti": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Add from Clipboard"
+          }
+        }
+      }
+    },
+    "Aggiungi dagli appunti…": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Add from Clipboard…"
+          }
+        }
+      }
+    },
+    "Ancora nessun preferito: aggiungili da Orbis Clip → Elementi…": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No favorites yet: add them from Orbis Clip → Items…"
+          }
+        }
+      }
+    },
+    "Annulla": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cancel"
+          }
+        }
+      }
+    },
+    "Apri %@ all'avvio del Mac": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open %@ at login"
+          }
+        }
+      }
+    },
+    "Apri Privacy e sicurezza…": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open Privacy & Security…"
+          }
+        }
+      }
+    },
+    "Avvio": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Startup"
+          }
+        }
+      }
+    },
+    "Cambia password": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Change Password"
+          }
+        }
+      }
+    },
+    "Centrale": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Middle"
+          }
+        }
+      }
+    },
+    "Cerca": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Search"
+          }
+        }
+      }
+    },
+    "Come il sistema": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Same as System"
+          }
+        }
+      }
+    },
+    "Con il clic sinistro i tasti hanno spesso già un significato (⇧ estende la selezione, ⌘ apre in un'altra finestra): quel clic non arriverà più alle app.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "With a left click the keys often already mean something (⇧ extends the selection, ⌘ opens in another window): that click will no longer reach the apps."
+          }
+        }
+      }
+    },
+    "Contenuto": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Content"
+          }
+        }
+      }
+    },
+    "Copiato negli appunti": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Copied to the clipboard"
+          }
+        }
+      }
+    },
+    "Creato «%@»": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Created “%@”"
+          }
+        }
+      }
+    },
+    "Destro": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Right"
+          }
+        }
+      }
+    },
+    "Dimensione": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Size"
+          }
+        }
+      }
+    },
+    "Elementi di Orbis Clip": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Orbis Clip Items"
+          }
+        }
+      }
+    },
+    "Elementi…": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Items…"
+          }
+        }
+      }
+    },
+    "Elemento": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Item"
+          }
+        }
+      }
+    },
+    "Elimina": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Delete"
+          }
+        }
+      }
+    },
+    "Elimina elemento": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Delete Item"
+          }
+        }
+      }
+    },
+    "Eliminare «%@»?": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Delete “%@”?"
+          }
+        }
+      }
+    },
+    "Esci da Orbis Clip": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Quit Orbis Clip"
+          }
+        }
+      }
+    },
+    "File": {
+      "shouldTranslate": false
+    },
+    "Fine": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "End"
+          }
+        }
+      }
+    },
+    "Il Portachiavi non ha salvato la password: %@.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The Keychain didn't save the password: %@."
+          }
+        }
+      }
+    },
+    "Immagine": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Image"
+          }
+        }
+      }
+    },
+    "Immagine.png": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Image.png"
+          }
+        }
+      }
+    },
+    "Impostazioni…": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Settings…"
+          }
+        }
+      }
+    },
+    "Indirizzo": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Address"
+          }
+        }
+      }
+    },
+    "Invio": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Return"
+          }
+        }
+      }
+    },
+    "Invio (tastierino)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enter (keypad)"
+          }
+        }
+      }
+    },
+    "La nuova lingua vale dalla prossima apertura.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The new language applies the next time the app opens."
+          }
+        }
+      }
+    },
+    "Laterale avanti": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Side (forward)"
+          }
+        }
+      }
+    },
+    "Laterale indietro": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Side (back)"
+          }
+        }
+      }
+    },
+    "Le password non diventano file.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Passwords don't become files."
+          }
+        }
+      }
+    },
+    "Lingua": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Language"
+          }
+        }
+      }
+    },
+    "Mostra nel Finder": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Show in Finder"
+          }
+        }
+      }
+    },
+    "Mostra pannello di prova": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Show Test Panel"
+          }
+        }
+      }
+    },
+    "Negli appunti non c'è niente che Orbis Clip sappia salvare: un testo, un link, un'immagine o un file.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "There's nothing on the clipboard that Orbis Clip can save: a text, a link, an image or a file."
+          }
+        }
+      }
+    },
+    "Nel pannello compaiono gli ultimi %lld preferiti aggiunti. La scorciatoia si scrive nella ricerca e porta l'elemento al primo posto.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The panel shows the last %lld favorites added. Type the shortcut in the search to bring the item to the top."
+          }
+        }
+      }
+    },
+    "Nessun elemento": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No items"
+          }
+        }
+      }
+    },
+    "Nome": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Name"
+          }
+        }
+      }
+    },
+    "Non si può aggiungere": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Can't Add"
+          }
+        }
+      }
+    },
+    "Nuova password": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "New password"
+          }
+        }
+      }
+    },
+    "Nuova password…": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "New Password…"
+          }
+        }
+      }
+    },
+    "Orbis Clip": {
+      "shouldTranslate": false
+    },
+    "Pag↑": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "PgUp"
+          }
+        }
+      }
+    },
+    "Pag↓": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "PgDn"
+          }
+        }
+      }
+    },
+    "Pannello": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Panel"
+          }
+        }
+      }
+    },
+    "Password": {
+      "shouldTranslate": false
+    },
+    "Password cambiata.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Password changed."
+          }
+        }
+      }
+    },
+    "Password non trovata nel Portachiavi": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Password not found in the Keychain"
+          }
+        }
+      }
+    },
+    "Preferiti": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Favorites"
+          }
+        }
+      }
+    },
+    "Premi la combinazione…": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Press the shortcut…"
+          }
+        }
+      }
+    },
+    "Riapri ora": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reopen Now"
+          }
+        }
+      }
+    },
+    "Ripristina": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reset"
+          }
+        }
+      }
+    },
+    "Risultati": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Results"
+          }
+        }
+      }
+    },
+    "Salvata nel Portachiavi di login.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Saved in the login Keychain."
+          }
+        }
+      }
+    },
+    "Scegli un elemento": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choose an item"
+          }
+        }
+      }
+    },
+    "Scorciatoia": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Shortcut"
+          }
+        }
+      }
+    },
+    "Seleziona un testo, un link o un file e scegli Servizi → Aggiungi a Orbis Clip dal menu contestuale, oppure aggiungi ciò che hai negli appunti.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Select a text, a link or a file and choose Services → Add to Orbis Clip from the context menu, or add what's on the clipboard."
+          }
+        }
+      }
+    },
+    "Serve il permesso Accessibilità": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Accessibility permission needed"
+          }
+        }
+      }
+    },
+    "Sinistro": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Left"
+          }
+        }
+      }
+    },
+    "Spazio": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Space"
+          }
+        }
+      }
+    },
+    "Tasti da tenere premuti": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Keys to hold"
+          }
+        }
+      }
+    },
+    "Tasto %u": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Key %u"
+          }
+        }
+      }
+    },
+    "Tasto del mouse": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mouse button"
+          }
+        }
+      }
+    },
+    "Testo formattato: si incolla con la sua formattazione.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Formatted text: pastes with its formatting."
+          }
+        }
+      }
+    },
+    "Tieni premuti i tasti e fai clic: %@. Clicca il campo e premi la combinazione; Esc annulla, ⌫ ripristina ⇧.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hold the keys and click: %@. Click the field and press the shortcut; Esc cancels, ⌫ resets to ⇧."
+          }
+        }
+      }
+    },
+    "Tra i preferiti": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Favorite"
+          }
+        }
+      }
+    },
+    "Usati di recente": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Recently Used"
+          }
+        }
+      }
+    },
+    "clic": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "click"
+          }
+        }
+      }
+    },
+    "clic centrale": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "middle click"
+          }
+        }
+      }
+    },
+    "clic destro": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "right click"
+          }
+        }
+      }
+    },
+    "errore %d": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "error %d"
+          }
+        }
+      }
+    },
+    "incollare la password «%@»": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "paste the password “%@”"
+          }
+        }
+      }
+    },
+    "macOS chiede una conferma: Impostazioni di Sistema → Generali → Elementi login.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "macOS asks for confirmation: System Settings → General → Login Items."
+          }
+        }
+      }
+    },
+    "per esempio Wi-Fi ufficio": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "for example Office Wi-Fi"
+          }
+        }
+      }
+    },
+    "per esempio lin": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "for example lin"
+          }
+        }
+      }
+    },
+    "per esempio wifi": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "for example wifi"
+          }
+        }
+      }
+    },
+    "tasto %lld del mouse": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "mouse button %lld"
+          }
+        }
+      }
+    },
+    "toast.undo": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Undo"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Annulla"
+          }
+        }
+      }
+    },
+    "«%@» supera i 10 MB: Orbis Clip conserva solo file più piccoli.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "“%@” is over 10 MB: Orbis Clip only keeps smaller files."
+          }
+        }
+      }
+    }
+  },
+  "version": "1.0"
+}

@@ -62,7 +62,7 @@ nonisolated enum FileOperations {
       let (stem, ext) = nameParts(of: url)
       let destination = availableURL(
         in: url.deletingLastPathComponent(),
-        stem: "\(stem) copia",
+        stem: String(localized: "\(stem) copia"),
         extension: ext
       )
       do {
@@ -148,7 +148,7 @@ nonisolated enum FileOperations {
       let (stem, _) = nameParts(of: job.url)
       let destination = availableURL(
         in: job.url.deletingLastPathComponent(),
-        stem: "\(stem) ridimensionata",
+        stem: String(localized: "\(stem) ridimensionata"),
         extension: job.fileExtension
       )
       do {
@@ -222,7 +222,7 @@ nonisolated enum FileOperations {
       )
     }
 
-    let stem = urls.count == 1 ? first.lastPathComponent : "Archivio"
+    let stem = urls.count == 1 ? first.lastPathComponent : String(localized: "Archivio")
     do {
       return try place(archive, in: first.deletingLastPathComponent(), stem: stem)
     } catch {

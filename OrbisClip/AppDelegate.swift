@@ -60,7 +60,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
   private func add(from pasteboard: NSPasteboard) {
     do {
       guard let draft = try ClipDraft(pasteboard: pasteboard) else {
-        showError("Negli appunti non c'è niente che Orbis Clip sappia salvare: un testo, un link, un'immagine o un file.")
+        showError(String(localized: "Negli appunti non c'è niente che Orbis Clip sappia salvare: un testo, un link, un'immagine o un file."))
         return
       }
       add(draft)
@@ -80,7 +80,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
   private func showError(_ message: String) {
     NSApp.activate()
     let alert = NSAlert()
-    alert.messageText = "Non si può aggiungere"
+    alert.messageText = String(localized: "Non si può aggiungere")
     alert.informativeText = message
     alert.runModal()
   }

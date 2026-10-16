@@ -33,7 +33,7 @@ struct GIFView: View {
         .foregroundStyle(.secondary)
       Text("Video in GIF")
         .font(.system(size: 15, weight: .semibold))
-      Text(model.isMultiple ? "\(model.videos.count) video" : model.first.lastPathComponent)
+      Text(model.isMultiple ? String(localized: "\(model.videos.count) video") : model.first.lastPathComponent)
         .font(.system(size: 12))
         .foregroundStyle(.secondary)
         .lineLimit(1)
@@ -41,7 +41,7 @@ struct GIFView: View {
     }
   }
 
-  private func placeholder(_ text: String, symbol: String?) -> some View {
+  private func placeholder(_ text: LocalizedStringKey, symbol: String?) -> some View {
     VStack(spacing: 10) {
       Spacer()
       if let symbol {
@@ -98,7 +98,7 @@ struct GIFView: View {
         AnimatedImage(data: sample.data)
           .padding(8)
       } else if !model.isSampling {
-        Text(model.problem ?? "Anteprima non disponibile")
+        Text(model.problem ?? String(localized: "Anteprima non disponibile"))
           .font(.system(size: 12))
           .foregroundStyle(.white.opacity(0.7))
           .multilineTextAlignment(.center)
@@ -152,7 +152,7 @@ struct GIFView: View {
     let selected = model.options.end - model.options.start
     let text = "\(Self.seconds(selected)) s"
     guard model.options.speed != 1 else { return text }
-    return "\(text) → GIF di \(Self.seconds(model.options.outputDuration)) s"
+    return String(localized: "\(text) → GIF di \(Self.seconds(model.options.outputDuration)) s")
   }
 
   /// "1:05,3": minuti, secondi e decimi.
@@ -286,7 +286,7 @@ struct GIFView: View {
     }
   }
 
-  private func label(_ text: String) -> some View {
+  private func label(_ text: LocalizedStringKey) -> some View {
     Text(text)
       .font(.system(size: 12, weight: .medium))
       .foregroundStyle(.secondary)
@@ -338,7 +338,7 @@ struct GIFView: View {
     } else if let job = model.job(for: model.first) {
       let size = job.options.geometry(for: info.size).output
       let weight = model.sample.map { "≈ " + ByteCountFormatter.string(fromByteCount: Int64($0.estimatedBytes), countStyle: .file) }
-      Text(["\(size.width)×\(size.height)", "\(job.options.frameCount) fotogrammi", weight].compactMap(\.self).joined(separator: " · "))
+      Text(["\(size.width)×\(size.height)", String(localized: "\(job.options.frameCount) fotogrammi"), weight].compactMap(\.self).joined(separator: " · "))
         .foregroundStyle(.secondary)
         .monospacedDigit()
     }

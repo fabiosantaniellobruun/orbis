@@ -244,7 +244,7 @@ private struct SeparatorPicker: View {
   @Binding var selection: String
 
   private static let options: [(value: String, title: String)] = [
-    (" ", "Spazio"), ("-", "Trattino  -"), ("_", "Sottolineato  _"), (".", "Punto  ."), ("", "Nessuno"),
+    (" ", String(localized: "Spazio")), ("-", String(localized: "Trattino  -")), ("_", String(localized: "Sottolineato  _")), (".", String(localized: "Punto  .")), ("", String(localized: "Nessuno")),
   ]
 
   var body: some View {

@@ -46,10 +46,10 @@ nonisolated struct RenameOptions: Sendable, Equatable {
 
     var title: String {
       switch self {
-      case .name: "Nome"
-      case .replace: "Sostituisci"
-      case .add: "Aggiungi"
-      case .date: "Data"
+      case .name: String(localized: "Nome")
+      case .replace: String(localized: "Sostituisci")
+      case .add: String(localized: "Aggiungi")
+      case .date: String(localized: "Data")
       }
     }
   }
@@ -62,10 +62,10 @@ nonisolated struct RenameOptions: Sendable, Equatable {
 
     var title: String {
       switch self {
-      case .original: "Come nel Finder"
-      case .name: "Nome"
-      case .created: "Data di creazione"
-      case .modified: "Data di modifica"
+      case .original: String(localized: "Come nel Finder")
+      case .name: String(localized: "Nome")
+      case .created: String(localized: "Data di creazione")
+      case .modified: String(localized: "Data di modifica")
       }
     }
   }
@@ -77,9 +77,9 @@ nonisolated struct RenameOptions: Sendable, Equatable {
 
     var title: String {
       switch self {
-      case .created: "Creazione"
-      case .modified: "Modifica"
-      case .today: "Oggi"
+      case .created: String(localized: "Creazione")
+      case .modified: String(localized: "Modifica")
+      case .today: String(localized: "Oggi")
       }
     }
   }

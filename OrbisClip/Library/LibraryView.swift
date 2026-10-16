@@ -198,7 +198,7 @@ private struct PasswordChanger: View {
   var body: some View {
     SecureField("Nuova password", text: $password)
     HStack {
-      Text(message ?? "Salvata nel Portachiavi di login.")
+      Text(message ?? String(localized: "Salvata nel Portachiavi di login."))
         .font(.caption)
         .foregroundStyle(.secondary)
       Spacer()
@@ -206,7 +206,7 @@ private struct PasswordChanger: View {
         do {
           try PasswordStore.save(password, account: account)
           password = ""
-          message = "Password cambiata."
+          message = String(localized: "Password cambiata.")
         } catch {
           message = error.localizedDescription
         }

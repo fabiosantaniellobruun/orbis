@@ -1,0 +1,2605 @@
+{
+  "sourceLanguage": "it",
+  "strings": {
+    "%": {
+      "shouldTranslate": false
+    },
+    "%@ %@ %@": {
+      "shouldTranslate": false
+    },
+    "%@ copia": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ copy"
+          }
+        }
+      }
+    },
+    "%@ creato": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ created"
+          }
+        }
+      }
+    },
+    "%@ creato in Download": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ created in Downloads"
+          }
+        }
+      }
+    },
+    "%@ creato, %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ created, %@"
+          }
+        }
+      }
+    },
+    "%@ ridimensionata": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ resized"
+          }
+        }
+      }
+    },
+    "%@ → GIF di %@ s": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ → %@ s GIF"
+          }
+        }
+      }
+    },
+    "%lld": {
+      "shouldTranslate": false
+    },
+    "%lld GIF creati": {
+      "localizations": {
+        "en": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld GIF created"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld GIFs created"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "%lld PNG creati": {
+      "localizations": {
+        "en": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld PNG created"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld PNGs created"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "%lld al secondo": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld per second"
+          }
+        }
+      }
+    },
+    "%lld elementi da rinominare": {
+      "localizations": {
+        "en": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld item to rename"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld items to rename"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "%lld elementi spostati in «%@»": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld items moved to “%@”"
+          }
+        }
+      }
+    },
+    "%lld elemento spostato in «%@»": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld item moved to “%@”"
+          }
+        }
+      }
+    },
+    "%lld fotogrammi": {
+      "localizations": {
+        "en": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld frame"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld frames"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "%lld immagine convertita in %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld image converted to %@"
+          }
+        }
+      }
+    },
+    "%lld immagine ridimensionata": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld image resized"
+          }
+        }
+      }
+    },
+    "%lld immagini": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld images"
+          }
+        }
+      }
+    },
+    "%lld immagini convertite in %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld images converted to %@"
+          }
+        }
+      }
+    },
+    "%lld immagini ridimensionate": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld images resized"
+          }
+        }
+      }
+    },
+    "%lld percorsi copiati": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld paths copied"
+          }
+        }
+      }
+    },
+    "%lld problemi": {
+      "localizations": {
+        "en": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld problem"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld problems"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "%lld saltati": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld skipped"
+          }
+        }
+      }
+    },
+    "%lld saltato": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld skipped"
+          }
+        }
+      }
+    },
+    "%lld video": {
+      "localizations": {
+        "en": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld video"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld videos"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "%lld volte": {
+      "localizations": {
+        "en": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld time"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld times"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "%lld%%": {
+      "shouldTranslate": false
+    },
+    ", %lld non riuscita": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": ", %lld failed"
+          }
+        }
+      }
+    },
+    ", %lld non riuscite": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": ", %lld failed"
+          }
+        }
+      }
+    },
+    ", %lld non riusciti": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": ", %lld failed"
+          }
+        }
+      }
+    },
+    ", %lld non riuscito": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": ", %lld failed"
+          }
+        }
+      }
+    },
+    ", %lld resta sopra il peso richiesto": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": ", %lld still over the target size"
+          }
+        }
+      }
+    },
+    ", %lld restano sopra il peso richiesto": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": ", %lld still over the target size"
+          }
+        }
+      }
+    },
+    ", %lld saltati": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": ", %lld skipped"
+          }
+        }
+      }
+    },
+    ", %lld saltato": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": ", %lld skipped"
+          }
+        }
+      }
+    },
+    ", %lld sopra il peso richiesto": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": ", %lld over the target size"
+          }
+        }
+      }
+    },
+    ", sopra il peso richiesto": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": ", over the target size"
+          }
+        }
+      }
+    },
+    "1": {
+      "shouldTranslate": false
+    },
+    "1 elemento da rinominare": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1 item to rename"
+          }
+        }
+      }
+    },
+    "1 immagine": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1 image"
+          }
+        }
+      }
+    },
+    "1 problema": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1 problem"
+          }
+        }
+      }
+    },
+    "2": {
+      "shouldTranslate": false
+    },
+    "5": {
+      "shouldTranslate": false
+    },
+    "50": {
+      "shouldTranslate": false
+    },
+    "500": {
+      "shouldTranslate": false
+    },
+    ":": {
+      "shouldTranslate": false
+    },
+    "Aggiungi": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Add"
+          }
+        }
+      }
+    },
+    "Alla misura dell'SVG": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "At the SVG's size"
+          }
+        }
+      }
+    },
+    "Altezza (px)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Height (px)"
+          }
+        }
+      }
+    },
+    "Altro": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Other"
+          }
+        }
+      }
+    },
+    "Animazione dal video": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Animation from the video"
+          }
+        }
+      }
+    },
+    "Annulla": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cancel"
+          }
+        }
+      }
+    },
+    "Annullato": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Undone"
+          }
+        }
+      }
+    },
+    "Anteprima non disponibile": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Preview not available"
+          }
+        }
+      }
+    },
+    "Anteprima: due secondi dal centro": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Preview: two seconds from the middle"
+          }
+        }
+      }
+    },
+    "Apri %@ all'avvio del Mac": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open %@ at login"
+          }
+        }
+      }
+    },
+    "Archivio": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Archive"
+          }
+        }
+      }
+    },
+    "Attorno al puntatore compare un anello di bottoni. Lo cambi nelle impostazioni.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A ring of buttons appears around the pointer. You can change the key in Settings."
+          }
+        }
+      }
+    },
+    "Auto": {
+      "shouldTranslate": false
+    },
+    "Avvio": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Startup"
+          }
+        }
+      }
+    },
+    "Azioni rapide sui file, con un gesto solo.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Quick actions on files, in a single gesture."
+          }
+        }
+      }
+    },
+    "Benvenuto in Orbis": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Welcome to Orbis"
+          }
+        }
+      }
+    },
+    "Cambia…": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Change…"
+          }
+        }
+      }
+    },
+    "Cartelle preferite": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Favorite Folders"
+          }
+        }
+      }
+    },
+    "Cestina": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Trash"
+          }
+        }
+      }
+    },
+    "Cifre": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Digits"
+          }
+        }
+      }
+    },
+    "Clona": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Clone"
+          }
+        }
+      }
+    },
+    "Colori": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Colors"
+          }
+        }
+      }
+    },
+    "Come il sistema": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Same as System"
+          }
+        }
+      }
+    },
+    "Come l'originale": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Same as original"
+          }
+        }
+      }
+    },
+    "Come nel Finder": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "As in the Finder"
+          }
+        }
+      }
+    },
+    "Come si usa…": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "How to Use…"
+          }
+        }
+      }
+    },
+    "Compaiono nel secondo anello di Sposta, dopo le due cartelle usate più di recente. Puoi anche trascinare una cartella su una riga.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "They appear in the second ring of Move, after the two most recently used folders. You can also drag a folder onto a row."
+          }
+        }
+      }
+    },
+    "Compatto, per i dispositivi Apple": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Compact, for Apple devices"
+          }
+        }
+      }
+    },
+    "Comprimi": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Compress"
+          }
+        }
+      }
+    },
+    "Con le proporzioni mantenute l'immagine sta dentro la misura indicata. Lascia vuoto un lato per non porre limiti.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "With proportions kept, the image fits inside the given size. Leave a side empty for no limit."
+          }
+        }
+      }
+    },
+    "Con ⌘ il Finder considera il trascinamento uno spostamento: ⌥, ⌃ o ⇧ sono più sicuri.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "With ⌘ the Finder treats the drag as a move: ⌥, ⌃ or ⇧ are safer."
+          }
+        }
+      }
+    },
+    "Contiene caratteri non validi (/ o :)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Contains invalid characters (/ or :)"
+          }
+        }
+      }
+    },
+    "Converti in": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Convert to"
+          }
+        }
+      }
+    },
+    "Converti in ha bisogno di un formato": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Convert to needs a format"
+          }
+        }
+      }
+    },
+    "Copia percorso": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Copy Path"
+          }
+        }
+      }
+    },
+    "Crea GIF": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Create GIF"
+          }
+        }
+      }
+    },
+    "Creazione": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Created"
+          }
+        }
+      }
+    },
+    "Creo il GIF": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Creating the GIF"
+          }
+        }
+      }
+    },
+    "Creo il GIF · %lld%%": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Creating the GIF · %lld%%"
+          }
+        }
+      }
+    },
+    "Data": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Date"
+          }
+        }
+      }
+    },
+    "Data di": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Date"
+          }
+        }
+      }
+    },
+    "Data di creazione": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Creation date"
+          }
+        }
+      }
+    },
+    "Data di modifica": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Modification date"
+          }
+        }
+      }
+    },
+    "Diffuso": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Diffusion"
+          }
+        }
+      }
+    },
+    "Dimensioni": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dimensions"
+          }
+        }
+      }
+    },
+    "Distingui maiuscole e minuscole": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Match case"
+          }
+        }
+      }
+    },
+    "Dopo il nome": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "After the name"
+          }
+        }
+      }
+    },
+    "Doppia, per gli schermi Retina": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Double, for Retina displays"
+          }
+        }
+      }
+    },
+    "Due elementi avrebbero lo stesso nome": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Two items would have the same name"
+          }
+        }
+      }
+    },
+    "Esci da Orbis": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Quit Orbis"
+          }
+        }
+      }
+    },
+    "Esiste già un elemento con questo nome": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "An item with this name already exists"
+          }
+        }
+      }
+    },
+    "Fine": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "End"
+          }
+        }
+      }
+    },
+    "Formato": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Format"
+          }
+        }
+      }
+    },
+    "Foto, il più compatibile": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Photos, the most compatible"
+          }
+        }
+      }
+    },
+    "Fotogrammi": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Frames"
+          }
+        }
+      }
+    },
+    "Generale": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "General"
+          }
+        }
+      }
+    },
+    "Già in «%@»": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Already in “%@”"
+          }
+        }
+      }
+    },
+    "Ha più immagini: non si ridimensiona": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Contains several images: not resized"
+          }
+        }
+      }
+    },
+    "Ho capito": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Got It"
+          }
+        }
+      }
+    },
+    "I file non sono SVG": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The files aren't SVGs"
+          }
+        }
+      }
+    },
+    "I file non sono immagini da convertire in %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The files aren't images to convert to %@"
+          }
+        }
+      }
+    },
+    "I file non sono immagini da ridimensionare": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The files aren't images to resize"
+          }
+        }
+      }
+    },
+    "I file non sono video da trasformare in GIF": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The files aren't videos to turn into GIFs"
+          }
+        }
+      }
+    },
+    "I fotogrammi al secondo vanno da 5 a 30": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Frames per second range from 5 to 30"
+          }
+        }
+      }
+    },
+    "Il Mac non sa scrivere questo formato: sceglierne un altro": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The Mac can't write this format: choose another one"
+          }
+        }
+      }
+    },
+    "Il file non è un SVG": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The file isn't an SVG"
+          }
+        }
+      }
+    },
+    "Il file non è un video da trasformare in GIF": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The file isn't a video to turn into a GIF"
+          }
+        }
+      }
+    },
+    "Il file non è un'immagine da convertire in %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The file isn't an image to convert to %@"
+          }
+        }
+      }
+    },
+    "Il file non è un'immagine da ridimensionare": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The file isn't an image to resize"
+          }
+        }
+      }
+    },
+    "Il nome è troppo lungo": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The name is too long"
+          }
+        }
+      }
+    },
+    "Il nome è vuoto": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The name is empty"
+          }
+        }
+      }
+    },
+    "Il più compatto, per il web": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The most compact, for the web"
+          }
+        }
+      }
+    },
+    "Il rapporto non è valido": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The ratio isn't valid"
+          }
+        }
+      }
+    },
+    "Il video non si legge": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The video can't be read"
+          }
+        }
+      }
+    },
+    "Impossibile annullare": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Couldn't undo"
+          }
+        }
+      }
+    },
+    "Impossibile cestinare": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Couldn't move to the Trash"
+          }
+        }
+      }
+    },
+    "Impossibile clonare": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Couldn't clone"
+          }
+        }
+      }
+    },
+    "Impossibile comprimere": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Couldn't compress"
+          }
+        }
+      }
+    },
+    "Impossibile convertire": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Couldn't convert"
+          }
+        }
+      }
+    },
+    "Impossibile convertire l'SVG": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Couldn't convert the SVG"
+          }
+        }
+      }
+    },
+    "Impossibile creare il GIF": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Couldn't create the GIF"
+          }
+        }
+      }
+    },
+    "Impossibile ridimensionare": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Couldn't resize"
+          }
+        }
+      }
+    },
+    "Impossibile rinominare": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Couldn't rename"
+          }
+        }
+      }
+    },
+    "Impossibile spostare": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Couldn't move"
+          }
+        }
+      }
+    },
+    "Impostazioni…": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Settings…"
+          }
+        }
+      }
+    },
+    "Invio": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Return"
+          }
+        }
+      }
+    },
+    "Invio (tastierino)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enter (keypad)"
+          }
+        }
+      }
+    },
+    "L'immagine viene stirata fino alla misura esatta.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The image is stretched to the exact size."
+          }
+        }
+      }
+    },
+    "La nuova lingua vale dalla prossima apertura.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The new language applies the next time the app opens."
+          }
+        }
+      }
+    },
+    "La percentuale va da 1 a 500": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The percentage ranges from 1 to 500"
+          }
+        }
+      }
+    },
+    "Larghezza (px)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Width (px)"
+          }
+        }
+      }
+    },
+    "Lato lungo massimo (px)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Maximum long side (px)"
+          }
+        }
+      }
+    },
+    "Le misure devono essere almeno 1 pixel": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sizes must be at least 1 pixel"
+          }
+        }
+      }
+    },
+    "Le misure non possono superare %lld pixel": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sizes can't exceed %lld pixels"
+          }
+        }
+      }
+    },
+    "Leggo il video…": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reading the video…"
+          }
+        }
+      }
+    },
+    "Limita il peso": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Limit file size"
+          }
+        }
+      }
+    },
+    "Lingua": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Language"
+          }
+        }
+      }
+    },
+    "Mantieni le proporzioni": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Keep proportions"
+          }
+        }
+      }
+    },
+    "Menu": {
+      "shouldTranslate": false
+    },
+    "Misura": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Size"
+          }
+        }
+      }
+    },
+    "Modifica": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Modified"
+          }
+        }
+      }
+    },
+    "Modo": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mode"
+          }
+        }
+      }
+    },
+    "Mostra menu di prova": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Show Test Menu"
+          }
+        }
+      }
+    },
+    "Nessun video da trasformare in GIF": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No videos to turn into GIFs"
+          }
+        }
+      }
+    },
+    "Nessuna immagine da ridimensionare": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No images to resize"
+          }
+        }
+      }
+    },
+    "Nessuna modifica": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No changes"
+          }
+        }
+      }
+    },
+    "Nessuna, per ora": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "None yet"
+          }
+        }
+      }
+    },
+    "Nessuno": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "None"
+          }
+        }
+      }
+    },
+    "Nome": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Name"
+          }
+        }
+      }
+    },
+    "Nome originale": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Original name"
+          }
+        }
+      }
+    },
+    "Non ingrandire le immagini più piccole": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Don't enlarge smaller images"
+          }
+        }
+      }
+    },
+    "Non trovata · %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Not found · %@"
+          }
+        }
+      }
+    },
+    "Non è un'immagine": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Not an image"
+          }
+        }
+      }
+    },
+    "Numero progressivo": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sequence number"
+          }
+        }
+      }
+    },
+    "Oggi": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Today"
+          }
+        }
+      }
+    },
+    "Ogni video diventa un GIF, per intero (al massimo %lld fotogrammi).": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Each video becomes a GIF, in full (at most %lld frames)."
+          }
+        }
+      }
+    },
+    "Orbis": {
+      "shouldTranslate": false
+    },
+    "Orbis vive nella barra dei menu, in alto a destra. Non chiede nessun permesso, non usa la rete e non legge i tuoi file finché non rilasci qualcosa su un'azione.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Orbis lives in the menu bar, at the top right. It asks for no permissions, doesn't use the network and doesn't read your files until you drop something on an action."
+          }
+        }
+      }
+    },
+    "Ordinato": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ordered"
+          }
+        }
+      }
+    },
+    "Ordine": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Order"
+          }
+        }
+      }
+    },
+    "Originale": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Original"
+          }
+        }
+      }
+    },
+    "PNG e TIFF sono senza perdita: per pesare meno riduci le dimensioni, oppure scegli JPEG, HEIC o AVIF.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "PNG and TIFF are lossless: to make them lighter, reduce the dimensions, or choose JPEG, HEIC or AVIF."
+          }
+        }
+      }
+    },
+    "Pag↑": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "PgUp"
+          }
+        }
+      }
+    },
+    "Pag↓": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "PgDn"
+          }
+        }
+      }
+    },
+    "Parti da": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Start at"
+          }
+        }
+      }
+    },
+    "Per ripeterlo servono almeno 2 volte": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Looping needs at least 2 times"
+          }
+        }
+      }
+    },
+    "Percentuale": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Percentage"
+          }
+        }
+      }
+    },
+    "Percentuale della misura originale": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Percentage of the original size"
+          }
+        }
+      }
+    },
+    "Percorso copiato": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Path copied"
+          }
+        }
+      }
+    },
+    "Peso massimo": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Maximum size"
+          }
+        }
+      }
+    },
+    "Più volte": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Several times"
+          }
+        }
+      }
+    },
+    "Posizione": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Position"
+          }
+        }
+      }
+    },
+    "Prefisso": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Prefix"
+          }
+        }
+      }
+    },
+    "Premi la combinazione…": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Press the shortcut…"
+          }
+        }
+      }
+    },
+    "Prima del nome": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Before the name"
+          }
+        }
+      }
+    },
+    "Proporzioni": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aspect ratio"
+          }
+        }
+      }
+    },
+    "Punto  .": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Period  ."
+          }
+        }
+      }
+    },
+    "Quadrupla": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Quadruple"
+          }
+        }
+      }
+    },
+    "Qualità  %lld%%": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Quality  %lld%%"
+          }
+        }
+      }
+    },
+    "Rapporto": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ratio"
+          }
+        }
+      }
+    },
+    "Retino": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dithering"
+          }
+        }
+      }
+    },
+    "Riapri ora": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reopen Now"
+          }
+        }
+      }
+    },
+    "Ridimensiona": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Resize"
+          }
+        }
+      }
+    },
+    "Ridimensiona %lld file": {
+      "localizations": {
+        "en": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Resize %lld file"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Resize %lld files"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "Ridimensiona passa dal suo pannello": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Resize goes through its own panel"
+          }
+        }
+      }
+    },
+    "Rilascia su un'azione": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Drop on an action"
+          }
+        }
+      }
+    },
+    "Rinomina": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rename"
+          }
+        }
+      }
+    },
+    "Rinomina %lld elementi": {
+      "localizations": {
+        "en": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Rename %lld item"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Rename %lld items"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "Rinomina passa dal suo pannello": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rename goes through its own panel"
+          }
+        }
+      }
+    },
+    "Rinomina, Clona, Sposta, Converti, Comprimi… Su Sposta e Converti in si apre un secondo anello; per i video, Converti in propone il GIF.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rename, Clone, Move, Convert, Compress… Move and Convert to each have a second ring; for videos, Convert to offers GIF."
+          }
+        }
+      }
+    },
+    "Ripetizioni": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Loop"
+          }
+        }
+      }
+    },
+    "Ripristina": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reset"
+          }
+        }
+      }
+    },
+    "Ritaglia al centro con rapporto": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Crop from the center to a ratio"
+          }
+        }
+      }
+    },
+    "Salva solo ciò che cambia tra un fotogramma e l'altro": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Save only what changes between frames"
+          }
+        }
+      }
+    },
+    "Scegli": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choose"
+          }
+        }
+      }
+    },
+    "Scegli cartella…": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choose Folder…"
+          }
+        }
+      }
+    },
+    "Scegli la cartella di destinazione": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choose the destination folder"
+          }
+        }
+      }
+    },
+    "Scegli un intervallo più lungo": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choose a longer range"
+          }
+        }
+      }
+    },
+    "Scegli una cartella preferita": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choose a favorite folder"
+          }
+        }
+      }
+    },
+    "Scegli…": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choose…"
+          }
+        }
+      }
+    },
+    "Segui l'orientamento dell'immagine": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Follow the image's orientation"
+          }
+        }
+      }
+    },
+    "Sempre": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Forever"
+          }
+        }
+      }
+    },
+    "Senza perdita, con trasparenza": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lossless, with transparency"
+          }
+        }
+      }
+    },
+    "Senza perdita, per la stampa": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lossless, for printing"
+          }
+        }
+      }
+    },
+    "Senza proporzioni bloccate servono larghezza e altezza": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Without locked proportions, both width and height are needed"
+          }
+        }
+      }
+    },
+    "Separatore": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Separator"
+          }
+        }
+      }
+    },
+    "Serve almeno un video": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "At least one video is needed"
+          }
+        }
+      }
+    },
+    "Sfoglia il Mac": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Browse the Mac"
+          }
+        }
+      }
+    },
+    "Sostituisci": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Replace"
+          }
+        }
+      }
+    },
+    "Sostituisci con": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Replace with"
+          }
+        }
+      }
+    },
+    "Sottolineato  _": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Underscore  _"
+          }
+        }
+      }
+    },
+    "Spazio": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Space"
+          }
+        }
+      }
+    },
+    "Sposta": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Move"
+          }
+        }
+      }
+    },
+    "Sposta ha bisogno di una cartella": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Move needs a folder"
+          }
+        }
+      }
+    },
+    "Sposta qui": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Move Here"
+          }
+        }
+      }
+    },
+    "Stesse misure e stesso formato: niente da fare": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Same size and format: nothing to do"
+          }
+        }
+      }
+    },
+    "Suffisso": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Suffix"
+          }
+        }
+      }
+    },
+    "Svuota l'elenco": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Clear the List"
+          }
+        }
+      }
+    },
+    "Svuota questa casella": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Clear this slot"
+          }
+        }
+      }
+    },
+    "Tasto %u": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Key %u"
+          }
+        }
+      }
+    },
+    "Tasto per aprire il menu": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Key to open the menu"
+          }
+        }
+      }
+    },
+    "Testo da cercare": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Text to find"
+          }
+        }
+      }
+    },
+    "Testo nuovo (vuoto per togliere)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "New text (empty to remove)"
+          }
+        }
+      }
+    },
+    "Tieni il menu aperto dopo aver rilasciato il tasto": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Keep the menu open after releasing the key"
+          }
+        }
+      }
+    },
+    "Tieni premuto %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hold %@"
+          }
+        }
+      }
+    },
+    "Tienilo premuto mentre trascini dei file. Clicca il campo e premi la combinazione: solo modificatori (⇧, ⌥⇧…) o un tasto con dei modificatori. Esc annulla, ⌫ ripristina ⇧.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hold it while dragging files. Click the field and press the shortcut: modifiers only (⇧, ⌥⇧…) or a key with modifiers. Esc cancels, ⌫ resets to ⇧."
+          }
+        }
+      }
+    },
+    "Trascina dei file": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Drag some files"
+          }
+        }
+      }
+    },
+    "Trascina dei file e tieni premuto %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Drag files and hold %@"
+          }
+        }
+      }
+    },
+    "Trattino  -": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hyphen  -"
+          }
+        }
+      }
+    },
+    "Tripla": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Triple"
+          }
+        }
+      }
+    },
+    "Troppi fotogrammi (%lld): accorcia l'intervallo o abbassa i fotogrammi al secondo": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Too many frames (%lld): shorten the range or lower the frames per second"
+          }
+        }
+      }
+    },
+    "Trova": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Find"
+          }
+        }
+      }
+    },
+    "Tutte e quattro: @2x, @3x, @4x": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "All four: @2x, @3x, @4x"
+          }
+        }
+      }
+    },
+    "Ultime cartelle usate": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Recent Folders"
+          }
+        }
+      }
+    },
+    "Un tasto normale arriva anche all'app da cui stai trascinando: Spazio, per esempio, apre l'anteprima nel Finder. Di solito conviene usare solo modificatori.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A regular key also reaches the app you're dragging from: Space, for example, opens Quick Look in the Finder. Modifiers alone are usually better."
+          }
+        }
+      }
+    },
+    "Una volta": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Once"
+          }
+        }
+      }
+    },
+    "Unità": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unit"
+          }
+        }
+      }
+    },
+    "Uno o più, dal Finder o dalla Scrivania. Tieni premuto il mouse.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "One or more, from the Finder or the desktop. Keep the mouse button down."
+          }
+        }
+      }
+    },
+    "Velocità": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Speed"
+          }
+        }
+      }
+    },
+    "Video in GIF": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Video to GIF"
+          }
+        }
+      }
+    },
+    "Vuota": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Empty"
+          }
+        }
+      }
+    },
+    "elementi clonati": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "items cloned"
+          }
+        }
+      }
+    },
+    "elementi nel Cestino": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "items moved to the Trash"
+          }
+        }
+      }
+    },
+    "elementi rinominati": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "items renamed"
+          }
+        }
+      }
+    },
+    "elemento clonato": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "item cloned"
+          }
+        }
+      }
+    },
+    "elemento nel Cestino": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "item moved to the Trash"
+          }
+        }
+      }
+    },
+    "elemento rinominato": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "item renamed"
+          }
+        }
+      }
+    },
+    "macOS chiede una conferma: Impostazioni di Sistema → Generali → Elementi login.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "macOS asks for confirmation: System Settings → General → Login Items."
+          }
+        }
+      }
+    },
+    "px": {
+      "shouldTranslate": false
+    },
+    "riduce la misura se serve": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "reduces the size if needed"
+          }
+        }
+      }
+    },
+    "toast.undo": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Undo"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Annulla"
+          }
+        }
+      }
+    },
+    "×": {
+      "shouldTranslate": false
+    }
+  },
+  "version": "1.0"
+}

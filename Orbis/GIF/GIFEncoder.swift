@@ -27,9 +27,9 @@ nonisolated enum GIFDithering: String, CaseIterable, Identifiable, Sendable {
 
   var title: String {
     switch self {
-    case .none: "Nessuno"
-    case .ordered: "Ordinato"
-    case .diffusion: "Diffuso"
+    case .none: String(localized: "Nessuno")
+    case .ordered: String(localized: "Ordinato")
+    case .diffusion: String(localized: "Diffuso")
     }
   }
 }

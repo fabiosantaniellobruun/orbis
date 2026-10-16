@@ -23,7 +23,7 @@ final class GIFModel {
   private var sampleTask: Task<Void, Never>?
 
   init(videos: [URL], skipped: Int) {
-    precondition(!videos.isEmpty, "Serve almeno un video")
+    precondition(!videos.isEmpty, String(localized: "Serve almeno un video"))
     self.videos = videos
     self.skipped = skipped
   }

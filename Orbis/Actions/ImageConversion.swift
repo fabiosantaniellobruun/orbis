@@ -26,11 +26,11 @@ nonisolated enum ImageFormat: String, CaseIterable, Sendable {
   /// Due parole per scegliere: a cosa serve.
   var detail: String {
     switch self {
-    case .png: "Senza perdita, con trasparenza"
-    case .jpeg: "Foto, il più compatibile"
-    case .heic: "Compatto, per i dispositivi Apple"
-    case .avif: "Il più compatto, per il web"
-    case .tiff: "Senza perdita, per la stampa"
+    case .png: String(localized: "Senza perdita, con trasparenza")
+    case .jpeg: String(localized: "Foto, il più compatibile")
+    case .heic: String(localized: "Compatto, per i dispositivi Apple")
+    case .avif: String(localized: "Il più compatto, per il web")
+    case .tiff: String(localized: "Senza perdita, per la stampa")
     }
   }
 

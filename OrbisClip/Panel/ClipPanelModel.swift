@@ -32,11 +32,11 @@ import Observation
 
   var sections: [Section] {
     if isSearching {
-      return [Section(id: "results", title: "Risultati", items: store.results(for: query))]
+      return [Section(id: "results", title: String(localized: "Risultati"), items: store.results(for: query))]
     }
     return [
-      Section(id: "favorites", title: "Preferiti", items: store.favorites),
-      Section(id: "recents", title: "Usati di recente", items: store.recents),
+      Section(id: "favorites", title: String(localized: "Preferiti"), items: store.favorites),
+      Section(id: "recents", title: String(localized: "Usati di recente"), items: store.recents),
     ].filter { !$0.items.isEmpty }
   }
 
