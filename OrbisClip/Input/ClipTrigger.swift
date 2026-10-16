@@ -11,6 +11,7 @@ nonisolated struct ClipTrigger: Codable, Equatable, Sendable {
   static let standard = ClipTrigger(keys: TriggerShortcut(modifiers: [.shift]), mouseButton: 1)
 
   private static let defaultsKey = "clipTrigger"
+  static var storageKey: String { defaultsKey }
 
   /// Senza tasti la combinazione scatterebbe a ogni clic.
   var isValid: Bool { keys.isValid }
